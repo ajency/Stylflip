@@ -1,0 +1,10 @@
+eclipse.preferences.version=1
+iosLaunchConfigurationAttributes/ATTR_MINIFY=true
+iosLaunchConfigurationAttributes/ATTR_PROJECT_NAME=sfapp
+iosLaunchConfigurationAttributes/appid=com.placard.StylFlip
+iosLaunchConfigurationAttributes/certificate=Placard Digital Solutions Private Limited (ZLQSKGVK92)
+iosLaunchConfigurationAttributes/distribute_path=/Users/Sushant/Documents/Sushant/sf/builds
+iosLaunchConfigurationAttributes/keychain=
+iosLaunchConfigurationAttributes/output_format=ipa
+iosLaunchConfigurationAttributes/sdk_version=8.1
+iosLaunchConfigurationAttributes/uuid=adb508f3-a960-4b6f-b674-efce30c989c7

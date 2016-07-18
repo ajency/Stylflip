@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.under1r.StylFlip" android:versionCode="8" android:versionName="1.0.7">
+	<uses-sdk android:minSdkVersion="10" android:targetSdkVersion="19"/>
+	<application android:icon="@drawable/appicon" android:label="StylFlip" android:name="StylflipApplication" android:debuggable="false" android:theme="@style/Theme.NoActionBar" android:largeHeap="true">
+		<activity android:name=".StylflipActivity" android:label="@string/app_name" android:theme="@style/Theme.Titanium" android:configChanges="keyboardHidden|orientation|screenSize">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN"/>
+				<category android:name="android.intent.category.LAUNCHER"/>
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+				<category android:name="android.intent.category.BROWSABLE"/>
+				<data android:scheme="stylflip"/>
+			</intent-filter>
+		</activity>
+		<activity android:name="org.appcelerator.titanium.TiActivity" android:configChanges="keyboardHidden|orientation|screenSize"/>
+		<activity android:name="org.appcelerator.titanium.TiTranslucentActivity" android:configChanges="keyboardHidden|orientation|screenSize" android:theme="@style/Theme.AppCompat.Translucent"/>
+		<activity android:name="ti.modules.titanium.ui.android.TiPreferencesActivity" android:configChanges="screenSize"/>
+		<activity android:name="ti.modules.titanium.media.TiCameraActivity" android:configChanges="keyboardHidden|orientation|screenSize" android:theme="@style/Theme.AppCompat.Translucent.NoTitleBar.Fullscreen"/>
+		<activity android:name="net.iamyellow.gcmjs.GcmjsActivity" android:noHistory="true" android:theme="@style/Theme.Titanium" android:configChanges="screenSize">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+				<category android:name="android.intent.category.BROWSABLE"/>
+			</intent-filter>
+		</activity>
+		<receiver android:name="net.iamyellow.gcmjs.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
+			<intent-filter>
+				<action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+				<action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
+				<category android:name="com.under1r.StylFlip"/>
+			</intent-filter>
+		</receiver>
+		<service android:name="net.iamyellow.gcmjs.GCMIntentService"/>
+		<service android:name="net.iamyellow.gcmjs.GcmjsService"/>
+		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
+	</application>
+	<permission android:name="com.under1r.StylFlip.permission.C2D_MESSAGE" android:protectionLevel="signature"/>
+	<uses-permission android:name="com.under1r.StylFlip.permission.C2D_MESSAGE"/>
+	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+	<uses-permission android:name="android.permission.INTERNET"/>
+	<uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+	<uses-permission android:name="android.permission.WAKE_LOCK"/>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+	<uses-permission android:name="android.permission.CAMERA"/>
+</manifest>
