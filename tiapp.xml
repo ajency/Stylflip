@@ -6,7 +6,7 @@
     <version>1.0</version>
     <publisher>webappgeek</publisher>
     <url>http://</url>
-    <description>Clothing redefined</description>
+    <description>undefined</description>
     <copyright>2014 by webappgeek</copyright>
     <icon>appicon.png</icon>
     <fullscreen>false</fullscreen>
@@ -36,18 +36,19 @@
                 <false/>
                 <key>UIStatusBarStyle</key>
                 <string>UIStatusBarStyleDefault</string>
-                <key>CFBundleURLTypes</key>
-                <array>
-                    <dict>
-                        <key>CFBundleURLName</key>
-                        <string>com.placard.StylFlip</string>
-                        <key>CFBundleURLSchemes</key>
-                        <array>
-                            <string>stylflip</string>
-                            <string>fb1486437388326591</string>
-                        </array>
-                    </dict>
-                </array>
+                
+				<key>CFBundleURLTypes</key>
+				<array>
+				    <dict>
+				        <key>CFBundleURLName</key>
+				        <string>com.placard.StylFlip</string>
+				        <key>CFBundleURLSchemes</key>
+				        <array>
+				            <string>stylflip</string>
+				            <string>fb1486437388326591</string>
+				        </array>
+				    </dict>
+				</array>
             </dict>
         </plist>
     </ios>
@@ -91,6 +92,6 @@
         <target device="iphone">true</target>
         <target device="mobileweb">false</target>
     </deployment-targets>
-    <sdk-version>4.0.0.GA</sdk-version>
+    <sdk-version>3.5.1.GA</sdk-version>
     <property name="appc-app-id" type="string">55b33072754e31ca156fc6d9</property>
 </ti:app>
