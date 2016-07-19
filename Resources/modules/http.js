@@ -5,7 +5,8 @@ var _responseObject = {};
 var HttpClient = {};
 
 HttpClient.apiCall = function(params, method, api, successCallback, errorCallback) {
-	if(Ti.Network.online) {
+	// if(Ti.Network.online) {
+	if(!Ti.Network.online) {	
 		_responseObject = {
 			sucess: false,
 			isNetworkError: 1,

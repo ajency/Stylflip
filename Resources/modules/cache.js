@@ -176,12 +176,15 @@ exports.get = function() {
    		// else {
    			// _db.getFile().deleteFile();
    		// }
+   		
    		try {
    			var _query = 'delete from ' + _cacheTableName;
 	    	_db.execute(_query);
 	    	_db.close();
    		}
-   		catch(e) {}
+   		catch(e) {
+   			Titanium.API.info( constant.APP + '################################### Delete from [' + _cacheTableName + '] query failed ##########################################');
+   		}
    	};
    	
     // _deleteData();

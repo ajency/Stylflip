@@ -344,8 +344,9 @@ exports.get = function(tabToLoad) {
 		//	Close all windows if more than one are opened
 		Window.closeAll(function() {
 			if(_currentKey != e.key || allowDuplicate) {
-				Cache.deleteData();
-				
+				Cache.deleteData(); //uncomment this debug
+				// console.log("no delete cache");
+
 				if(currentView) {
 					contentView.remove(includeView);
 					tmpView = currentView;

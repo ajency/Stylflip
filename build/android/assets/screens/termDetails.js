@@ -1,0 +1,1 @@
+/Users/cyrusAjency/Documents/StylFlip/Resources/screens/termDetails.js

@@ -21,15 +21,16 @@ else {
 
 exports.get = function() {
 	return {
-		// DOMAIN: 'http://54.149.49.29/stylflip/',
-		// BASE_URL: 'http://54.149.49.29/stylflip/api/',
+		DOMAIN: 'http://54.149.49.29/stylflip/',
+		BASE_URL: 'http://54.149.49.29/stylflip/api/',
 		
-		DOMAIN: 'http://localhost/sf/server/',
-		BASE_URL: 'http://localhost/sf/server/api/',
+		// DOMAIN: 'http://localhost/sf/server/',
+		// BASE_URL: 'http://localhost/sf/server/api/',
 		
 		// DOMAIN: 'http://stylflip.com/stylflip/',
 		// BASE_URL: 'http://stylflip.com/stylflip/api/',
 		
+		APP: 'STYLFLIP',
 		HEADER_HEIGHT: headerHeight,
 		FOOTER_HEIGHT: footerHeight,
 		FOOTER_TOP: (pheight - footerHeight) - windowTopPos,
