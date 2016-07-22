@@ -342,13 +342,14 @@ exports.get = function(tabSelected, userId, followCallback) {
 	    			type: 'sold'
 	    		}));
 	    	}
-	    	// else if(itemData.KYC != undefined && itemData.KYC == false) {
-	    	else if(itemData.KYC != undefined && itemData.KYC == false && userId === Utils.loggedInUserId()) {	
-	    		imgProductView.add(UI.createImageWithTextView({
-	    			width: Ti.UI.FILL,
-	    			height: Ti.UI.FILL,
-	    			type: 'pending kyc'
-	    		}));
+	    	else if(itemData.KYC != undefined && itemData.KYC == false) {	
+	    		if(!userId){ //if this is a logged in user
+	    			imgProductView.add(UI.createImageWithTextView({
+		    			width: Ti.UI.FILL,
+		    			height: Ti.UI.FILL,
+		    			type: 'pending kyc'
+		    		}));
+	    		}
 	    	}
 	    	else if(!itemData.isApproved) {
 	    		imgProductView.add(UI.createImageWithTextView({
