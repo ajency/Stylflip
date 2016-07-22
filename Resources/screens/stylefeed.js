@@ -304,6 +304,7 @@ exports.get = function(header) {
 	        /*
 	         * Hit web service
 	         */
+	        Ti.API.info("getting data location 1");
 	        HttpClient.getResponse({
 	        	requestArgs: _requestArgs,
 	        	success: function(response) {
@@ -351,6 +352,7 @@ exports.get = function(header) {
 	 * Load product details
 	 */
 	var _loadProductDetails = function(productId) {
+		console.log(constant.APP + " stylefeed _loadProductDetails init");
         var window = Window.create(exitOnClose=false);
         var productDetails = require('/screens/productDetails').get(tabSelected='stylefeed', productId, function(e) {
         	if(e.type == 'purchase') {
@@ -389,6 +391,7 @@ exports.get = function(header) {
 	 * Create a single feed row
 	 */
 	var _createFeedRow = function(feedData, separator) {
+		Titanium.API.info(constant.APP + " creating feed row...");
 		var feedRow = Ti.UI.createView(_style.feedRow);
 		
 		var profileView = Ti.UI.createView(_style.profileView);
@@ -417,6 +420,7 @@ exports.get = function(header) {
 		    btnReportView.isFollowing = feedData.isFollowing=='1'||feedData.isFollowing==1||feedData.isFollowing==true;
 		    
 		    btnReportView.addEventListener('click', function(e) {
+		    	console.log(constant.APP + " btnReportView clicked");
 		    	if(!Utils.isUserLoggedIn()) {
 		    		UI.showLoginAlert();
 		    		return;
@@ -444,6 +448,7 @@ exports.get = function(header) {
 		    	});
 		    	reportOptionsView.show();
 		    	reportOptionsView.addEventListener('click', function(e) {
+		    		console.log(constant.APP + " reportOptionsView clicked");
 		    		reportOptionsView.hide();
 		    		switch(e.index) {
 		    			case 0:
@@ -470,6 +475,7 @@ exports.get = function(header) {
 								        /*
 								         * Hit web service
 								         */
+								        Ti.API.info("getting data location 2");
 								        HttpClient.getResponse({
 								        	requestArgs: _requestArgs,
 								        	success: function(response) {
@@ -514,6 +520,7 @@ exports.get = function(header) {
 						        /*
 						         * Hit web service
 						         */
+						        Ti.API.info("getting data location 3");
 						        HttpClient.getResponse({
 						        	requestArgs: _requestArgs,
 						        	success: function(response) {
@@ -556,6 +563,7 @@ exports.get = function(header) {
 							        /*
 							         * Hit web service
 							         */
+							        Ti.API.info("getting data location 4");
 							        HttpClient.getResponse({
 							        	requestArgs: _requestArgs,
 							        	success: function(response) {
@@ -710,6 +718,7 @@ exports.get = function(header) {
 	        /*
 	         * Hit web service
 	         */
+	        Ti.API.info("getting data location 5");
 	        HttpClient.getResponse({
 	        	requestArgs: _requestArgs,
 	        	success: function(response) {
@@ -838,7 +847,7 @@ exports.get = function(header) {
 	    feedRow.add(commentsView);
 	    
 	    return feedRow;
-	};
+	}; //end _createFeedRow
 
 
 	var _loadData = function(isRefresh) {
@@ -878,6 +887,7 @@ exports.get = function(header) {
         /*
          * Hit web service
          */
+        Ti.API.info("getting data location 6");
         HttpClient.getResponse({
         	requestArgs: _requestArgs,
         	success: function(response) {
@@ -938,7 +948,7 @@ exports.get = function(header) {
                 }, 500);
         	}
         });
-	};
+	}; //end _loadData
 	
 	_loadData(true);
 	

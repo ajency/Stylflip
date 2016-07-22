@@ -1,4 +1,4 @@
-//	android - com.under1r.StylFlip
+//	android - com.placard.StylFlip
 //	ios		- com.placard.StylFlip
 
 if(Ti.Platform.osname == 'iphone' || Ti.Platform.osname == 'ipad') {

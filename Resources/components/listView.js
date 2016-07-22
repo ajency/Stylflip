@@ -194,6 +194,7 @@ exports.get = function() {
 	 * Get clicked child of list view
 	 */
 	var _getChild = function(view, foundCallback) {
+		console.log(constant.APP + " _getChild reached");
 		if(view.index != null || view.index != undefined) {
 			foundCallback(view);
 		}
@@ -206,6 +207,7 @@ exports.get = function() {
 	 * List view click listener
 	 */
 	var _listViewClickListener = function(e) {
+		console.log(constant.APP + " _listViewClickListener reached");
 		var child = _getChild(e.source, function(child) {
 			var data = {
 				index: child.index,
@@ -256,6 +258,7 @@ exports.get = function() {
 	var _fireEvent = function(eventToFire, eventData) {
 		switch(eventToFire) {
 			case 'click':
+				console.log(constant.APP + " click event captured");
 				Utils._.isFunction(_clickCallback) && _clickCallback(eventData);
 			break;
 			

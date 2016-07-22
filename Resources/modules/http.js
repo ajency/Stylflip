@@ -50,6 +50,8 @@ HttpClient.apiCall = function(params, method, api, successCallback, errorCallbac
 		
 	  	// http onload method
 		_httpClient.onload = function() {
+			Titanium.API.info(constant.APP + " http api call message recived");
+			console.log(this.responseText)
 			if(this.showLoader) {
 				Loader.hide();				
 			}
@@ -76,7 +78,8 @@ HttpClient.apiCall = function(params, method, api, successCallback, errorCallbac
 			// }
 			
 			var _responseData = JSON.parse(responseText);
-			
+			// console.dir(_responseData);
+			Titanium.API.info(_responseData);
 			if(_responseData.success) {
 			    _responseObject = {
                     success: true,
@@ -146,6 +149,7 @@ HttpClient.getResponse = function(config) {
 	var successCallback = config.success;
 	var errorCallback = config.error;
 	// params.cache = true;
+	Titanium.API.info(constant.APP + " getting response data from server");
 	if(params.cache) {
 		// if(params.showLoader) {
 			// Loader.show(params.loaderMsg?params.loaderMsg:'Loading...');
@@ -157,6 +161,8 @@ HttpClient.getResponse = function(config) {
 				// if(params.showLoader) {
 					// Loader.hide();
 				// }
+				
+				Titanium.API.info(responseData);
 				if(JSON.parse(responseData).data.length == 0) {
 					HttpClient.apiCall(params, method, api, successCallback, errorCallback);
 					return;

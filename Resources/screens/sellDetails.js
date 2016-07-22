@@ -244,7 +244,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
         	});
         	Window.getCurrentWindow().close();
         // });
-    });
+    }); //end btnNext click event
     
     
 	var _createButtonView = function(arrButtons, buttonViewStyle, selectedButtonStyle, unselectedButtonStyle, clickCallback, enableSearch) {
@@ -507,6 +507,8 @@ exports.get = function(tabSelected, productDetails, successCallback) {
    	 * Create size chart view
    	 */
    	var _createSizeChartView = function(size) {
+   		Ti.API.info(constant.APP + " creating size chart view");
+
    		var sizeChartView = Ti.UI.createView({
    			width: Ti.UI.FILL,
    			height: Ti.UI.SIZE,
@@ -514,12 +516,14 @@ exports.get = function(tabSelected, productDetails, successCallback) {
    		});
    		
    		try {
+   			Ti.API.info(constant.APP + " constructing  mainChart view");
    			var mainChart = Ti.UI.createView(_style.mainChart);
 		    sizeChartView.add(mainChart);
 		    
 		    if(_sizeChartSelected == 'E') {
 		    	var _sizeParent = constant.SIZE_CHARTS[_sizeChartSelected];
 		    	for(var key in _sizeParent) {
+		    		Ti.API.info(constant.APP + " constructing  burstView view");
 			    	var burstView = Ti.UI.createView(Utils._.extend({}, _style.burstView, {
 				    	top: -1,
 				    	borderColor: '#bfbfbf',
@@ -551,6 +555,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
 				    	_customSize[this.key] = this.value;
 				    });
 			    }
+
 		    }
 		    else {
 		    	var _sizeParent = constant.SIZE_CHARTS[_sizeChartSelected][size];
@@ -602,6 +607,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
 				    sizeChartView.add(burstView);
 			    }
 		    }
+		    Ti.API.info(constant.APP + " try block complete");
    		}
    		catch(e) {}
    		
@@ -621,6 +627,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
    			break;
    		}
    		
+   		Ti.API.info(constant.APP + " constructing labelSizeComment label");
    		var lblSizeComment = Ti.UI.createLabel(Utils._.extend({}, _commonStyle.label, {
 			text: _sizeChartComment,
 			left: UI.left(10),
@@ -635,6 +642,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
 	    }));
    		sizeChartView.add(lblSizeComment);
 	    
+	    Ti.API.info(constant.APP + " returning sizeChartView");
 	    return sizeChartView;
    	};
 	
@@ -754,8 +762,11 @@ exports.get = function(tabSelected, productDetails, successCallback) {
     
     sizesView.add(selectSizeView);
     
+    var sizeChartViewRef = null;
+
     if(_sizeChartSelected) {
-    	sizesView.add(_createSizeChartView(_sizeSelected));
+    	sizeChartViewRef = _createSizeChartView(_sizeSelected)
+    	sizesView.add(sizeChartViewRef);
     	if(_sizeChartSelected == 'E') {
     		lblSelectSize.text = 'Enter Sizes';
     	}
@@ -765,6 +776,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
     }
 
     selectSizeView.addEventListener('click', function() {
+    	Ti.API.info(constant.APP + " selectSizeView clicked");
     	if(_sizeChartSelected == '' || _sizeChartSelected == undefined || _sizeChartSelected == null) {
     		return;
     	}
@@ -790,6 +802,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
 		});
 		optiosView.show();
 		optiosView.addEventListener('click', function(e) {
+			Ti.API.info(constant.APP + " optiosView clicked")
 			_sizeSelected = e.option.key;
 			for(var i = 0; i < sizesView.children.length; i++) {
 				if(sizesView.children[i].type != 'selectSize') {
@@ -1375,6 +1388,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
     
     return {
         getView: _getView,
+        sizeChartView: sizeChartViewRef,
         removeFromMemory: _removeFromMemory
     };
 };

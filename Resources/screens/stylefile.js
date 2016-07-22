@@ -3,6 +3,8 @@ exports.get = function(tabSelected, userId, followCallback) {
 	
 	var _pageIndex = 0, _username;
 	
+	Ti.API.info(constant.APP + " userid: " + userId + " logged in user id: " + Utils.loggedInUserId());
+
 	var mainView = Ti.UI.createView({
 	    width: Ti.UI.FILL,
 	    height: Ti.UI.FILL,
@@ -340,7 +342,8 @@ exports.get = function(tabSelected, userId, followCallback) {
 	    			type: 'sold'
 	    		}));
 	    	}
-	    	else if(itemData.KYC != undefined && itemData.KYC == false) {
+	    	// else if(itemData.KYC != undefined && itemData.KYC == false) {
+	    	else if(itemData.KYC != undefined && itemData.KYC == false && userId === Utils.loggedInUserId()) {	
 	    		imgProductView.add(UI.createImageWithTextView({
 	    			width: Ti.UI.FILL,
 	    			height: Ti.UI.FILL,

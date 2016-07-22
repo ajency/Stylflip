@@ -77,7 +77,7 @@ exports.get = function(tabToLoad) {
 			header.setSearchActive(false);
 			_isSearchBarVisible = false;
 		}
-	};
+	}; //end _searchIconClickCallback
     
 	var mainView = Ti.UI.createView(_style.mainView);
 	
@@ -254,7 +254,7 @@ exports.get = function(tabToLoad) {
 			clearTimeout(includeTimeout);
 			includeTimeout = undefined;
 		}, 500);		
-	};
+	}; //_onOptionSelect
 	
 	Ti.App.addEventListener('onOptionSelect', _onOptionSelect);
 	
@@ -265,6 +265,7 @@ exports.get = function(tabToLoad) {
 	 * Tab select listener
 	 */
 	var _onFooterTabSelect = function(e, allowDuplicate) {
+		console.log(constant.APP + " _onFooterTabSelect entered");
 		if(_isSearchBarVisible) {
 			searchBar.setHidden(true);
 			_isSearchBarVisible = false;
@@ -387,7 +388,7 @@ exports.get = function(tabToLoad) {
 				}
 			}
 		});
-	};
+	}; //end _onFooterTabSelect
 	
 	
 	if(osname == 'android') {
@@ -424,6 +425,7 @@ exports.get = function(tabToLoad) {
 	
 	
 	var _onFooterTabEventListener = function(e) {
+		console.log(constant.APP + " _onFooterTabEventListener entered");
 		if(osname == 'android') {
 			if(!_isAppLoaded) {
 				_checkAndLoadNotificationView(e, true);
@@ -447,7 +449,7 @@ exports.get = function(tabToLoad) {
 				_onFooterTabSelect(e);
 			}
 		}
-	};
+	}; //end _onFooterTabEventListener
 	
 	
 	Ti.App.addEventListener('onFooterTabSelect', _onFooterTabEventListener);
@@ -492,7 +494,7 @@ exports.get = function(tabToLoad) {
 	    		}
 	    	}
 	    });
-	};
+	}; //end _registerForPushNotification
 	
 	_registerForPushNotification();
 	
@@ -534,7 +536,7 @@ exports.get = function(tabToLoad) {
         	},
         	error: function(error) {}
         });
-	};
+	}; //end _getUnreadNotificationCount
 	
 	_getUnreadNotificationCount();
 	

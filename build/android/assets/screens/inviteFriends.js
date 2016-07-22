@@ -1,1 +1,0 @@
-/Users/cyrusAjency/Documents/StylFlip/Resources/screens/inviteFriends.js
