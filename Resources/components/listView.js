@@ -79,6 +79,7 @@ exports.get = function() {
 	 */
 	var _tmpWidth = UI.platformWidth / UI.height(50);
 	var _createListView = function() {
+		Ti.API.info(constant.APP + " ######################### CREATING LIST VIEW ############################");
 		var _fireRefresh = false, _currentY;
 		
 		var view = Ti.UI.createScrollView(_style.listView);	

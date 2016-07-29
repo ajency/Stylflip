@@ -3,6 +3,9 @@ exports.get = function(tabSelected, productDetails, successCallback) {
 		screenName: 'Sell Details'
 	});
 	
+	var _win = Window.getCurrentWindow();
+	var _sellDetailsSlugs = _win.customProperty;
+
 	var _style = require('/styles/sell').get();
 	
 	var _currentButtonIndex = 0;
@@ -17,13 +20,15 @@ exports.get = function(tabSelected, productDetails, successCallback) {
 	_sizeChartSelected = productDetails && productDetails.sizeChart ? productDetails.sizeChart : undefined, 
 	_pickupFrom = productDetails && productDetails.pickupFrom ? productDetails.pickupFrom : undefined,
 	_toBeDonated = productDetails && productDetails.toBeDonated ? productDetails.toBeDonated : false,
-	_userAddresses = productDetails && productDetails.userAddresses ? productDetails.userAddresses : undefined;
-	
+	_userAddresses = productDetails && productDetails.userAddresses ? productDetails.userAddresses : undefined,
+	_productDetailsLaunch = productDetails && productDetails.productDetailsLaunch ? productDetails.productDetailsLaunch : false;
+	_productDetailsDiscount = productDetails && productDetails.discountPrice ? productDetails.discountPrice : 0;
 	
 	/*
 	 * Calculating product's final price
 	 */
 	var _getCalculatedPrice = function(sellingPrice, originalPrice) {
+		Ti.API.info(constant.APP + " ############## _getCalculatedPrice CALLED #############");
 		sellingPrice = isNaN(parseFloat(sellingPrice)) ? 0 : parseFloat(sellingPrice);
 		if(sellingPrice == 0) {
 			return '\u20B9 0';
@@ -34,11 +39,17 @@ exports.get = function(tabSelected, productDetails, successCallback) {
 		if(_isShippingToBeAdded) {
 			sellingPrice = sellingPrice + 120;	//	120 is the shipping fees
 		}
+
+		if(isNaN(sellingPrice)){
+			sellingPrice = 0;
+		}
+
 		return '\u20B9 ' + Math.ceil(sellingPrice);
 	};
 	
 	
 	var _getShippingAndHandlingFees = function(sellingPrice) {
+		//Ti.API.info(constant.APP + " ############## _getShippingAndHandlingFees CALLED #############");
 		sellingPrice = isNaN(parseFloat(sellingPrice)) ? 0 : parseFloat(sellingPrice);
 		if(sellingPrice == 0) {
 			return '\u20B9 0';
@@ -112,6 +123,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
     
     
     btnPrev.addEventListener('click', function() {
+    	//Ti.API.info(constant.APP + " ############## btnPrev CLICK CALLED #############");
     	if(_currentButtonIndex > 0) {
     		_currentButtonIndex--;
     		buttonBar.selectButton(_currentButtonIndex);
@@ -119,135 +131,149 @@ exports.get = function(tabSelected, productDetails, successCallback) {
     });
     
     btnNext.addEventListener('click', function() {
+    	//Ti.API.info(constant.APP + " ############## btnNext CLICK CALLED #############");
     	if(this.title == 'NEXT' && _currentButtonIndex < _objButtons.length - 1) {
     		_currentButtonIndex++;
     		buttonBar.selectButton(_currentButtonIndex);
     		return;
     	}
     	
-    	/*
-    	 * 	If button's title is DONE
-    	 */
-    	var _areFieldsInComplete = false, _inCompleteFields = [];
-    	
-	   	if(txtTitle.value.trim() == '' || txtTitle.value.trim() == txtTitle.hintText) {
-    		// alert('Please enter title');
-    		// return;
-    		_areFieldsInComplete = true;
-    		_inCompleteFields.push('Title');
-    	}
-    	if(txtDescription.value.trim() == '' || txtDescription.value.trim() == txtDescription.hintText) {
-    		// alert('Please enter title');
-    		// return;
-    		_areFieldsInComplete = true;
-    		_inCompleteFields.push('Description');
-    	}
-    	if(_categorySelected == undefined) {
-    		// alert('Please select at least one category');
-    		// return;
-    		_areFieldsInComplete = true;
-    		_inCompleteFields.push('Category');
-    	}
-    	// if(_subcategorySelected == undefined) {
-    		// alert('Please select at least one subcategory');
-    		// return;
-    	// }
-    	if(_brandSelected == undefined) {
-    		// alert('Please select brand');
-    		// return;
-    		_areFieldsInComplete = true;
-    		_inCompleteFields.push('Brand');
-    	}
-    	if(_sizeSelected == undefined && _sizeChartSelected == undefined) {
-    		_areFieldsInComplete = true;
-    		_inCompleteFields.push('Size');
-    	}
-    	if(_sizeSelected == 'custom' && (lblBurstValue.value.trim() == '' || lblWaistValue.value.trim() == '' || lblLowWaistValue.value.trim() == '' || lblHipValue.value.trim() == '')) {
-    		_areFieldsInComplete = true;
-    	}
-    	// if(txtDescription.value.trim() == '' || txtDescription.value.trim() == txtDescription.hintText) {
-    		// // alert('Please enter description');
-    		// // return;
-    		// _areFieldsInComplete = true;
-    	// }
-    	if(txtSellingPrice.value.trim() == '') {
-    		// alert('Please enter selling price');
-    		// return;
-    		_areFieldsInComplete = true;
-    		_inCompleteFields.push('Selling Price');
-    	}
-    	if(txtSellingPrice.value.trim() != '' && isNaN(txtSellingPrice.value.trim())) {
-    		// alert('Please enter valid selling price');
-    		// return;
-    		_areFieldsInComplete = true;
-    	}
-    	// if(txtOriginalPrice.value.trim() == '') {
-    		// // alert('Please enter original price');
-    		// // return;
-    		// _areFieldsInComplete = true;
-    		// _inCompleteFields.push('Original Price');
-    	// }
-    	if(txtOriginalPrice.value.trim() != '' && isNaN(txtOriginalPrice.value.trim())) {
-    		// alert('Please enter valid original price');
-    		// return;
-    		_areFieldsInComplete = true;
-    	}
-    	if(_conditionSelected == undefined) {
-    		// alert('Please select condition');
-    		// return;
-    		_areFieldsInComplete = true;
-    		_inCompleteFields.push('Condition');
-    	}
-    	if(_pickupFrom == undefined) {
-    		// alert('Please select condition');
-    		// return;
-    		_areFieldsInComplete = true;
-    		_inCompleteFields.push('Pick-up address');
-    	}
-    	
-    	if(_areFieldsInComplete) {
-    		var alertDialog = UI.createAlertDialog({
+
+    	var _showIncompleteAlert = function(){
+			var alertDialog = UI.createAlertDialog({
     			title: constant.ALERT.TITLE.FAUX_PAS,
 	            message: "You seem to have left out important information regarding your listing. Give it a second look."
 	        });
 	        alertDialog.show();
 	        alertDialog = null;
-	        return;
+    	};
+
+		/*
+    	 * 	If button's title is DONE
+    	 */
+    	try{
+	    	var _areFieldsInComplete = false, _inCompleteFields = [];
+	    	
+		   	if(txtTitle.value.trim() == '' || txtTitle.value.trim() == txtTitle.hintText) {
+	    		// alert('Please enter title');
+	    		// return;
+	    		_areFieldsInComplete = true;
+	    		_inCompleteFields.push('Title');
+	    	}
+	    	if(txtDescription.value.trim() == '' || txtDescription.value.trim() == txtDescription.hintText) {
+	    		// alert('Please enter title');
+	    		// return;
+	    		_areFieldsInComplete = true;
+	    		_inCompleteFields.push('Description');
+	    	}
+	    	if(_categorySelected == undefined) {
+	    		// alert('Please select at least one category');
+	    		// return;
+	    		_areFieldsInComplete = true;
+	    		_inCompleteFields.push('Category');
+	    	}
+	    	// if(_subcategorySelected == undefined) {
+	    		// alert('Please select at least one subcategory');
+	    		// return;
+	    	// }
+	    	if(_brandSelected == undefined) {
+	    		// alert('Please select brand');
+	    		// return;
+	    		_areFieldsInComplete = true;
+	    		_inCompleteFields.push('Brand');
+	    	}
+	    	if(_sizeSelected == undefined && _sizeChartSelected == undefined) {
+	    		_areFieldsInComplete = true;
+	    		_inCompleteFields.push('Size');
+	    	}
+
+	    	if(_sizeSelected == 'custom' && (lblBurstValue.value.trim() == '' || lblWaistValue.value.trim() == '' || lblLowWaistValue.value.trim() == '' || lblHipValue.value.trim() == '')) {
+	    		_areFieldsInComplete = true;
+	    	}
+	    	// if(txtDescription.value.trim() == '' || txtDescription.value.trim() == txtDescription.hintText) {
+	    		// // alert('Please enter description');
+	    		// // return;
+	    		// _areFieldsInComplete = true;
+	    	// }
+	    	if(txtSellingPrice.value.trim() == '') {
+	    		// alert('Please enter selling price');
+	    		// return;
+	    		_areFieldsInComplete = true;
+	    		_inCompleteFields.push('Selling Price');
+	    	}
+	    	if(txtSellingPrice.value.trim() != '' && isNaN(txtSellingPrice.value.trim())) {
+	    		// alert('Please enter valid selling price');
+	    		// return;
+	    		_areFieldsInComplete = true;
+	    	}
+	    	// if(txtOriginalPrice.value.trim() == '') {
+	    		// // alert('Please enter original price');
+	    		// // return;
+	    		// _areFieldsInComplete = true;
+	    		// _inCompleteFields.push('Original Price');
+	    	// }
+	    	if(txtOriginalPrice.value.trim() != '' && isNaN(txtOriginalPrice.value.trim())) {
+	    		// alert('Please enter valid original price');
+	    		// return;
+	    		_areFieldsInComplete = true;
+	    	}
+	    	if(_conditionSelected == undefined) {
+	    		// alert('Please select condition');
+	    		// return;
+	    		_areFieldsInComplete = true;
+	    		_inCompleteFields.push('Condition');
+	    	}
+	    	if(_pickupFrom == undefined) {
+	    		// alert('Please select condition');
+	    		// return;
+	    		_areFieldsInComplete = true;
+	    		_inCompleteFields.push('Pick-up address');
+	    	}
+	    	
+	    	if(_areFieldsInComplete) {
+	    		_showIncompleteAlert();
+		        return;
+	    	}
+	    	
+	    	txtTitle.blur();
+	    	txtDescription.blur();
+	    	txtSellingPrice.blur();
+	    	txtOriginalPrice.blur();
+	    	
+	    	// Window.closeAll(function() {
+	    		var discountPrice = (txtListingPrice.text).split(' ');
+	    		discountPrice = discountPrice[1];
+	        	Utils._.isFunction(successCallback) && successCallback({
+	        		productTitle: txtTitle.value.trim(),
+		        	productDescription: txtDescription.value.trim() == txtDescription.hintText ? '' : txtDescription.value.trim(),
+		        	categoryId: _categorySelected,
+		        	subcategoryId: _subcategorySelected,
+		        	sellingPrice: txtSellingPrice.value.trim(),
+		        	originalPrice: txtOriginalPrice.value.trim(),
+		        	discountPrice: discountPrice,
+		        	discountPercentage: (100 - ((parseFloat(discountPrice)/parseFloat(txtOriginalPrice.value.trim()))*100)) < 0 ? 0 : (100 - ((parseFloat(discountPrice)/parseFloat(txtOriginalPrice.value.trim()))*100)),
+		        	condition: _conditionSelected,
+		        	brandId: _brandSelected,
+		        	brandName: _brandName,
+		        	size: _sizeSelected,
+		        	sizeChart: _sizeChartSelected,
+		        	customSize: _customSize,
+		        	pickupFrom: _pickupFrom,
+		        	userAddresses: _userAddresses,
+		        	toBeDonated: _toBeDonated
+	        	});
+	        	_win.close();
+	        // });
     	}
-    	
-    	txtTitle.blur();
-    	txtDescription.blur();
-    	txtSellingPrice.blur();
-    	txtOriginalPrice.blur();
-    	
-    	// Window.closeAll(function() {
-    		var discountPrice = (txtListingPrice.text).split(' ');
-    		discountPrice = discountPrice[1];
-        	Utils._.isFunction(successCallback) && successCallback({
-        		productTitle: txtTitle.value.trim(),
-	        	productDescription: txtDescription.value.trim() == txtDescription.hintText ? '' : txtDescription.value.trim(),
-	        	categoryId: _categorySelected,
-	        	subcategoryId: _subcategorySelected,
-	        	sellingPrice: txtSellingPrice.value.trim(),
-	        	originalPrice: txtOriginalPrice.value.trim(),
-	        	discountPrice: discountPrice,
-	        	discountPercentage: (100 - ((parseFloat(discountPrice)/parseFloat(txtOriginalPrice.value.trim()))*100)) < 0 ? 0 : (100 - ((parseFloat(discountPrice)/parseFloat(txtOriginalPrice.value.trim()))*100)),
-	        	condition: _conditionSelected,
-	        	brandId: _brandSelected,
-	        	brandName: _brandName,
-	        	size: _sizeSelected,
-	        	sizeChart: _sizeChartSelected,
-	        	customSize: _customSize,
-	        	pickupFrom: _pickupFrom,
-	        	userAddresses: _userAddresses,
-	        	toBeDonated: _toBeDonated
-        	});
-        	Window.getCurrentWindow().close();
-        // });
+    	catch(e){
+    		_showIncompleteAlert();
+    	}
     }); //end btnNext click event
     
-    
+   	var _lastButtonSelectedIndex = -1;
+	var _selectedButtonIndex = -1;
 	var _createButtonView = function(arrButtons, buttonViewStyle, selectedButtonStyle, unselectedButtonStyle, clickCallback, enableSearch) {
+		Ti.API.info(constant.APP + " ############## _createButtonView CALLED #############");
 		var buttonView = Ti.UI.createTableView(Utils._.extend({}, buttonViewStyle, {
 	        height: Ti.UI.FILL
 	    }));
@@ -263,8 +289,8 @@ exports.get = function(tabSelected, productDetails, successCallback) {
 			});
 			buttonView.filterAttribute = 'filterText';
 	    }
-	    var _lastButtonSelectedIndex = -1;
-	    var _selectedButtonIndex = -1;
+	    _lastButtonSelectedIndex = -1;
+	    _selectedButtonIndex = -1;
 	    
 	    var _pageIndex = 0, _pageLimit = 15, _totalRecords = arrButtons.length, _fetchedCount = 0;
 	    
@@ -311,50 +337,81 @@ exports.get = function(tabSelected, productDetails, successCallback) {
 	    // });
 
 	    buttonView.addEventListener('click', function(e) {
-	    	if(_lastButtonSelectedIndex == e.row.index) {
-    			return;
-    		}
+	    	Ti.API.info(constant.APP + " ############## buttonView CLICKED #############");
+	  //   	if(_lastButtonSelectedIndex == e.row.index) {
+   //  			return;
+   //  		}
     		
-    		if(_lastButtonSelectedIndex > -1) {
-	    		if(unselectedButtonStyle) {
-					for(key in unselectedButtonStyle) {
-						_tableData[_lastButtonSelectedIndex].children[0][key] = unselectedButtonStyle[key];
+   //  		if(_lastButtonSelectedIndex > -1) {
+	  //   		if(unselectedButtonStyle) {
+	  //   			Ti.API.info(constant.APP + " COPYING UNSELECT-BUTON STYLE _lastButtonSelectedIndex: " + _lastButtonSelectedIndex);
+			// 		for(key in unselectedButtonStyle) {
+			// 			_tableData[_lastButtonSelectedIndex].children[0][key] = unselectedButtonStyle[key];
+			// 		}
+			// 	}
+			// 	else {
+			// 		_tableData[_lastButtonSelectedIndex].children[0].font = _commonStyle.smallButton.font;
+			// 		_tableData[_lastButtonSelectedIndex].children[0].color = '#999';
+			// 	}
+   //  		}
+    		
+   //  		if(selectedButtonStyle) {
+   //  			Ti.API.info(constant.APP + " COPYING SELECT-BUTON STYLE");
+   //  			Ti.API.info(e.row);
+			// 	for(key in selectedButtonStyle) {
+			// 		e.row.children[0][key] = selectedButtonStyle[key];
+			// 	}
+			// }
+			// else {
+			// 	e.row.children[0].color = '#000';
+	  //   		e.row.children[0].font = {
+	  //               fontSize: UI.fontSize(14),
+	  //               fontFamily: constant.FONT.DEFAULT_FONT,
+	  //               fontWeight: 'bold'
+	  //           };
+			// }
+    		
+   //  		Utils._.isFunction(clickCallback) && clickCallback({buttonData: e.row.data});
+    		
+   //  		_lastButtonSelectedIndex = e.row.index;
+
+    		if(unselectedButtonStyle) {
+    			Ti.API.info(constant.APP + " COPYING UNSELECT-BUTON STYLE");
+    			// for(item in _tableData){
+    			for(item = 0, tLength = _tableData.length; item < tLength; item++){	
+    				for(key in unselectedButtonStyle) {
+						_tableData[item].children[0][key] = unselectedButtonStyle[key];
 					}
-				}
-				else {
-					_tableData[_lastButtonSelectedIndex].children[0].font = _commonStyle.smallButton.font;
-					_tableData[_lastButtonSelectedIndex].children[0].color = '#999';
-				}
-    		}
+    			}
+			}
     		
     		if(selectedButtonStyle) {
+    			Ti.API.info(constant.APP + " COPYING SELECT-BUTON STYLE");
+    			eRowStr = JSON.stringify(e.row.children[0]);
+    			
+    			console.log(eRowStr);
 				for(key in selectedButtonStyle) {
 					e.row.children[0][key] = selectedButtonStyle[key];
 				}
 			}
-			else {
-				e.row.children[0].color = '#000';
-	    		e.row.children[0].font = {
-	                fontSize: UI.fontSize(14),
-	                fontFamily: constant.FONT.DEFAULT_FONT,
-	                fontWeight: 'bold'
-	            };
-			}
-    		
+   		
     		Utils._.isFunction(clickCallback) && clickCallback({buttonData: e.row.data});
     		
-    		_lastButtonSelectedIndex = e.row.index;
-	    });
+	    }); //end buttonView
 	    
 	    
 	    if(_selectedButtonIndex > -1) {
 	    	_tableData[_selectedButtonIndex].fireEvent('click', {row: _tableData[_selectedButtonIndex]});
 	    }
 	    return buttonView;
-    };
+    }; //end _createButtonView
     
 
 	var _loadCategories = function() {
+		//Ti.API.info(constant.APP + " ############## _loadCategories CALLED #############");
+		_lastButtonSelectedIndex = -1;
+	    _selectedButtonIndex = -1;
+
 		if(categoryButtonViewContainer.children.length > 0) {
    			return;
    		}
@@ -400,6 +457,10 @@ exports.get = function(tabSelected, productDetails, successCallback) {
 	};
 	
 	var _loadSubCategories = function(categoryId) {
+		//Ti.API.info(constant.APP + " ############## _loadSubCategories CALLED #############");
+		_lastButtonSelectedIndex = -1;
+	    _selectedButtonIndex = -1;
+
 		if(_categorySelected == undefined) {
 			return;
 		}
@@ -457,6 +518,11 @@ exports.get = function(tabSelected, productDetails, successCallback) {
 	};
     
    	var _loadBrands = function() {
+   		//Ti.API.info(constant.APP + " ############## _loadBrands CALLED #############");
+
+   		_lastButtonSelectedIndex = -1;
+	    _selectedButtonIndex = -1;
+
    		if(brandsView.children.length > 0) {
    			return;
    		}
@@ -493,6 +559,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
    	 * Get size options list
    	 */
    	var _getSizeOptions = function(type) {
+   		//Ti.API.info(constant.APP + " ############## _getSizeOptions CALLED #############");
    		var _list = [];
    		for(var size in constant.SIZE_CHARTS[type]) {
    			_list.push({
@@ -507,7 +574,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
    	 * Create size chart view
    	 */
    	var _createSizeChartView = function(size) {
-   		Ti.API.info(constant.APP + " creating size chart view");
+   		//Ti.API.info(constant.APP + " ############## _createSizeChartView CALLED #############");
 
    		var sizeChartView = Ti.UI.createView({
    			width: Ti.UI.FILL,
@@ -516,37 +583,94 @@ exports.get = function(tabSelected, productDetails, successCallback) {
    		});
    		
    		try {
-   			Ti.API.info(constant.APP + " constructing  mainChart view");
-   			var mainChart = Ti.UI.createView(_style.mainChart);
+   			//Ti.API.info(constant.APP + " constructing  mainChart view");
+
+   			var mainChart = undefined;
+
+   			if(_productDetailsLaunch){
+	   			var createProps = Utils._.extend({},_style.mainChart,{
+					borderColor: '#ffffff'
+				});
+			 	mainChart = Ti.UI.createView(createProps);
+   			}
+   			else{ // set a white border in the modal
+ 				mainChart = Ti.UI.createView(_style.mainChart); 	  				
+   			}
+
 		    sizeChartView.add(mainChart);
 		    
-		    if(_sizeChartSelected == 'E') {
+		    if(_sizeChartSelected == 'E') { // size chart for bags
 		    	var _sizeParent = constant.SIZE_CHARTS[_sizeChartSelected];
 		    	for(var key in _sizeParent) {
-		    		Ti.API.info(constant.APP + " constructing  burstView view");
 			    	var burstView = Ti.UI.createView(Utils._.extend({}, _style.burstView, {
 				    	top: -1,
 				    	borderColor: '#bfbfbf',
 				    	borderWidth: 1
 				    }));
+
+				    // console.log("lblBurst: " + constant.SIZE.SIZE_FULL_FORM[key]);
 				    var lblBurst = Ti.UI.createLabel(Utils._.extend({}, _style.lblBurst, {
-				    	text: constant.SIZE_FULL_FORM[key]
+				    	text: constant.SIZE_FULL_FORM[key],
+				    	left: '35%'
 				    }));
-				    var lblBurstValue = Ti.UI.createTextField(Utils._.extend({}, _style.lblBurstValue, {
-				    	value: _customSize != undefined && _customSize[constant.SIZE_KEYS[key]] != undefined ? _customSize[constant.SIZE_KEYS[key]] : '',
-				    	width: UI.width(45),
-				    	height: UI.height(30),
-				    	maxLength: 5,
-				    	paddingRight: 2,
-				    	textAlign: 'right',
-				    	borderColor: '#bfbfbf',
-				    	borderWidth: 1,
-				    	key: constant.SIZE_KEYS[key]
-				    }));
+
+				    var _textIsEditable;
+				    if(_customSize.readOnly){
+				    	_textIsEditable = false;
+				    }
+				    else{
+				    	_textIsEditable = true;
+				    }
+
+				    // console.log(_customSize != undefined && _customSize[constant.SIZE_KEYS[key]] != undefined ? _customSize[constant.SIZE_KEYS[key]] : '');
+				    
+				    // var lblBurstValue = Ti.UI.createTextField(Utils._.extend({}, _style.lblBurstValue, {
+				    // 	value: _customSize != undefined && _customSize[constant.SIZE_KEYS[key]] != undefined ? _customSize[constant.SIZE_KEYS[key]] : '',
+				    // 	width: UI.width(45),
+				    // 	height: UI.height(30),
+				    // 	maxLength: 5,
+				    // 	paddingRight: 2,
+				    // 	textAlign: 'right',
+				    // 	borderColor: '#bfbfbf',
+				    // 	borderWidth: 1,
+				    // 	editable: _textIsEditable,
+				    // 	key: constant.SIZE_KEYS[key]
+				    // }));
+				    var lblBurstValStyle = null;
+				    var burstVal = _customSize != undefined && _customSize[constant.SIZE_KEYS[key]] != undefined ? _customSize[constant.SIZE_KEYS[key]] : ''
+				    if(_productDetailsLaunch){
+				    	lblBurstValStyle = {
+					    	value: burstVal,
+					    	width: Ti.UI.SIZE,
+					    	height: UI.height(30),
+					    	maxLength: 5,
+					    	paddingRight: 2,
+					    	borderColor: '#bfbfbf',
+					    	borderWidth: 1,
+					    	touchEnabled: false
+					    }
+				    }
+				    else{
+				    	lblBurstValStyle = {
+					    	value: burstVal,
+					    	width: UI.width(45),
+					    	height: Ti.UI.SIZE,
+					    	maxLength: 5,
+					    	paddingRight: 2,
+					    	textAlign: 'right',
+					    	borderColor: '#bfbfbf',
+					    	borderWidth: 1,
+					    	editable: _textIsEditable,
+					    	key: constant.SIZE_KEYS[key]
+					    }
+				    }
+				    var lblBurstValue = Ti.UI.createTextField(Utils._.extend({}, _style.lblBurstValue,lblBurstValStyle));
+
 				    var lblBurstIn = Ti.UI.createLabel(Utils._.extend({}, _style.lblBurstValue, {
-				    	text: 'in.',
-				    	left: UI.left(170)
+				    	text: 'in.'
+				    	// left: UI.left(170)
 				    }));
+
 				    burstView.add(lblBurst);
 				    burstView.add(lblBurstValue);
 				    burstView.add(lblBurstIn);
@@ -579,35 +703,82 @@ exports.get = function(tabSelected, productDetails, successCallback) {
 				    mainChart.add(USView);
 			    }
 			    
+			    var _sKeyLength = Object.keys(_sizeParent.secondary).length;
+			    var viewWidth = (110 / 3) + '%';
+			    // if(_productDetailsLaunch){
+			    	if(_sKeyLength > 1){ // clothing apparel
+				    	viewWidth = (110 / 3) + '%';
+				    }
+				    else{ // for sizeChart  type E  (shoes)
+				    	viewWidth = '28%';
+				    }
+			    // }
+			    // else{
+			    // 	viewWidth = '30%';
+			    // }
+			    
+
 			    for(var key in _sizeParent.secondary) {
 			    	var burstView = Ti.UI.createView(Utils._.extend({}, _style.burstView, {
 				    	top: -1,
 				    	borderColor: '#bfbfbf',
 				    	borderWidth: 1
 				    }));
+
+				    // var lblBurstView = Ti.UI.createView({
+				    // 	width: viewWidth
+				    // });
+					
+					//Ti.API.info(constant.APP + " ########## FIRST KEY: " + constant.SIZE_FULL_FORM[key]);
 				    var lblBurst = Ti.UI.createLabel(Utils._.extend({}, _style.lblBurst, {
-				    	text: constant.SIZE_FULL_FORM[key]
+				    	text: constant.SIZE_FULL_FORM[key],
+				    	left: viewWidth
 				    }));
+
+				    // lblBurstView.add(lblBurst);
+
+				    // var lblBurstValueView = Ti.UI.createView({
+				    // 	width: Ti.UI.SIZE
+				    // });
+
 				    var lblBurstValue = Ti.UI.createTextField(Utils._.extend({}, _style.lblBurstValue, {
+				    	// left: 0,
 				    	value: _sizeParent.secondary[key],
-				    	width: UI.width(45),
-				    	height: UI.height(30),
+				    	// width: UI.width(45),
+				    	width: Ti.UI.SIZE,
+				    	// height: UI.height(30),
+				    	height: Ti.UI.SIZE,
 				    	maxLength: 5,
 				    	paddingRight: 2,
-				    	textAlign: 'right',
+				    	// textAlign: 'right',
 				    	touchEnabled: false
 				    }));
+
+				    // lblBurstValueView.add(lblBurstValue);
+				    
+				    // var lblBurstInView = Ti.UI.createView({
+				    // 	width: Ti.UI.SIZE
+				    // });
+
 				    var lblBurstIn = Ti.UI.createLabel(Utils._.extend({}, _style.lblBurstValue, {
-				    	text: 'in.',
-				    	left: UI.left(170)
+				    	text: 'in.'
+				    	// left: UI.left(170)
 				    }));
+
+				    // lblBurstInView.add(lblBurstIn);
+				    
 				    burstView.add(lblBurst);
 				    burstView.add(lblBurstValue);
 				    burstView.add(lblBurstIn);
+
+				    // burstView.add(lblBurstView);
+				    // burstView.add(lblBurstValueView);
+				    // burstView.add(lblBurstInView);
+
 				    sizeChartView.add(burstView);
 			    }
 		    }
-		    Ti.API.info(constant.APP + " try block complete");
+		    //Ti.API.info(constant.APP + " try block complete");
    		}
    		catch(e) {}
    		
@@ -627,7 +798,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
    			break;
    		}
    		
-   		Ti.API.info(constant.APP + " constructing labelSizeComment label");
+   		//Ti.API.info(constant.APP + " constructing labelSizeComment label");
    		var lblSizeComment = Ti.UI.createLabel(Utils._.extend({}, _commonStyle.label, {
 			text: _sizeChartComment,
 			left: UI.left(10),
@@ -642,10 +813,9 @@ exports.get = function(tabSelected, productDetails, successCallback) {
 	    }));
    		sizeChartView.add(lblSizeComment);
 	    
-	    Ti.API.info(constant.APP + " returning sizeChartView");
+	    //Ti.API.info(constant.APP + " returning sizeChartView");
 	    return sizeChartView;
-   	};
-	
+   	}; //end _createSizeChartView
 	
 	/*
 	 * Inputs view
@@ -656,6 +826,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
     	height: Ti.UI.SIZE,
     	layout: 'vertical'
     });
+
     var txtTitle = UI.createTextField(Utils._.extend({}, _style.textArea, {
     	top: 0,
     	left: UI.left(30),
@@ -668,6 +839,9 @@ exports.get = function(tabSelected, productDetails, successCallback) {
         maxLength: 150,
         bubbleParent: false
     }));
+
+    _sellDetailsSlugs.txtTitle = "";
+
     var lblTitle = Ti.UI.createLabel(Utils._.extend({}, _commonStyle.txtField, {
     	text: 'What are you selling?\n\nAn interesting title can get your item noticed.',
     	top: UI.top(20),
@@ -765,7 +939,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
     var sizeChartViewRef = null;
 
     if(_sizeChartSelected) {
-    	sizeChartViewRef = _createSizeChartView(_sizeSelected)
+    	sizeChartViewRef = _createSizeChartView(_sizeSelected);
     	sizesView.add(sizeChartViewRef);
     	if(_sizeChartSelected == 'E') {
     		lblSelectSize.text = 'Enter Sizes';
@@ -776,7 +950,8 @@ exports.get = function(tabSelected, productDetails, successCallback) {
     }
 
     selectSizeView.addEventListener('click', function() {
-    	Ti.API.info(constant.APP + " selectSizeView clicked");
+    	//Ti.API.info(constant.APP + " ############## selectSizeView CLICKED #############");
+
     	if(_sizeChartSelected == '' || _sizeChartSelected == undefined || _sizeChartSelected == null) {
     		return;
     	}
@@ -802,7 +977,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
 		});
 		optiosView.show();
 		optiosView.addEventListener('click', function(e) {
-			Ti.API.info(constant.APP + " optiosView clicked")
+			//Ti.API.info(constant.APP + " ############## selectSizeView optiosView CLICKED #############");
 			_sizeSelected = e.option.key;
 			for(var i = 0; i < sizesView.children.length; i++) {
 				if(sizesView.children[i].type != 'selectSize') {
@@ -814,7 +989,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
 			optiosView.hide();
 			// buttonBar.selectButton(_currentButtonIndex+1);
 		});
-    });
+    }); //end selectSizeView
 	
     
     /*
@@ -860,6 +1035,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
     priceView.top = 0;
     var txtSellingPrice = UI.createTextField(Utils._.extend({}, _commonStyle.txtField, {
     	top: -1,
+    	value: '',
     	width: UI.width(262),
     	height: UI.height(40),
         hintText: 'asking price',
@@ -880,6 +1056,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
     var txtOriginalPrice = UI.createTextField(Utils._.extend({}, _commonStyle.txtField, {
     	top: -1,
         width: UI.width(262),
+        value: '',
     	height: UI.height(40),
         hintText: 'original price (optional)',
         keyboardType: Ti.UI.KEYBOARD_DECIMAL_PAD,
@@ -960,6 +1137,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
     donateView.add(lblDonateText);
     
     btnDonateView.addEventListener('click', function() {
+    	//Ti.API.info(constant.APP + " ############## btnDonateView CLICKED #############");
     	if(this.children[0].backgroundImage == '/images/sell/form-check-off.png') {
     		this.children[0].backgroundImage = '/images/sell/form-check-on.png';
     		_toBeDonated = true;
@@ -974,7 +1152,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
     		this.children[0].backgroundImage = '/images/sell/form-check-off.png';
     		_toBeDonated = false;
     	}
-    });
+    }); //end btnDonateView
     
     priceView.add(txtSellingPrice);
     // priceView.add(lblOriginalPrice);
@@ -985,6 +1163,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
     priceView.add(donateView);
     
     btnViewDetails.addEventListener('click', function() {
+    	//Ti.API.info(constant.APP + " ############## btnViewDetails CLICKED #############");
     	Analytics.trackEvent({
 	  		category: "View Details (Sell)",
 	  		action: "click",
@@ -999,13 +1178,15 @@ exports.get = function(tabSelected, productDetails, successCallback) {
     	});
     	alertDialog.show();
     	alertDialog = null;
-    });
+    }); //end btnViewDetails click callback
     
     
     txtSellingPrice.addEventListener('change', function() {
+    	Ti.API.info(constant.APP + " ############## txtSellingPrice CLICKED #############");
     	txtListingPrice.text = _getCalculatedPrice(txtSellingPrice.value.trim(), txtOriginalPrice.value.trim());
     });
     txtOriginalPrice.addEventListener('change', function() {
+    	Ti.API.info(constant.APP + " ############## txtOriginalPrice CLICKED #############");
     	txtListingPrice.text = _getCalculatedPrice(txtSellingPrice.value.trim(), txtOriginalPrice.value.trim());
     });
     
@@ -1067,6 +1248,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
     
 
     selectAddressView.addEventListener('click', function() {
+    	//Ti.API.info(constant.APP + " ############## selectAddressView CLICKED #############");
     	var sourceView = this;
     	if(!_userAddresses) {
     		var _requestArgs = {
@@ -1112,6 +1294,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
 					});
 					optiosView.show();
 					optiosView.addEventListener('click', function(e) {
+						//Ti.API.info(constant.APP + " ############## getResponse success optiosView CLICKED #############");
 						optiosView.hide();
 						if(e.option == 'Add a location') {
 				    		var window = Window.create(exitOnClose=false);
@@ -1163,6 +1346,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
 		});
 		optiosView.show();
 		optiosView.addEventListener('click', function(e) {
+			//Ti.API.info(constant.APP + " ############## popOver optiosView CLICKED #############");
 			optiosView.hide();
 			if(e.option == 'Add a location') {
 	    		var window = Window.create(exitOnClose=false);
@@ -1184,7 +1368,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
 	    		_pickupFrom = e.option;
 	    	}
 		});
-    });
+    }); //end selectAddressView
     
     
     var _brandsTimeout;
@@ -1271,7 +1455,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
 	    		e.viewToShow.visible = true;
 	    	}
     	}
-    };
+    }; //end _buttonBarClickCallback
     
 
 	/*
@@ -1302,6 +1486,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
 	});
 	
 	buttonBar.addEventListener('click', function(e) {
+		//Ti.API.info(constant.APP + " ############## buttonBar CLICKED #############");
 		Analytics.trackEvent({
 	  		category: Utils.toFirstUppercase(e.title) + " (Sell)",
 	  		action: "click",
@@ -1336,23 +1521,27 @@ exports.get = function(tabSelected, productDetails, successCallback) {
 	var _titleAutoSelect = productDetails && productDetails.productTitle ? false : true;
 	
 	txtTitle.addEventListener('return', function() {
+		//Ti.API.info(constant.APP + " ############## txtTitle RETURN #############");
 		buttonBar.selectButton(_currentButtonIndex+1);
 	});
 	
 	txtDescription.addEventListener('return', function() {
+		//Ti.API.info(constant.APP + " ############## txtDescription RETURN #############");
 		buttonBar.selectButton(_currentButtonIndex+1);
 	});
 	
     if(productDetails) {
     	txtOriginalPrice.value = productDetails.originalPrice;
     	txtSellingPrice.value = productDetails.sellingPrice;
-    	txtListingPrice.text = '\u20B9 ' + productDetails.discountPrice;
+    	// txtListingPrice.text = '\u20B9 ' + productDetails.discountPrice;
+    	txtListingPrice.text = '\u20B9 ' + _productDetailsDiscount;
     }
     
     fieldsView.add(buttonBar.getView());
     fieldsView.add(inputView);
     
     fieldsView.addEventListener('swipe', function(e) {
+    	//Ti.API.info(constant.APP + " ############## fieldsView SWIPE #############");
     	if(e.direction == 'right') {
     		btnPrev.fireEvent('click');
     	}
@@ -1362,6 +1551,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
     });
     
     mainView.addEventListener('click', function() {
+    	//Ti.API.info(constant.APP + " ############## mainView SWIPE #############");
     	txtTitle.blur();
     	txtDescription.blur();
     	txtSellingPrice.blur();
@@ -1374,7 +1564,7 @@ exports.get = function(tabSelected, productDetails, successCallback) {
     };
     
     
-    Window.getCurrentWindow().addEventListener('close', function() {
+    _win.addEventListener('close', function() {
     	_removeFromMemory();
     });
     

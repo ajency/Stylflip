@@ -2,7 +2,14 @@ exports.get = function() {
 	Analytics.trackScreen({
 		screenName: 'Login'
 	});
-	
+
+	Ti.API.info(constant.APP + " <<<<<<<<<<<<<<<<<<<<<<<< LOGIN SCREEN LOAD >>>>>>>>>>>>>>>>>>>>>>>");
+
+    // if(Utils.loggedInUserId() === null){
+    //     NOLOGINDETECTED = true;
+    // }
+    UI.firstLogin = true;
+
     var _style = require('/styles/login').get();
     
     var mainView = Ti.UI.createScrollView(_style.mainView); 

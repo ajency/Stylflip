@@ -12,7 +12,6 @@ if(Ti.Platform.osname == 'iphone' || Ti.Platform.osname == 'ipad') {
 }
 else {
     var isIOS7Plus = false;
-    
     // var ImageFactory = require('fh.imagefactory');
 }
 
@@ -61,10 +60,19 @@ var errorView, _isUserAutoLoggedOut = false;
 
 
 var _onAppResume = function(e) {
-	if(!Utils.isUserLoggedIn()) {
-		return;	
+    Ti.API.info(constant.APP + " ##################### RESUMING APP #####################");
+    // Ti.API.info(constant.APP + " logged in user: " + Utils.loggedInUserId());
+	
+    if(!Utils.isUserLoggedIn()) {
+		return;
 	}
 	
+    // return here to prevent loading data from server on sizeChart window close
+    if(UI.modalWindowOpen){
+        UI.modalWindowOpen = false;
+        return;
+    }
+
 	var type = e.type;
 	
 	try {
@@ -72,6 +80,16 @@ var _onAppResume = function(e) {
 	}
 	catch(e) {}
 	
+    if(UI.disableUpdateOnResume){
+        // UI.disableUpdateOnResume = false;
+        if(UI.firstLogin){
+            UI.firstLogin = false;
+        }
+        else{
+            return;
+        }
+    }
+
 	var _requestArgs = {
         showLoader: true,
         url: 'user.php',
@@ -82,46 +100,48 @@ var _onAppResume = function(e) {
         }
     };
     
+    // return;
     /*
      * Hit web service
      */
+    Ti.API.info(constant.APP + " ######################## HTTP API CALL ON RESUME ########################");
     HttpClient.getResponse({
-    	requestArgs: _requestArgs,
-    	success: function(response) {
+        requestArgs: _requestArgs,
+        success: function(response) {
             if(response.data.status == 1) {
-            	if(type == 'open') {
-            		if(response.data.username == '' || response.data.email == '') {
-            			var editProfile = require('/screens/editProfile').get(undefined, true);
-	        			window.add(editProfile.getView());
-            		}
-            		else {
-            			var dashboard = require('/screens/dashboard').get();
-    					window.add(dashboard.getView());
-            		}
-            	}
+                if(type == 'open') {
+                    if(response.data.username == '' || response.data.email == '') {
+                        var editProfile = require('/screens/editProfile').get(undefined, true);
+                        window.add(editProfile.getView());
+                    }
+                    else {
+                        var dashboard = require('/screens/dashboard').get();
+                        window.add(dashboard.getView());
+                    }
+                }
             }
             else if(response.data.status == 2) {
-            	_isUserAutoLoggedOut = true;
-            	//	account disabled by admin
-            	if(type == 'open') {
-            		var login = require('/screens/login').get();
-					window.add(login.getView());
-            	}
-            	else {
-        			Window.closeAll(function() {
-            			Ti.App.fireEvent('onOptionSelect', {title: 'LOG OUT', key: 'logout'});
-            		});
-            	}
+                _isUserAutoLoggedOut = true;
+                //  account disabled by admin
+                if(type == 'open') {
+                    var login = require('/screens/login').get();
+                    window.add(login.getView());
+                }
+                else {
+                    Window.closeAll(function() {
+                        Ti.App.fireEvent('onOptionSelect', {title: 'LOG OUT', key: 'logout'});
+                    });
+                }
             }
-    	},
-    	error: function(error) {
-    		errorView = UI.createErrorView(error.errorMessage, function() {
-       			_onAppResume(e);
-           	}, type == 'resume' ? {backgroundColor: '#fff'} : undefined);
-           	window.add(errorView);
-    	}
+        },
+        error: function(error) {
+            errorView = UI.createErrorView(error.errorMessage, function() {
+                _onAppResume(e);
+            }, type == 'resume' ? {backgroundColor: '#fff'} : undefined);
+            window.add(errorView);
+        }
     });
-};
+}; //end _onAppResume
 
 /*
  * If user is already signed in, then goto dashboard screen

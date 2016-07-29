@@ -4,7 +4,9 @@ var _openWindows = [];
 /*
  * creating a new window
  */
-Window.create = function(exitOnClose, toBeOpened, disableClick) {
+// Window.create = function(exitOnClose, toBeOpened, disableClick) {
+Window.create = function(exitOnClose, toBeOpened, disableClick, customProperty) {
+
 	var window = Ti.UI.createWindow({
 		backgroundColor: '#FFFFFF', // '#E3E3E3',
 		tabBarHidden: true,
@@ -12,6 +14,7 @@ Window.create = function(exitOnClose, toBeOpened, disableClick) {
 		fullScreen: false,
 		exitOnClose: exitOnClose,
 		toBeOpened: toBeOpened?true:false,
+		customProperty: customProperty
 	});
 	
 	if(osname == 'android') {
@@ -50,7 +53,8 @@ Window.create = function(exitOnClose, toBeOpened, disableClick) {
 	/*
 	 * Set current window to currently focused window
 	 */	
-	window.addEventListener('focus', function() {
+	window.addEventListener('focus', function(e) {
+		Ti.API.info(constant.APP + " <<<<<<<<<<<<<<<<<<<<<<<<<<< MAIN WINDOW FOCUSED >>>>>>>>>>>>>>>>>>>>>>>>>>");
 		if(osname == 'android') {
 			if(window.wasBlurred) {
 				Ti.App.fireEvent('checkAndLoadNotificationView');
@@ -219,6 +223,6 @@ Window.clearMemory = function(parentView, callback) {
     }
 };
 
-
+Window.sellDetailsSlugs = {};
 
 module.exports = Window;

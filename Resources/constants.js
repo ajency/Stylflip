@@ -21,8 +21,12 @@ else {
 
 exports.get = function() {
 	return {
-		DOMAIN: 'http://54.149.49.29/stylflip/',
-		BASE_URL: 'http://54.149.49.29/stylflip/api/',
+
+		DOMAIN: 'http://54.69.190.92/stylflip/',
+		BASE_URL: 'http://54.69.190.92/stylflip/api/',
+
+		// DOMAIN: 'http://54.149.49.29/stylflip/', 54.69.190.92
+		// BASE_URL: 'http://54.149.49.29/stylflip/api/',
 		
 		// DOMAIN: 'http://localhost/sf/server/',
 		// BASE_URL: 'http://localhost/sf/server/api/',
@@ -304,7 +308,7 @@ exports.get = function() {
 				}
 			},
 			
-			C: {
+			C: { //shoes
 				2: {
 					primary: {
 						UK: 2, US: 4, EU: 35
@@ -371,14 +375,14 @@ exports.get = function() {
 				}
 			},
 			
-			D: {
+			D: { //accessories
 				S: {},
 				M: {},
 				L: {},
 				FREE: {}
 			},
 			
-			E: {
+			E: { //bags
 				HEIGHT: {},
 				LENGTH: {}
 			},

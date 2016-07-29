@@ -261,3 +261,52 @@
  "isTagged":"0","timestamp":"3 weeks ago","photos":{"productImage1":"uploads\/productPics\/thumbnails\/10191_thumbnail_101467216424.png","productImage2":"uploads\/productPics\/thumbnails\/10191_thumbnail_231467650472.png","productImage3":"uploads\/productPics\/thumbnails\/10191_thumbnail_321467650472.png","productImage4":"uploads\/productPics\/thumbnails\/10191_thumbnail_411467650472.png","productImage5":"uploads\/productPics\/thumbnails\/10191_thumbnail_501467650472.png"},"isLiked":0,"isAddedToWant":0,"KYC":true}]}
 [INFO] :   [object Object]
 
+[INFO] :   STYLFLIP http api call message recived
+[INFO] :   {"success":true,"data":[{"productId":"2762","categoryId":"9","subcategoryId":"44","sellingPrice":"699","brandId":"430","userId":"12393","isToBeDonated":"0","pickupFrom":"Maduban","isPurchased":"1","isApproved":"1","condition":"New without tags","size":"M","sizeChart":"D","height":"","length":"","comments":"1","productTitle":"Vintage coin neckpiece","primaryPhoto":"uploads\/productPics\/thumbnails\/12393_thumbnail_101469453483.png","productDescription":"Vintage coin neckpiece","createdOn":"2016-07-25 06:31:24","profilePicURL":"uploads\/profilePics\/thumbnails\/12393_thumbnail_01469449514.png","username":"Kritikakhurana","firstName":"Kritika","lastName":"Khurana","userLocation":"New delhi","brand":"Others","category":"ACCESSORIES","subcategory":"Jewellery","originalPrice":"999","discountPrice":"959","discountPercentage":"4","likes":"1","isLiked":"0","isAddedToWant":"0","isCommented":"0","isTagged":"0","timestamp":"19 hours ago","photos":{"productImage1":"uploads\/productPics\/thumbnails\/12393_thumbnail_101469453483.png"},"KYC":true}]}
+[INFO] :   [object Object]
+
+
+[INFO] :   STYLFLIP http api call message recived
+[INFO] :   {"success":true,"data":[{"productId":"2798","categoryId":"7","subcategoryId":"37","sellingPrice":"683","brandId":"459","userId":"11601","isToBeDonated":"0","pickupFrom":"Gala no. 7, creative industrial estate","isPurchased":"0","isApproved":"1","condition":"Brand new with tags","size":"","sizeChart":"C","height":"","length":"","comments":"0","productTitle":"Eye slip on","primaryPhoto":"uploads\/productPics\/thumbnails\/11601_thumbnail_101469517802.png","productDescription":"Faux horse hair, open toed, slip ons | Available in sizes: 35,36,38","createdOn":"2016-07-26 00:22:28","profilePicURL":"uploads\/profilePics\/thumbnails\/11601_thumbnail_01469440731.png","username":"Blurstore","firstName":"Blur","lastName":"Store","userLocation":"Mumbai","brand":"Blur Designs","category":"SHOES","subcategory":"Slippers \/ Flip-flops","originalPrice":"0","discountPrice":"940","discountPercentage":"0","likes":"0","isLiked":"0","isAddedToWant":"0","isCommented":"0","isTagged":"0","timestamp":"1 hour ago","photos":{"productImage1":"uploads\/productPics\/thumbnails\/11601_thumbnail_101469517802.png","productImage2":"uploads\/productPics\/thumbnails\/11601_thumbnail_211469517802.png"},"KYC":true}]}
+[INFO] :   [object Object]
+[INFO] :   STYLFLIP productDetails _loadProductDetails init
+
+[INFO] :   STYLFLIP http api call message recived
+[INFO] :   {"success":true,"data":[{"productId":"2797","categoryId":"7","subcategoryId":"37","sellingPrice":"1791","brandId":"459","userId":"11601","isToBeDonated":"0","pickupFrom":"Gala no. 7, creative industrial estate","isPurchased":"0","isApproved":"1","condition":"Brand new with tags","size":"","sizeChart":"C","height":"","length":"","comments":"0","productTitle":"Holographic cross strap sandals","primaryPhoto":"uploads\/productPics\/thumbnails\/11601_thumbnail_101469517619.png","productDescription":"Slip on buckle fastenings, open toe design, faux leather upper | Available in sizes: 35,36,37,38","createdOn":"2016-07-26 00:19:24","profilePicURL":"uploads\/profilePics\/thumbnails\/11601_thumbnail_01469440731.png","username":"Blurstore","firstName":"Blur","lastName":"Store","userLocation":"Mumbai","brand":"Blur Designs","category":"SHOES","subcategory":"Slippers \/ Flip-flops","originalPrice":"0","discountPrice":"2270","discountPercentage":"0","likes":"0","isLiked":"0","isAddedToWant":"0","isCommented":"0","isTagged":"0","timestamp":"1 hour ago","photos":{"productImage1":"uploads\/productPics\/thumbnails\/11601_thumbnail_101469517619.png","productImage2":"uploads\/productPics\/thumbnails\/11601_thumbnail_201469517661.png"},"KYC":true}]}
+[INFO] :   [object Object]
+[INFO] :   STYLFLIP productDetails _loadProductDetails init
+
+
+[INFO] :   STYLFLIP COPYING SELECT-BUTON STYLE
+[INFO] :   {
+"bubbleParent":true,
+"enabled":true,
+"title":"CLOTHING  ",
+"color":"#454545",
+"backgroundColor":"transparent",
+"backgroundRepeat":false,
+"height":135,
+"left":-16.875,
+"borderWidth":1,
+"top":-1,
+"opacity":1,
+"children":[],
+"rect":{
+	"height":135,
+	"width":911,
+	"y":-1,
+	"x":-17
+},
+"visible":true,
+"width":911.25,
+"size":{"height":135,"width":911,"y":0,"x":0},
+"keepScreenOn":false,
+"backgroundImage":"transparent",
+"borderColor":"#bfbfbf",
+"apiName":"Ti.UI.Button",
+"font":{"fontSize":40.5,"fontFamily":"Roboto"},
+"touchEnabled":true,
+"_events":{"touchstart":{},"touchend":{},"touchcancel":{}}
+}
+
+[INFO] :   STYLFLIP getting response data from server

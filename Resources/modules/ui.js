@@ -9,6 +9,8 @@ var negativeButtons = ['no', 'cancel', 'false', 'wrong', 'disagree'];
 
 var UI = {};
 
+UI.disableUpdateOnResume = false;
+UI.firstLogin = false;
 UI.platformWidth = pwidth;
 UI.platformHeight = pheight;
 
@@ -1313,33 +1315,27 @@ UI.createScrollView = function(config) {
 };
 
 UI.showModal = function(windowTitle,view){
+
     if(!windowTitle){
-        windowTitle = "Modal Window";
+        windowTitle = "Modal Message";
+    }
+
+    function hideWindow(){
+        Loader.hide();  
+        modalWindow.close();
     }
 
     var modalWindow = Ti.UI.createWindow({
-        // top: UI.top(20),
-        // width: pwidth * 0.9,
-        height: pheight * 0.7,
+        top: UI.top(10),
+        width: pwidth * 0.9,
+        height: pheight * 0.8,
         title: windowTitle,
-        // backgroundColor : '#40000000' //transparent
-        backgroundColor : '#ffffff',
-        // borderColor: 'black',
-        // borderRadius: 4,
-        // borderWidth: 5
+        backgroundColor : '#ffffff'
         // rightNavButton: cancelButton
     });
 
-    // var wrapperView    = Ti.UI.createView(); // Full screen
-    // var backgroundView = Ti.UI.createView({  // Also full screen
-    //     backgroundColor : '#000',
-    //     opacity         : 0.5
-    // });
     var containerView  = Ti.UI.createView({  // Set height appropriately
-        // height          : Ti.UI.FILL,
-        // top: UI.height(30),
         height: Ti.UI.SIZE,
-        // height: Ti.UI.FILL,
         backgroundColor: '#FFF',
         layout: 'vertical'
     });
@@ -1348,31 +1344,30 @@ UI.showModal = function(windowTitle,view){
         title: 'Got it',
         bottom: 0
     });
-    closeButton.addEventListener('click', function () {
-        modalWindow.close();
-    });
+    closeButton.addEventListener('click', hideWindow);
+
+    if(osname == 'android') {
+        modalWindow.addEventListener('android:back', hideWindow);
+    }
 
     var closeButonView = Ti.UI.createView({
         height: Ti.UI.SIZE,
+        top: UI.top(20)
     });
 
     closeButonView.add(closeButton);
-    // containerView.add(someLabel);
-    // view.add(closeButonView);
     containerView.add(view);
     containerView.add(closeButonView);
-    // wrapperView.add(backgroundView);
-    // wrapperView.add(containerView);
 
     modalWindow.add(containerView);
 
     modalWindow.open({
         modal: true
-        // modalTransitionStyle: Ti.UI.iPhone.MODAL_TRANSITION_STYLE_FLIP_HORIZONTAL,
-        // modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FORMSHEET
     });
-};
 
+    Loader.show('...');
+    UI.modalWindowOpen = true;
+};
 
 UI.fonts = {};
 

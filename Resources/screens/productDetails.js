@@ -393,62 +393,21 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 	    	Titanium.API.info(constant.APP + " size chart label clicked");
 	    	// UI.showLoginAlert("chart info here");
 	    	Ti.API.info(constant.APP + " sizeChart: " + productData.sizeChart);
-	    	var modalText;
-	    	if(productData.sizeChart === 'C'){
-		    	var chart = Utils._.find(constant.SIZE_CHARTS,function(val,key){
-		    		if(key === productData.sizeChart){
-		    			return true
-		    		}
-		    	});
-
-		    	if(typeof chart === 'object'){
-		    		shoeSizechart = Utils._.find(chart,function(val,key){
-		    			if(key == productData.size){
-		    				return true
-		    			}
-		    		});
-		    	}
-
-		    	if(shoeSizechart){
-		    		var stringChart = JSON.stringify(shoeSizechart);
-					console.log(stringChart);
-		    	}
-
-		   //  	primary: {
-					// 	UK: 7, US: 9, EU: 40
-					// },
-					// secondary: {
-					// 	FOOT_LENGTH: 10.25
-					// }
-
-		    	modalText = "UK: " + shoeSizechart.primary.UK + " US: " + shoeSizechart.primary.US + " EU: " + shoeSizechart.primary.EU
-	    		modalText += "\n Footlength: " + shoeSizechart.secondary.FOOT_LENGTH
-	    	} 
-	    	else{
-	    		modalText = "Coming Soon"
-	    	}
-
 	    	modalView = sellDetails.sizeChartView;
 
 	    	// UI.showModal("Size Chart",modalText);
 	    	UI.showModal("Size Chart",modalView);
 	    };
 
-	    // brandView.add(lblBrand);
-	    brandView.add(lblBrandValue);
-		if(productData.size) {
-			brandView.add(lblLine);
-
-			if(productData.sizeChart === 'C'){
-				brandView.add(lblSizeCountry);
-			}
-
-	    	brandView.add(lblSizeValue);
-
+	    function addSizeChartLabel(){
 	    	if(productData.size !== 'FREE'){
 	   	 		brandView.add(lblLine2);
 		    
 		   	 	// console.log(productData);
+		   	 	Ti.API.info(constant.APP + " ########################## brandView width: " + brandView.getWidth() + " platform width: " + UI.platformWidth + " platform height: " + UI.platformHeight);
+		    	// Ti.API.info(constant.APP + " ########################## platform width: " + Ti.UI.width + " platform height: " + Ti.UI.height);
+
+		    	productData.productDetailsLaunch = true;
 
 		    	sellDetails = require('/screens/sellDetails').get('productDetails', productData, null);
 		    	
@@ -480,15 +439,54 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 
 			    lblClickContainer.add(lblImgScale);
 			    lblClickContainer.add(lblSizeChart);
+			    lblClickContainer.addEventListener('click',_sizeChartLblClick);
 
 		    	// brandView.add(lblSizeChart);
 		    	brandView.add(lblClickContainer);
 
-		    	lblClickContainer.addEventListener('click',_sizeChartLblClick);		
-	   	 	}		
-		}	    
-	    
-	    
+		    			
+	   	 	}
+	    } //end addSizeChartLabel
+
+	    brandView.add(lblBrandValue);
+
+	    function addSizeLabel(){
+	    	if(productData.size){
+	    		brandView.add(lblLine);
+				if(productData.sizeChart === 'C'){ //add label UK for shoes
+					brandView.add(lblSizeCountry);
+				}
+				brandView.add(lblSizeValue);
+	    	}
+	    }
+
+	    if(productData.sizeChart === 'D'){ //accessories
+	    	addSizeLabel();
+	    }else if(productData.sizeChart === 'E'){ //bags
+			// var bagDimensions = "Height: " + productData.height + ", Length: " + productData.length;
+			if(productData.height || productData.length){
+
+				if(!productData.height){
+					productData.height = 'na';
+				}
+
+				if(!productData.length){
+					productData.length = 'na';
+				}
+
+				productData.customSize = {
+					height: productData.height,
+					length: productData.length,
+					readOnly: true 
+				};
+			    addSizeChartLabel();
+			}
+
+		}else if(productData.size) {
+			addSizeLabel();
+			addSizeChartLabel();		
+		}
+		
 	    var conditionView = Ti.UI.createView(_style.pricingView);
 	    var lblCondition = Ti.UI.createLabel(Utils._.extend({}, _style.priceLabels, {
 			text: 'Condition: ' + (osname=='android'?'  ':''),
@@ -497,6 +495,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 	            fontFamily: constant.FONT.DEFAULT_FONT
 	        }
 	    }));
+
 	    var lblConditionValue = Ti.UI.createLabel(Utils._.extend({}, _style.priceLabels, {
 			text: productData.condition?(productData.condition + (osname=='android'?'  ':'')):'-' + (osname=='android'?'  ':''),
 			font: {
@@ -504,6 +503,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 	            fontFamily: constant.FONT.DEFAULT_FONT
 	       }
 	    }));
+
 	    conditionView.add(lblCondition);
 	    conditionView.add(lblConditionValue);
 	    

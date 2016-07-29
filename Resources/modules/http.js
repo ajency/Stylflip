@@ -51,7 +51,10 @@ HttpClient.apiCall = function(params, method, api, successCallback, errorCallbac
 	  	// http onload method
 		_httpClient.onload = function() {
 			Titanium.API.info(constant.APP + " http api call message recived");
-			console.log(this.responseText)
+			Titanium.API.info(this.responseText);
+
+			Ti.App.fireEvent('app:apicallSuccess',{params: params});
+			
 			if(this.showLoader) {
 				Loader.hide();				
 			}
@@ -78,8 +81,7 @@ HttpClient.apiCall = function(params, method, api, successCallback, errorCallbac
 			// }
 			
 			var _responseData = JSON.parse(responseText);
-			// console.dir(_responseData);
-			Titanium.API.info(_responseData);
+
 			if(_responseData.success) {
 			    _responseObject = {
                     success: true,
@@ -93,6 +95,7 @@ HttpClient.apiCall = function(params, method, api, successCallback, errorCallbac
                 	Cache.saveData(api, params.serverArgs, responseText);
                 }
 
+                
                 Utils._.isFunction(successCallback) && successCallback(_responseObject);
 			}
 			else {
@@ -174,6 +177,8 @@ HttpClient.getResponse = function(config) {
 		            serverURL: BASE_URL + api,
 		            serverArgs: params
 		        };
+
+		        Ti.App.fireEvent('app:apicallSuccess',{params: params});
 		        Utils._.isFunction(successCallback) && successCallback(_responseObject);
 			},
 			error: function() {

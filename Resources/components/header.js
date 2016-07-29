@@ -76,15 +76,19 @@ exports.get = function(config) {
 	
 	btnSearchView.addEventListener('click', function(e) {
 		if(btnSearch.backgroundImage == '/images/header/search.png') {
+			Ti.API.info(constant.APP + " ####################### INACTIVE SEARCH ICON CLICKED #####################");
 			btnSearch.backgroundImage = '/images/header/search-active.png';
 			config && config.searchIconClickCallback && config.searchIconClickCallback({show: true});
 			Utils._.isFunction(_clickCallback) && _clickCallback();
 		}
-		else if(btnSearch.backgroundImage == '/images/header/search-active.png') {
+		// else if(btnSearch.backgroundImage == '/images/header/search-active.png') {
+		else if(btnSearch.backgroundImage === '/images/header/closeicon.png' || btnSearch.backgroundImage === '/images/header/search-active.png') {	
+			Ti.API.info(constant.APP + " ####################### ACTIVE SEARCH ICON CLICKED #####################");
 			config && config.searchIconClickCallback && config.searchIconClickCallback({show: false});
 			Utils._.isFunction(_clickCallback) && _clickCallback();
 		}
 		else if(btnSearch.backgroundImage == '/images/header/filter-done.png') {
+			Ti.API.info(constant.APP + " ####################### FILTER-DONE ICON CLICKED #####################");
 			Ti.App.fireEvent('filterDoneClick');
 			_enableFilterDone(false);
 		}
@@ -175,7 +179,6 @@ exports.get = function(config) {
         headerView.add(btnBackView);
 	};
 	
-	
 	var _getView = function() {
 		if(config && config.showMenu && config.rightView) {
 			btnMenuView = Ti.UI.createView(_style.btnMenuView);
@@ -257,6 +260,12 @@ exports.get = function(config) {
 		btnSearchView.visible = bool?true:false;
 	};
 	
+	var _getenableSearchVisibilty = function(){
+		if(btnSearchView){
+			return btnSearchView.visible;
+		}
+	};
+
 	var _enableCompose = function(bool) {
 	};
 	
@@ -301,7 +310,8 @@ exports.get = function(config) {
 	
 	var _setSearchActive = function(bool) {
 		if(bool) {
-			btnSearch.backgroundImage = '/images/header/search-active.png';
+			btnSearch.backgroundImage = '/images/header/closeicon.png';
+			// btnSearch.backgroundImage = '/images/header/search-active.png';
 		}
 		else {
 			btnSearch.backgroundImage = '/images/header/search.png';
@@ -321,9 +331,15 @@ exports.get = function(config) {
 		catch(e) {}
 	};
 	
+	var _getbtnSearch = function(){
+		if(btnSearch){
+			return btnSearch;
+		}
+	};
 	
 	return {
 		getView: _getView,
+		getbtnSearch: _getbtnSearch,
 		getHeaderView: _getHeaderView,
 		setTitle: _setTitle,
 		resetTitle: _resetTitle,
@@ -333,6 +349,7 @@ exports.get = function(config) {
 		enableHeaderIcons: _enableHeaderIcons,
 		enableFilter: _enableFilter,
 		enableSearch: _enableSearch,
+		getSearchVisibility :_getenableSearchVisibilty,
 		enableCompose: _enableCompose,
 		setFilterActive: _setFilterActive,
 		setSearchActive: _setSearchActive,

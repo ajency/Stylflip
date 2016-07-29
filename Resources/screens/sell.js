@@ -226,7 +226,9 @@ exports.get = function(tabSelected, wardrobeData, productData) {
      * DETAILS button click handler
      */
     btnAddProductDetails.addEventListener('click', function() {
-        var window = Window.create();
+        // var window = Window.create();
+        var window = Window.create(null,null,null,Window.sellDetailsSlugs);
+
         var sellDetails = require('/screens/sellDetails').get(tabSelected!=undefined?tabSelected:'sell', _productDetails, function(e) {
         	//	DONE button click handler
         	if(e.saveAddresses) {

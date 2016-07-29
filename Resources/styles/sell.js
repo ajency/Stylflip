@@ -176,7 +176,8 @@ exports.get = function() {
 	    mainChart: {
 	    	left: -1,
 	    	height: Ti.UI.SIZE,
-	    	width: UI.platformWidth + 2,
+	    	// width: UI.platformWidth + 2,
+	    	width: Ti.UI.FILL,
 	    	borderColor: '#bfbfbf',
 	    	borderWidth: 1,
 	    	layout: 'horizontal'
@@ -212,8 +213,10 @@ exports.get = function() {
 	    
 	    burstView: {
 	    	left: -1,
-	    	width: UI.platformWidth + 2,
-    		height: UI.height(40)
+	    	// width: UI.platformWidth + 2,
+	    	width: Ti.UI.FILL,
+    		height: UI.height(40),
+    		layout: 'horizontal'
 	    },
 	    
 	    lblBurst: {
@@ -228,7 +231,8 @@ exports.get = function() {
 	    },
 	    
 	    lblBurstValue: {
-	    	left: UI.left(120),
+	    	// left: UI.left(120),
+	    	left: UI.left(5),
 	    	width: Ti.UI.SIZE,
 	    	height: UI.height(30),
 	    	font: {
@@ -237,7 +241,7 @@ exports.get = function() {
             },
             color: '#757575',
             bubbleParent: false
-	    },
+	    }
     };
     
     return style;    
