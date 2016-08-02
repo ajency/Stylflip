@@ -1,7 +1,9 @@
 //	android - com.placard.StylFlip
 //	ios		- com.placard.StylFlip
 
-if(Ti.Platform.osname == 'iphone' || Ti.Platform.osname == 'ipad') {
+var osname = Ti.Platform.osname;
+
+if(osname === 'iphone' || osname === 'ipad') {
     var osVersion = Ti.Platform.version;
     if(parseInt(osVersion.split('.')[0]) >= 7) {
         var isIOS7Plus = true;
@@ -14,9 +16,6 @@ else {
     var isIOS7Plus = false;
     // var ImageFactory = require('fh.imagefactory');
 }
-
-
-var osname = Ti.Platform.osname;
 
 var constant = require('/constants').get();
 

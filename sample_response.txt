@@ -309,4 +309,32 @@
 "_events":{"touchstart":{},"touchend":{},"touchcancel":{}}
 }
 
+[INFO] :   STYLFLIP COPYING SELECT-BUTON STYLE
+[INFO] :   {
+"bubbleParent":true,
+"enabled":true,
+"title":"ACCESSORIES  ",
+"color":"#454545",
+"backgroundColor":"transparent",
+"backgroundRepeat":false,
+"height":135,
+"left":-16.875,
+"borderWidth":1,
+"top":-1,
+"opacity":1,
+"children":[],
+"rect":{"height":0,"width":0,"y":0,"x":0},
+"visible":true,
+"width":911.25,
+"size":{"height":0,"width":0,"y":0,"x":0},
+"keepScreenOn":false,
+"backgroundImage":"transparent",
+"borderColor":"#bfbfbf",
+"apiName":"Ti.UI.Button",
+"font":{"fontSize":40.5,"fontFamily":"Roboto"},
+"touchEnabled":true,
+"_events":{"touchstart":{},"touchend":{},"touchcancel":{}}
+}
+[INFO] :   STYLFLIP getting response data from server
+
 [INFO] :   STYLFLIP getting response data from server

@@ -1,7 +1,8 @@
 exports.get = function(tabSelected, wardrobeData, productData) {
 	var _style = require('/styles/sell').get();
 	
-	var _productDetails;
+	// var _productDetails;
+	var _productDetails = {};
 	var _productImages = [];
 	var _lastPlusButtonClickedIndex = 0;
 	
@@ -222,12 +223,17 @@ exports.get = function(tabSelected, wardrobeData, productData) {
 	}
 	
     
+	var _updateProductDetails = function(updateVars){
+		Ti.API.info(constant.APP + "_updateProductDetails call " + updateVars);
+		_productDetails = updateVars;
+	};
+
     /*
      * DETAILS button click handler
      */
     btnAddProductDetails.addEventListener('click', function() {
-        // var window = Window.create();
-        var window = Window.create(null,null,null,Window.sellDetailsSlugs);
+        var window = Window.create();
+        // var window = Window.create(null,null,null,Window.sellDetailsSlugs);
 
         var sellDetails = require('/screens/sellDetails').get(tabSelected!=undefined?tabSelected:'sell', _productDetails, function(e) {
         	//	DONE button click handler
@@ -236,12 +242,15 @@ exports.get = function(tabSelected, wardrobeData, productData) {
         		_productDetails.userAddresses = e.userAddresses;
         		return;
         	}
-        	_productDetails = e;
-        	
+
+        	// _productDetails = e;
+        	_updateProductDetails(e);
+
         	UI.enableButton(btnView);
         	UI.enableButton(btnSubmit);
         	UI.enableButton(btnRemove, {color: '#828282'});
-        });
+        },_updateProductDetails);
+
         window.add(sellDetails.getView());
         Window.open(window);  
     });
@@ -389,7 +398,8 @@ exports.get = function(tabSelected, wardrobeData, productData) {
 				            alertDialog = null;
 		        		}
 			            
-			            _productDetails = undefined;
+			            // _productDetails = undefined;
+			            _productDetails = {};
 			            
 			            /*
 			             * Remove images from serverArgs
@@ -464,7 +474,8 @@ exports.get = function(tabSelected, wardrobeData, productData) {
 		alertDialog.show();
 		alertDialog.addEventListener('click', function(e) {
 			if(e.index == 0) {
-				_productDetails = undefined;
+				// _productDetails = undefined;
+				_productDetails = {};
 				for(var i=0; i<_arrImageViews.length; i++) {
 					_arrImageViews[i].children[0].image = null;
 					_arrImageViews[i].children[1].visible = true;

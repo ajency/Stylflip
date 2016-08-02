@@ -9,6 +9,7 @@ exports.get = function() {
 		gridButtonsView: {
 			backgroundColor: '#fff',
 			top: UI.top(0),
+			zIndex: 49,
 		    width: Ti.UI.FILL,
 		    height: UI.height(30)
 		},

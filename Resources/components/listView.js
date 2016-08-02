@@ -79,7 +79,7 @@ exports.get = function() {
 	 */
 	var _tmpWidth = UI.platformWidth / UI.height(50);
 	var _createListView = function() {
-		Ti.API.info(constant.APP + " ######################### CREATING LIST VIEW ############################");
+		//Ti.API.info(constant.APP + " ######################### CREATING LIST VIEW ############################");
 		var _fireRefresh = false, _currentY;
 		
 		var view = Ti.UI.createScrollView(_style.listView);	
@@ -101,7 +101,7 @@ exports.get = function() {
 		var _lastViewIndexCleared = 0;
 		var _indexesCleared = [];
 		var _scrollTimeout;
-		
+
 		if(osname == 'android' && _isPullToRefreshEnabled && _pullToRefreshCallback) {
 			var refreshControl = require('com.rkam.swiperefreshlayout').createSwipeRefresh({
 		    	view: view
@@ -189,7 +189,7 @@ exports.get = function() {
 		}
 
 		return view;
-	};
+	}; //end _createListView
 	
 	/*
 	 * Get clicked child of list view
@@ -294,12 +294,14 @@ exports.get = function() {
 			listView = null;
 		}
 		
+		_removeData();
+		
+		//Ti.API.info(constant.APP + " ################ _createListView called from _setData ##############");
 		listView = _createListView();
 		
 		listView.addEventListener('singletap', _listViewClickListener);
 		mainView.add(listView);
 		
-		// _removeData();
 		_dataLength = 0;
 		
 		if(data) {
@@ -319,6 +321,9 @@ exports.get = function() {
 		}
 		
 		// lazyLoad.setRowsCount(_dataLength);
+		Ti.API.info(constant.APP + " ################ LIST-VIEW ADDED TO MAIN-VIEW ##############");
+		// e.params.serverArgs.searchText
+
 	};
 	
 	/*
@@ -327,6 +332,7 @@ exports.get = function() {
 	var _appendData = function(data) {
 		if(data) {
 			if(!listView) {
+				//Ti.API.info(constant.APP + " ################ _createListView called from _appendData ##############");
 				listView = _createListView();
 				listView.addEventListener('singletap', _listViewClickListener);
 			}
@@ -380,6 +386,7 @@ exports.get = function() {
 	var _appendRow = function(row) {
 		if(row) {
 			if(!listView) {
+				//Ti.API.info(constant.APP + " ################ _createListView called from _appendRow ##############");
 				listView = _createListView();
 				listView.addEventListener('singletap', _listViewClickListener);
 			}

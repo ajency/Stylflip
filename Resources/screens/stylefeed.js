@@ -391,7 +391,7 @@ exports.get = function(header) {
 	 * Create a single feed row
 	 */
 	var _createFeedRow = function(feedData, separator) {
-		Titanium.API.info(constant.APP + " creating feed row...");
+		// Titanium.API.info(constant.APP + " creating feed row...");
 		var feedRow = Ti.UI.createView(_style.feedRow);
 		
 		var profileView = Ti.UI.createView(_style.profileView);
@@ -887,7 +887,7 @@ exports.get = function(header) {
         /*
          * Hit web service
          */
-        Ti.API.info("getting data location 6");
+        Ti.API.info(constant.APP + " #################### getting data location 6 ###################");
         HttpClient.getResponse({
         	requestArgs: _requestArgs,
         	success: function(response) {
@@ -927,6 +927,8 @@ exports.get = function(header) {
 				if(_feedData.length > 0) {
 					_pageIndex++;
 					listView.showLazyLoadingRow();
+
+					Ti.App.fireEvent('app:apicallSuccess',{params: _requestArgs});
 				}
 				else {
 					listView.hideLazyLoadingRow();

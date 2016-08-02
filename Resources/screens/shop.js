@@ -9,7 +9,8 @@ exports.get = function() {
 	var gridButtonsView = Ti.UI.createView(_style.gridButtonsView);
     var btnListView = UI.createButton(Utils._.extend({}, _style.gridButtons, {
 		backgroundImage: '/images/shop/list.png',
-		right: UI.right(10)
+		right: UI.right(10),
+		touchEnabled: true
     }));
     var btnGridView = UI.createButton(Utils._.extend({}, _style.gridButtons, {
 		backgroundImage: '/images/shop/grid-active.png',
@@ -21,8 +22,9 @@ exports.get = function() {
     
     mainView.add(gridButtonsView);
     
-    
-    btnListView.addEventListener('click', function() {
+    // btnListView.addEventListener('click', function() {
+     btnListView.addEventListener('singletap', function() {	
+    	Ti.API.info(constant.APP + " ################ LOADING LIST VIEW ################");
     	btnListView.touchEnabled = false;
     	btnListView.backgroundImage = '/images/shop/list-active.png';
     	btnGridView.touchEnabled = true;
@@ -32,7 +34,9 @@ exports.get = function() {
     	_showListView(true);
     });
     
-    btnGridView.addEventListener('click', function() {
+    // btnGridView.addEventListener('click', function() {
+    btnGridView.addEventListener('singletap', function() {
+    	Ti.API.info(constant.APP + " ################ LOADING GRID VIEW ################");
     	btnListView.touchEnabled = true;
     	btnListView.backgroundImage = '/images/shop/list.png';
     	btnGridView.touchEnabled = false;
@@ -210,6 +214,7 @@ exports.get = function() {
 	
 	
 	var _showListView = function(isRefresh) {
+		Ti.API.info(constant.APP + " ####################### SETTING LIST VIEW ##########################");
 		if(isRefresh) {
 			_pageIndex = 0;
 			try {
@@ -399,6 +404,7 @@ exports.get = function() {
 				
 				if(isRefresh) {
 					listView.setData(_listData);
+					Ti.App.fireEvent('app:apicallSuccess',{params: _requestArgs});
 				}
 				else {
 					listView.appendData(_listData);
@@ -428,10 +434,11 @@ exports.get = function() {
                 }, 500);
         	}
         });
-	};
+	}; //end _showListView
 
 	
 	var _showGridView = function(isRefresh) {
+		Ti.API.info(constant.APP + " ####################### SETTING GRID VIEW ##########################");
 		if(isRefresh) {
 			_pageIndex = 0;
 			try {
@@ -448,6 +455,7 @@ exports.get = function() {
 			}
 		}
 
+		Ti.API.info(constant.APP + " ####################### SETTING GRID VIEW ##########################");
 		var _requestArgs = {
 	        showLoader: true,
 	        url: 'product.php',
@@ -509,7 +517,7 @@ exports.get = function() {
 						text: Utils.ellipsis(_productData[i].brand, 15) + (osname=='android'?'  ':''),
 						font: {
 				            fontSize: UI.fontSize(12),
-				            fontFamily: constant.FONT.DEFAULT_FONT,
+				            fontFamily: constant.FONT.DEFAULT_FONT
 				            // fontWeight: 'bold'
 				        },
 			     		color: '#828282'	//'#ef4e6d'
@@ -700,6 +708,7 @@ exports.get = function() {
 				
 				if(isRefresh) {
 					gridView.setData(_gridData);
+					Ti.App.fireEvent('app:apicallSuccess',{params: _requestArgs});
 				}
 				else {
 					gridView.appendData(_gridData);
@@ -729,7 +738,7 @@ exports.get = function() {
                 }, 500);
         	}
         });
-	};
+	}; //end _showGridView
 	
 	// _showListView();
 	_showGridView(true);

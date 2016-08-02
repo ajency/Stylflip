@@ -220,6 +220,7 @@ exports.get = function(config) {
     	for(var i=0; i<_arrButtons.length; i++) {
     		if(_arrButtons[i].index == buttonIndex) {
     			_arrButtons[i].fireEvent('click', {triggered: true});
+    			// config.selectButtonCallback && Utils._.isFunction(config.selectButtonCallback) && config.selectButtonCallback()
     			break;
     		}
     	}

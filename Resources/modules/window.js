@@ -4,8 +4,8 @@ var _openWindows = [];
 /*
  * creating a new window
  */
-// Window.create = function(exitOnClose, toBeOpened, disableClick) {
-Window.create = function(exitOnClose, toBeOpened, disableClick, customProperty) {
+
+Window.create = function(exitOnClose, toBeOpened, disableClick) {
 
 	var window = Ti.UI.createWindow({
 		backgroundColor: '#FFFFFF', // '#E3E3E3',
@@ -13,8 +13,7 @@ Window.create = function(exitOnClose, toBeOpened, disableClick, customProperty) 
 		navBarHidden: true,
 		fullScreen: false,
 		exitOnClose: exitOnClose,
-		toBeOpened: toBeOpened?true:false,
-		customProperty: customProperty
+		toBeOpened: toBeOpened?true:false
 	});
 	
 	if(osname == 'android') {
@@ -40,6 +39,7 @@ Window.create = function(exitOnClose, toBeOpened, disableClick, customProperty) 
 		window.addEventListener('android:back', function() {
 			Loader.hide();	
 			window.close();
+			Ti.API.info(constant.APP + " ################# android back button clicked #################");
 		});
 	}
 	

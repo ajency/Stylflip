@@ -272,12 +272,14 @@ exports.get = function(config) {
 			Window.clearMemory(gridView);
 			gridView = null;
 		}
+
+		_removeData();
 		
 		gridView = _createGridView();
 		gridView.addEventListener('singletap', _gridViewClickListener);
 		mainView.add(gridView);
 		
-		// _removeData();
+		
 		_dataLength = 0;
 		
 		if(data) {

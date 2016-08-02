@@ -171,6 +171,7 @@ exports.get = function(config) {
         		alertDialog = null;
         	}
         	else {
+        		config && config.backButtonCallback && Utils._.isFunction(config.backButtonCallback) && config.backButtonCallback();
     		 	Loader.hide();
         		Window.getCurrentWindow().close();
         	}

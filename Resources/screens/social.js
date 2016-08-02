@@ -210,6 +210,7 @@ exports.get = function(footerInstance) {
 		    	
 				if(isRefresh) {
 					listView.setData(_listData);
+					Ti.App.fireEvent('app:apicallSuccess',{params: _requestArgs});
 				}
 				else {
 					listView.appendData(_listData);
@@ -453,6 +454,7 @@ exports.get = function(footerInstance) {
 				
 				if(isRefresh) {
 					listView.setData(_listData);
+					Ti.App.fireEvent('app:apicallSuccess',{params: _requestArgs});
 				}
 				else {
 					listView.appendData(_listData);

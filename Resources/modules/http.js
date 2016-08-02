@@ -53,7 +53,7 @@ HttpClient.apiCall = function(params, method, api, successCallback, errorCallbac
 			Titanium.API.info(constant.APP + " http api call message recived");
 			Titanium.API.info(this.responseText);
 
-			Ti.App.fireEvent('app:apicallSuccess',{params: params});
+			// Ti.App.fireEvent('app:apicallSuccess',{params: params});
 			
 			if(this.showLoader) {
 				Loader.hide();				
@@ -178,7 +178,7 @@ HttpClient.getResponse = function(config) {
 		            serverArgs: params
 		        };
 
-		        Ti.App.fireEvent('app:apicallSuccess',{params: params});
+		        // Ti.App.fireEvent('app:apicallSuccess',{params: params});
 		        Utils._.isFunction(successCallback) && successCallback(_responseObject);
 			},
 			error: function() {

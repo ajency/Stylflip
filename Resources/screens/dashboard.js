@@ -166,7 +166,7 @@ exports.get = function(tabToLoad) {
 			top: UI.top(0),
 		    width: Ti.UI.FILL,
 		    height: UI.height(30),
-		    zIndex: 49,
+		    // zIndex: 48,
 		    opacity: 0.0,
 		    borderColor: '#888888' 
     });
@@ -207,7 +207,7 @@ exports.get = function(tabToLoad) {
 	searchBar.addEventListener('search', function(e) {
 		try {
 			currentView.searchData(e.text);
-			// _showSearchBar(e.text);
+			_showSearchBar(e.text);
 		}
 		catch(e) {}
 	});
@@ -354,19 +354,24 @@ exports.get = function(tabToLoad) {
 	
 	// Ti.App.fireEvent('onOptionSelect', {title: 'SOCIAL', key: 'social'});
 	
-	var _showSearchBar = function(searchText){
+	var _showSearchBar = function(searchText, showSearchStatus){
 		if(searchText){
 			searchBar.setHidden(false);
 			_isSearchBarVisible = true;
+		}
+		else{
+			searchBar.setHidden(true);
+			_isSearchBarVisible = false;
+		}
+
+		if(showSearchStatus){
 			searchStatusView.opacity = 1.0;
-			searchStatusLabel.text = 'Search results for "' + searchText + '"';
+			searchStatusLabel.text = 'Showing search results for "' + searchText + '"';
 			if(includeView){
 				includeView.top = UI.top(30);
 			}
 		}
 		else{
-			searchBar.setHidden(true);
-			_isSearchBarVisible = false;
 			searchStatusView.opacity = 0.0;
 			searchStatusLabel.text = "No search results";
 			if(includeView){
@@ -381,7 +386,7 @@ exports.get = function(tabToLoad) {
 		var searchText = e.params && e.params.serverArgs && e.params.serverArgs.searchText ? e.params.serverArgs.searchText : "";
 		if(searchText){
 			Ti.API.info(constant.APP + " ################### SEARCH TEXT FOUND ###################");
-			_showSearchBar(searchText);
+			_showSearchBar(searchText,true);
 		}
 	});
 
@@ -424,7 +429,7 @@ exports.get = function(tabToLoad) {
 				header.enableSearch(true);
 				header.enableCompose(true);
 				
-				_showSearchBar();
+				_showSearchBar(_feedSearchText);
 
 			break;
 			case 'shop':
@@ -435,7 +440,7 @@ exports.get = function(tabToLoad) {
 				header.enableSearch(true);
 				header.enableCompose(false);
 
-				_showSearchBar();
+				_showSearchBar(_shopSearchText);
 			break;
 			case 'sell':
 				header.enableFilter(false);
@@ -451,7 +456,7 @@ exports.get = function(tabToLoad) {
 				header.enableSearch(true);
 				header.enableCompose(false);
 
-				_showSearchBar();
+				_showSearchBar(_socialSearchText);
 			break;
 			case 'stylefile': _showSearchBar();
 			case 'stylefile_push':
