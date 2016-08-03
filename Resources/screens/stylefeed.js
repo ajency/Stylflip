@@ -352,7 +352,7 @@ exports.get = function(header) {
 	 * Load product details
 	 */
 	var _loadProductDetails = function(productId) {
-		console.log(constant.APP + " stylefeed _loadProductDetails init");
+		console.log(constant.APP + " ############### stylefeed _loadProductDetails init #################");
         var window = Window.create(exitOnClose=false);
         var productDetails = require('/screens/productDetails').get(tabSelected='stylefeed', productId, function(e) {
         	if(e.type == 'purchase') {
@@ -670,7 +670,7 @@ exports.get = function(header) {
 		        // Window.open(window); 
 		    // });
 	    }
-	    
+	    // Ti.API.info(constant.APP + " ########### feedData.isLiked: " + feedData.isLiked + " feedData.likes: " + feedData.likes);
 	    feedData.isLiked = feedData.isLiked=='1'||feedData.isLiked==1||feedData.isLiked==true?true:false;
 	    
 	    var commentsView = Ti.UI.createView(_style.commentsView);
@@ -718,10 +718,11 @@ exports.get = function(header) {
 	        /*
 	         * Hit web service
 	         */
-	        Ti.API.info("getting data location 5");
+	        Ti.API.info(constant.APP + " getting data location 5");
 	        HttpClient.getResponse({
 	        	requestArgs: _requestArgs,
 	        	success: function(response) {
+	        		Ti.API.info(constant.APP + " response data status: " + response.data.status);
 		            if(response.data.status == '1') {
 		            	if(likeButton.backgroundImage == '/images/common/like-active.png') {
 		            		likeButton.likesCount.text = parseInt(likeButton.likesCount.text) - 1;
@@ -919,6 +920,7 @@ exports.get = function(header) {
 				
 				if(isRefresh) {
 					listView.setData(_listData);
+					Ti.App.fireEvent('app:apicallSuccess',{params: _requestArgs});
 				}
 				else {
 					listView.appendData(_listData);
@@ -927,8 +929,6 @@ exports.get = function(header) {
 				if(_feedData.length > 0) {
 					_pageIndex++;
 					listView.showLazyLoadingRow();
-
-					Ti.App.fireEvent('app:apicallSuccess',{params: _requestArgs});
 				}
 				else {
 					listView.hideLazyLoadingRow();

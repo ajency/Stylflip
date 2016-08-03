@@ -109,14 +109,47 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     contentView.add(fieldsView);
     contentView.add(navButtonsView);
 
-    var _checkProductDetails = function(){
+    var _prevSelectedIndex = 0;
+
+    var undoIncrement = function(index){
+    		Ti.API.info(constant.APP + " ################ undoing increment ############");
+    		_currentButtonIndex = index - 1;
+    		// _currentButtonIndex = _prevSelectedIndex;
+    };
+
+    var _checkProductDetails = function(event){
     	Ti.API.info(constant.APP + " ################ checking visible page");
+    	var currIndex = event.source.index;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+    	Ti.API.info(constant.APP + " index: " + currIndex);
+    	
+    	if(_prevSelectedIndex > currIndex){
+    		Ti.API.info(constant.APP + "############ skip button check #############");
+    		_prevSelectedIndex = currIndex;
+    		return true;
+    	}
+
+    	// _prevSelectedIndex = event.source.index;
+    	// if(event){
+    	// 	for(var x in event){
+    	// 		if(x == 'source'){
+    	// 			var src = event[x];
+    	// 			for(var y in src){
+    	// 				Ti.API.info(constant.APP + " key: " + y + " value: " + src[y]);
+    	// 			}
+    	// 		}
+    	// 		// console.log(constant.APP + " key: " + x + " value: " + event[x]);
+    	// 	}
+    	// }
+    	
+
     	var txt = "";
     	if(titleView.visible){
     		Ti.API.info(constant.APP + " ####################### titleView visible ################### ");
     		txt = txtTitle.value.trim()
     		if(!txt){
     			_showIncompleteAlert('title');
+    			undoIncrement(currIndex);
     			return false;
     		}
     		else{
@@ -139,6 +172,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     		Ti.API.info(constant.APP + " ####################### categoryView visible ################### ");
     		if(!_categorySelected){
     			_showIncompleteAlert('category');
+    			undoIncrement(currIndex);
     			return false;
     		}
     		else{
@@ -149,6 +183,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     		Ti.API.info(constant.APP + " ####################### subcategoryView visible ################### ");
     		if(!_subcategorySelected){
     			_showIncompleteAlert('subcategory');
+    			undoIncrement(currIndex);
     			return false;
     		}
     		else{
@@ -159,6 +194,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     		Ti.API.info(constant.APP + " ####################### brandsView visible ################### ");
     		if(!_brandSelected){
     			_showIncompleteAlert('brand');
+    			undoIncrement(currIndex);
     			return false;
     		}
     		else{
@@ -166,10 +202,13 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     		}
     	}
     	if(sizesView.visible){
-    		Ti.API.info(constant.APP + " ####################### sizesView visible " + _sizeSelected  + " " + _sizeChartSelected + " ################### ");
-    		if(!_sizeSelected && !_sizeChartSelected){
-    			_showIncompleteAlert('size');
-    			return false;
+    		Ti.API.info(constant.APP + " ####################### sizesView visible  _sizeSelected: " + _sizeSelected  + " _sizeChartSelected: " + _sizeChartSelected + " ################### ");
+    		if(_sizeChartSelected !== ''){
+    			if(!_sizeSelected && !_sizeChartSelected){
+	    			_showIncompleteAlert('size');
+	    			undoIncrement(currIndex);
+	    			return false;
+	    		}
     		}
     		else{
     			productDetails.size = _sizeSelected;
@@ -180,6 +219,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     		Ti.API.info(constant.APP + " ####################### conditionView visible ################### ");
     		if(!_conditionSelected){
     			_showIncompleteAlert('condition');
+    			undoIncrement(currIndex);
     			return false;
     		}
     		else{
@@ -190,6 +230,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     		Ti.API.info(constant.APP + " ####################### pickupFromView visible ################### ");
     		if(!_pickupFrom){
     			_showIncompleteAlert('pickup location');
+    			undoIncrement(currIndex);
     			return false;
     		}
     		else{
@@ -200,7 +241,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     	// 	Ti.API.info(constant.APP + " ####################### priceView visible ################### ");
     	// 	_showIncompleteAlert('price');
     	// }
-
+    	_prevSelectedIndex = currIndex
     	return true;
     };
 
@@ -246,20 +287,17 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     btnPrev.addEventListener('click', function() {
     	//Ti.API.info(constant.APP + " ############## btnPrev CLICK CALLED #############");
     	if(_currentButtonIndex > 0) {
-    		// _checkProductDetails();
     		_currentButtonIndex--;
     		buttonBar.selectButton(_currentButtonIndex);
     	}
     });
     
+    //debug
     btnNext.addEventListener('click', function() {
     	//Ti.API.info(constant.APP + " ############## btnNext CLICK CALLED #############");
     	if(this.title == 'NEXT' && _currentButtonIndex < _objButtons.length - 1) {
-    		var pass = _checkProductDetails();
-    		if(pass){
-    			_currentButtonIndex++;
-    			buttonBar.selectButton(_currentButtonIndex);
-    		}
+    		_currentButtonIndex++;
+    		buttonBar.selectButton(_currentButtonIndex);
     		return;
     	}
  
@@ -512,8 +550,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 				}
 			}
    		
-    		Utils._.isFunction(clickCallback) && clickCallback({buttonData: e.row.data});
-    		
+    		Utils._.isFunction(clickCallback) && clickCallback({buttonData: e.row.data});	
 	    }); //end buttonView
 	    
 	    
@@ -1493,6 +1530,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     
     var _brandsTimeout;
     
+    //debug
    	var _buttonBarClickCallback = function(e) {
    		if(_brandsTimeout) {
    			clearTimeout(_brandsTimeout);
@@ -1603,18 +1641,25 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 		selectedButtonStyle: _style.selectedButton,
 		unselectedButtonStyle: _style.unselectedButton,
 		scrollable: true,
-		// selectButtonCallback: _checkProductDetails
+		selectButtonCallback: _checkProductDetails
 	});
 	
+	//debug
 	buttonBar.addEventListener('click', function(e) {
-		//Ti.API.info(constant.APP + " ############## buttonBar CLICKED #############");
+		Ti.API.info(constant.APP + " ############## buttonBar CLICKED #############");
+		
 		Analytics.trackEvent({
 	  		category: Utils.toFirstUppercase(e.title) + " (Sell)",
 	  		action: "click",
 	  		label: "",
 	  		value: 1
 		});
-		_buttonBarClickCallback(e);
+
+		// var pass = _checkProductDetails();
+		// if(pass){
+			_buttonBarClickCallback(e);
+		// }
+		
 	});
 	
 	
@@ -1661,6 +1706,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     fieldsView.add(buttonBar.getView());
     fieldsView.add(inputView);
     
+    //debug
     fieldsView.addEventListener('swipe', function(e) {
     	//Ti.API.info(constant.APP + " ############## fieldsView SWIPE #############");
     	if(e.direction == 'right') {

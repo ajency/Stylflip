@@ -114,13 +114,24 @@ exports.get = function(config) {
 	    }
     }
     
-    
+    var executeButtonCallback = config && config.selectButtonCallback && Utils._.isFunction(config.selectButtonCallback) ? true : false;
+    Ti.API.info(constant.APP + " ############## executeButtonCallback: " + executeButtonCallback);
+
     for(var i=0; i<_arrButtons.length; i++) {
 		_arrButtons[i].addEventListener('click', function(e) {
 			if(!Utils._.isFunction(_clickCallback)) {
 				return;				
 			}
-			
+
+			if(executeButtonCallback){
+				var pass = config.selectButtonCallback(e);
+				if(!pass){
+					Ti.API.info(constant.APP + " ####################### click disabled ##########################");
+					return;
+				}
+			}
+
+			Ti.API.info(constant.APP + " ####################### changing button ##########################");
 			if(!config.selectable && (_lastButtonClickedTitle && _lastButtonClickedTitle == this.key.title) || this.index == -1) {
 				return;
 			}

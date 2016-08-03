@@ -54,7 +54,8 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
     
     
     var _loadProductDetails = function(productData) {
-    	Ti.API.info(constant.APP + " productDetails _loadProductDetails init");
+    	// Ti.API.info(constant.APP + " productDetails _loadProductDetails init ");
+    	Ti.API.info(constant.APP + " ########### _loadProductDetails productData.isLiked: " + productData.isLiked + " productData.likes: " + productData.likes);
     	productData.isToBeDonated = productData.isToBeDonated==1||productData.isToBeDonated==true;
     	productData.isPurchased = productData.isPurchased==1||productData.isPurchased==true;
 		var lblStatus = Ti.UI.createLabel(Utils._.extend({}, _style.lblStatus, {
@@ -1076,6 +1077,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
     
     
     if(productId != undefined) {
+    	Ti.API.info(constant.APP + " ############ FOUND VALID PRODUCTID ###############"); 
     	var _getProductDetails = function() {
     		contentView.removeAllChildren();
     		
