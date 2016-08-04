@@ -17,7 +17,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	_conditionSelected = productDetails && productDetails.condition ? productDetails.condition : undefined,
 	_brandName = productDetails && productDetails.brandName ? productDetails.brandName : undefined,
 	_categoryName = productDetails && productDetails.categoryName ? productDetails.categoryName : undefined,
-	_sizeChartSelected = productDetails && productDetails.sizeChart ? productDetails.sizeChart : undefined, 
+	_sizeChartSelected = productDetails && productDetails.sizeChart ? productDetails.sizeChart : '', 
 	_pickupFrom = productDetails && productDetails.pickupFrom ? productDetails.pickupFrom : undefined,
 	_toBeDonated = productDetails && productDetails.toBeDonated ? productDetails.toBeDonated : false,
 	_userAddresses = productDetails && productDetails.userAddresses ? productDetails.userAddresses : undefined,
@@ -129,20 +129,8 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     		return true;
     	}
 
-    	// _prevSelectedIndex = event.source.index;
-    	// if(event){
-    	// 	for(var x in event){
-    	// 		if(x == 'source'){
-    	// 			var src = event[x];
-    	// 			for(var y in src){
-    	// 				Ti.API.info(constant.APP + " key: " + y + " value: " + src[y]);
-    	// 			}
-    	// 		}
-    	// 		// console.log(constant.APP + " key: " + x + " value: " + event[x]);
-    	// 	}
-    	// }
-    	
 
+    
     	var txt = "";
     	if(titleView.visible){
     		Ti.API.info(constant.APP + " ####################### titleView visible ################### ");
@@ -203,17 +191,25 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     	}
     	if(sizesView.visible){
     		Ti.API.info(constant.APP + " ####################### sizesView visible  _sizeSelected: " + _sizeSelected  + " _sizeChartSelected: " + _sizeChartSelected + " ################### ");
-    		if(_sizeChartSelected !== ''){
-    			if(!_sizeSelected && !_sizeChartSelected){
-	    			_showIncompleteAlert('size');
-	    			undoIncrement(currIndex);
-	    			return false;
-	    		}
-    		}
-    		else{
+			// if(!_sizeSelected && !_sizeChartSelected){
+   //  			_showIncompleteAlert('size');
+   //  			undoIncrement(currIndex);
+   //  			return false;
+   //  		}
+   //  		else{
+   //  			productDetails.size = _sizeSelected;
+   //  			productDetails.sizeChart = _sizeChartSelected;
+   //  		}
+   			if(_sizeChartSelected == '' || _sizeChartSelected){
     			productDetails.size = _sizeSelected;
     			productDetails.sizeChart = _sizeChartSelected;
     		}
+    		else{
+   				_showIncompleteAlert('size');
+    			undoIncrement(currIndex);
+    			return false;
+    		}
+
     	}
     	if(conditionView.visible){
     		Ti.API.info(constant.APP + " ####################### conditionView visible ################### ");
@@ -555,7 +551,8 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	    
 	    
 	    if(_selectedButtonIndex > -1) {
-	    	_tableData[_selectedButtonIndex].fireEvent('click', {row: _tableData[_selectedButtonIndex]});
+	    	// _tableData[_selectedButtonIndex].fireEvent('click', {row: _tableData[_selectedButtonIndex]});
+	    	buttonView.fireEvent('click',{row: _tableData[_selectedButtonIndex]});
 	    }
 	    return buttonView;
     }; //end _createButtonView
@@ -714,7 +711,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
    	 * Get size options list
    	 */
    	var _getSizeOptions = function(type) {
-   		//Ti.API.info(constant.APP + " ############## _getSizeOptions CALLED #############");
+   		Ti.API.info(constant.APP + " ############## _getSizeOptions CALLED #############");
    		var _list = [];
    		for(var size in constant.SIZE_CHARTS[type]) {
    			_list.push({
@@ -1108,7 +1105,8 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     }
 
     selectSizeView.addEventListener('click', function() {
-    	//Ti.API.info(constant.APP + " ############## selectSizeView CLICKED #############");
+    	Ti.API.info(constant.APP + " ############## selectSizeView CLICKED #############");
+    	Ti.API.info(constant.APP + " _sizeChartSelected: " + _sizeChartSelected);
 
     	if(_sizeChartSelected == '' || _sizeChartSelected == undefined || _sizeChartSelected == null) {
     		return;
@@ -1578,7 +1576,10 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     			_loadCategories();
     		break;
     		
-    		case 'SUB-CATEGORY':
+    		case 'SUB-CATEGORY':if(_categorySelected){
+    			Ti.API.info(constant.APP + " ###################### loading subcategores from previous screen....");
+    			_loadSubCategories(_categorySelected);
+    		};
     		case 'SIZE':
     			if(!e.triggered && _categorySelected == undefined) {
     				var alertDialog = UI.createAlertDialog({
@@ -1598,6 +1599,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     	}
     	
     	if(e.title == 'SIZE') {
+    		Ti.API.info(constant.APP + " ################ FIRING SIZE VIEW ################");
     		selectSizeView.fireEvent('click');
     	}
     	

@@ -49,7 +49,7 @@ exports.get = function(tabToLoad) {
     	else{
     		Ti.API.info(constant.APP + " ############ REM NO CURRENT SEARCH TEXT FIELD FOCUSED ################");
     	}
-    }
+    };
 
     var _searchBarChangeCallback = function(){
 		Ti.API.info(constant.APP + " #################### SEARCH BAR KEYPRESSED ###################");

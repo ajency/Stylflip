@@ -7,6 +7,8 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 	
 	var _userId = canBeEdited && canBeEdited.userId;
 	
+	var _sizeChart = productData && productData.sizeChart ? productData.sizeChart : '';
+
 	var mainView = Ti.UI.createView({
 	    width: Ti.UI.FILL,
 	    height: Ti.UI.FILL,
@@ -50,8 +52,6 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 	 	window.add(userProfile.getView());
         Window.open(window);
 	};
-    
-    
     
     var _loadProductDetails = function(productData) {
     	// Ti.API.info(constant.APP + " productDetails _loadProductDetails init ");
@@ -393,7 +393,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 	    var _sizeChartLblClick = function(){
 	    	Titanium.API.info(constant.APP + " size chart label clicked");
 	    	// UI.showLoginAlert("chart info here");
-	    	Ti.API.info(constant.APP + " sizeChart: " + productData.sizeChart);
+	    	Ti.API.info(constant.APP + " sizeChart: " + _sizeChart);
 	    	modalView = sellDetails.sizeChartView;
 
 	    	// UI.showModal("Size Chart",modalText);
@@ -454,16 +454,16 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 	    function addSizeLabel(){
 	    	if(productData.size){
 	    		brandView.add(lblLine);
-				if(productData.sizeChart === 'C'){ //add label UK for shoes
+				if(_sizeChart === 'C'){ //add label UK for shoes
 					brandView.add(lblSizeCountry);
 				}
 				brandView.add(lblSizeValue);
 	    	}
 	    }
 
-	    if(productData.sizeChart === 'D'){ //accessories
+	    if(_sizeChart === 'D'){ //accessories
 	    	addSizeLabel();
-	    }else if(productData.sizeChart === 'E'){ //bags
+	    }else if(_sizeChart === 'E'){ //bags
 			// var bagDimensions = "Height: " + productData.height + ", Length: " + productData.length;
 			if(productData.height || productData.length){
 
