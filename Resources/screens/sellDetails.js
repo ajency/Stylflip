@@ -26,6 +26,24 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	_productOriginalPrice = productDetails && productDetails.originalPrice ? productDetails.originalPrice : '',
     _productSellingPrice = productDetails && productDetails.sellingPrice ? productDetails.sellingPrice : '';
     
+    Ti.API.info(constant.APP + " ####### _categorySelected: " + _categorySelected);
+    Ti.API.info(constant.APP + " ####### _subcategorySelected: " + _subcategorySelected);
+    Ti.API.info(constant.APP + " ####### _brandSelected: " + _brandSelected);
+    Ti.API.info(constant.APP + " ####### _sizeSelected: " + _sizeSelected);
+    Ti.API.info(constant.APP + " ####### _customSize: " + _customSize);
+    Ti.API.info(constant.APP + " ####### _conditionSelected: " + _conditionSelected);
+    Ti.API.info(constant.APP + " ####### _brandName: " + _brandName);
+    Ti.API.info(constant.APP + " ####### _categoryName: " + _categoryName);
+    Ti.API.info(constant.APP + " ####### _sizeChartSelected: " + _sizeChartSelected);
+    Ti.API.info(constant.APP + " ####### _pickupFrom: " + _pickupFrom);
+    Ti.API.info(constant.APP + " ####### _toBeDonated: " + _toBeDonated);
+    Ti.API.info(constant.APP + " ####### _userAddresses: " + _userAddresses);
+    Ti.API.info(constant.APP + " ####### _productDetailsLaunch: " + _productDetailsLaunch);
+    Ti.API.info(constant.APP + " ####### _productDiscount: " + _productDiscount);
+    Ti.API.info(constant.APP + " ####### _productOriginalPrice: " + _productOriginalPrice);
+    Ti.API.info(constant.APP + " ####### _productSellingPrice: " + _productSellingPrice);
+
+
 	var interMediaryWrapper = function(){
 		Ti.API.info(constant.APP + " interMediaryWrapper call " + productDetails);
 		backButtonCallback(productDetails);

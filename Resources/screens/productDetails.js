@@ -8,6 +8,15 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 	var _userId = canBeEdited && canBeEdited.userId;
 	
 	var _sizeChart = productData && productData.sizeChart ? productData.sizeChart : '';
+	var _size = productData && productData.size ? productData.size : '';
+	var _productHeight = productData && productData.height ? productData.height : '';
+	var _productLength = productData && productData.length ? productData.length : '';
+
+	Ti.API.info(constant.APP + " ############## _sizeChart: " + _sizeChart);
+	Ti.API.info(constant.APP + " ############## _size: " + _size);
+	Ti.API.info(constant.APP + " ############## _productHeight: " + _productHeight);
+	Ti.API.info(constant.APP + " ############## _productLength: " + _productLength);
+
 
 	var mainView = Ti.UI.createView({
 	    width: Ti.UI.FILL,

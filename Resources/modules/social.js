@@ -24,8 +24,9 @@ var twitter = require('/libs/twitter').Twitter({
  * Facebook config
  */
 var fb = require('facebook');
-fb.appid = 1486437388326591;
-fb.permissions = ['publish_actions'];
+// fb.appid = 1486437388326591;
+// fb.permissions = ['publish_actions'];
+fb.permissions = ['email'];
 
 var _messageToFeed, _shareCallback, _objectToFeed;
 
@@ -344,6 +345,8 @@ social.shareViaEmail = function(obj, message) {
 	emailDialog.open();
 	emailDialog = null;
 };
+
+social.fb = fb;
 
 module.exports = social;
 

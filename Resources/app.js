@@ -41,8 +41,11 @@ var _isAppLoaded = false;
 
 var window = Window.create(exitOnClose=true, toBeOpened=true, disableClick=true);
 
+// var Social = require('/modules/social');
+
 if(Ti.Platform.osname == "android") {
-	Window.open(window);	
+	window.fbProxy = Social.fb.createActivityWorker({lifecycleContainer: window}); 
+    Window.open(window);	
 }
 else {
 	var tabGroup = Ti.UI.createTabGroup();

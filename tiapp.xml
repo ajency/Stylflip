@@ -45,20 +45,24 @@
                         <key>CFBundleURLSchemes</key>
                         <array>
                             <string>stylflip</string>
-                            <string>fb1486437388326591</string>
+                            <string>fb1001569853245977</string>
                         </array>
                     </dict>
                 </array>
+                <key>FacebookAppID</key>
+                    <!-- Facebook App ID -->
+                    <string>1001569853245977</string>
+                    <key>FacebookDisplayName</key>
+                    <!-- Facebook App Name from developer.facebook.com -->
+                    <string>stylflip</string>
             </dict>
         </plist>
     </ios>
     <android xmlns:android="http://schemas.android.com/apk/res/android">
         <manifest android:versionCode="1" android:versionName="1.0">
-            <application android:debuggable="false"
-                android:icon="@drawable/appicon"
-                android:label="StylFlip" android:largeHeap="true" android:theme="@style/Theme.NoActionBar"/>
-            <uses-sdk android:maxSdkVersion="21"
-                android:minSdkVersion="10" android:targetSdkVersion="19"/>
+            <application android:debuggable="false" android:icon="@drawable/appicon" android:label="StylFlip" android:largeHeap="true" android:theme="@style/Theme.NoActionBar">
+                <uses-sdk android:maxSdkVersion="21" android:minSdkVersion="10" android:targetSdkVersion="19"/>
+            </application>    
         </manifest>
     </android>
     <property name="ti.android.bug2373.finishfalseroot" type="bool">true</property>
@@ -82,7 +86,7 @@
     </modules>
     <property name="ti.android.bug2373.finishfalseroot" type="bool">true</property>
     <property name="ti.android.bug2373.skipAlert">true</property>
-    <property name="ti.facebook.appid">1486437388326591</property>
+    <property name="ti.facebook.appid">1001569853245977</property>
     <property name="acs-push-type-development" type="string">gcm</property>
     <property name="acs-push-type-production" type="string">gcm</property>
     <property name="acs-push-type" type="string">gcm</property>

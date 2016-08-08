@@ -260,22 +260,24 @@ exports.get = function(tabSelected, wardrobeData, productData) {
      * VIEW button click handler
      */
     btnView.addEventListener('click', function() {
-	    var _productDataToDisplay = {
-	    	productTitle: _productDetails.productTitle,
-	    	productDescription: _productDetails.productDescription,
-        	profilePicURL: '',
-        	username: 'Username',
-        	timestamp: 'Just now',
-        	userLocation: 'Navi Mumbai',
-        	discountPrice: _productDetails.discountPrice,
-        	sellingPrice: _productDetails.sellingPrice,
-        	originalPrice: _productDetails.originalPrice,
-        	discountPercentage: _productDetails.discountPercentage,
-        	condition: _productDetails.condition,
-        	brand: _productDetails.brandName,
-        	size: _productDetails.size,
-        	likes: 0
-	    };	
+	    // var _productDataToDisplay = {
+	    // 	productTitle: _productDetails.productTitle,
+	    // 	productDescription: _productDetails.productDescription,
+     //    	profilePicURL: '',
+     //    	username: 'Username',
+     //    	timestamp: 'Just now',
+     //    	userLocation: 'Navi Mumbai',
+     //    	discountPrice: _productDetails.discountPrice,
+     //    	sellingPrice: _productDetails.sellingPrice,
+     //    	originalPrice: _productDetails.originalPrice,
+     //    	discountPercentage: _productDetails.discountPercentage,
+     //    	condition: _productDetails.condition,
+     //    	brand: _productDetails.brandName,
+     //    	size: _productDetails.size,
+     //    	likes: 0
+	    // };
+
+	    var _productDataToDisplay = _productDetails;	
 	    
 	    if(_productImages.length > 0) {
 	    	_productDataToDisplay.photos = {};

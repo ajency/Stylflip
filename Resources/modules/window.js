@@ -47,6 +47,7 @@ Window.create = function(exitOnClose, toBeOpened, disableClick) {
 	 * Open event listener
 	 */	
 	window.addEventListener('open', function() {
+		Ti.API.info(constant.APP + " <<<<<<<<<<<<<<<<<<<<<<<<<<< MAIN WINDOW OPENED >>>>>>>>>>>>>>>>>>>>>>>>>>");
 		_currentWindow.isBlur = false;		
 	});	
 
