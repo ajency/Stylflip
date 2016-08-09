@@ -52,17 +52,17 @@ exports.get = function(tabToLoad) {
     };
 
     var _searchBarChangeCallback = function(){
-		Ti.API.info(constant.APP + " #################### SEARCH BAR KEYPRESSED ###################");
+		// Ti.API.info(constant.APP + " #################### SEARCH BAR KEYPRESSED ###################");
 		if(UI.currentTextFieldFocused){
 			var headerView = header.getView();
 			Ti.API.info(" searchBarVisiblbe: " + searchBar.visible + " headerVisible: " + headerView.visible + " UI.currentTextFieldFocused.value: " + UI.currentTextFieldFocused.value);
 			if(headerView.visible){
 				if((UI.currentTextFieldFocused.value).trim() !== '') {
-					Ti.API.info(constant.APP + " #################### CLOSE ICON VISIBLE ###################");
+					// Ti.API.info(constant.APP + " #################### CLOSE ICON VISIBLE ###################");
 					btnSearch.backgroundImage = '/images/header/closeicon.png';
 				}
 				else{
-					Ti.API.info(constant.APP + " #################### SEARCH-ACTIVE ICON VISIBLE ###################");
+					// Ti.API.info(constant.APP + " #################### SEARCH-ACTIVE ICON VISIBLE ###################");
 					btnSearch.backgroundImage = '/images/header/search-active.png';
 				}
 			}
@@ -103,45 +103,43 @@ exports.get = function(tabToLoad) {
 			Ti.API.info(constant.APP + " ################# SEARCH BAR HIDE PROCEDURE ###################")
 			switch(_currentKey) {
 				case 'stylefeed':
-					if(_isSearchBarVisible && _feedSearchText) {
-						// alertDialog.show();
+					// if(_isSearchBarVisible && _feedSearchText) {
+					// 	// alertDialog.show();
+					// 	_clearSearchField();
+					// 	return;
+					// }
+					// else if(!_isSearchBarVisible && _feedSearchText) {
+					// 	searchBar.setHidden(false);
+					// 	_isSearchBarVisible = true;
+					// 	return;
+					// }
+					if(_feedSearchText){
 						_clearSearchField();
-						return;
 					}
-					else if(!_isSearchBarVisible && _feedSearchText) {
-						searchBar.setHidden(false);
-						_isSearchBarVisible = true;
-						return;
+					else{
+						searchBar.setText('');
 					}
 				break;	
 				case 'shop':
-					if(_isSearchBarVisible && _shopSearchText) {
-						// alertDialog.show();
+					if(_shopSearchText){
 						_clearSearchField();
-						return;
 					}
-					if(!_isSearchBarVisible && _shopSearchText) {
-						searchBar.setHidden(false);
-						_isSearchBarVisible = true;
-						return;
+					else{
+						searchBar.setText('');
 					}
 				break;
 				case 'social':
-					if(_isSearchBarVisible && _socialSearchText) {
-						// alertDialog.show();
+					if(_socialSearchText){
 						_clearSearchField();
-						return;
 					}
-					else if(!_isSearchBarVisible && _socialSearchText) {
-						searchBar.setHidden(false);
-						_isSearchBarVisible = true;
-						return;
+					else{
+						searchBar.setText('');
 					}
 				break;
 			}
-			searchBar.setHidden(true);
-			header.setSearchActive(false); //change the search icon
-			_isSearchBarVisible = false;
+			// searchBar.setHidden(true);
+			// header.setSearchActive(false); //change the search icon
+			// _isSearchBarVisible = false;
 
 			// remSearchChange();
 		}
