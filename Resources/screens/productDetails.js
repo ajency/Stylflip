@@ -7,17 +7,6 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 	
 	var _userId = canBeEdited && canBeEdited.userId;
 	
-	var _sizeChart = productData && productData.sizeChart ? productData.sizeChart : '';
-	var _size = productData && productData.size ? productData.size : '';
-	var _productHeight = productData && productData.height ? productData.height : '';
-	var _productLength = productData && productData.length ? productData.length : '';
-
-	Ti.API.info(constant.APP + " ############## _sizeChart: " + _sizeChart);
-	Ti.API.info(constant.APP + " ############## _size: " + _size);
-	Ti.API.info(constant.APP + " ############## _productHeight: " + _productHeight);
-	Ti.API.info(constant.APP + " ############## _productLength: " + _productLength);
-
-
 	var mainView = Ti.UI.createView({
 	    width: Ti.UI.FILL,
 	    height: Ti.UI.FILL,
@@ -62,9 +51,22 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
         Window.open(window);
 	};
     
+	var _sizeChart, _size, _productHeight, _productLength;
+
     var _loadProductDetails = function(productData) {
     	// Ti.API.info(constant.APP + " productDetails _loadProductDetails init ");
     	Ti.API.info(constant.APP + " ########### _loadProductDetails productData.isLiked: " + productData.isLiked + " productData.likes: " + productData.likes);
+
+    	_sizeChart = productData && productData.sizeChart ? productData.sizeChart : '';
+		_size = productData && productData.size ? productData.size : '';
+		_productHeight = productData && productData.height ? productData.height : '';
+		_productLength = productData && productData.length ? productData.length : '';
+
+		Ti.API.info(constant.APP + " ############## _sizeChart: " + _sizeChart);
+		Ti.API.info(constant.APP + " ############## _size: " + _size);
+		Ti.API.info(constant.APP + " ############## _productHeight: " + _productHeight);
+		Ti.API.info(constant.APP + " ############## _productLength: " + _productLength);
+
     	productData.isToBeDonated = productData.isToBeDonated==1||productData.isToBeDonated==true;
     	productData.isPurchased = productData.isPurchased==1||productData.isPurchased==true;
 		var lblStatus = Ti.UI.createLabel(Utils._.extend({}, _style.lblStatus, {
@@ -376,9 +378,8 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 	        }
 	    }));
 
-	    // var sizeLabelwCntry = productData.size + ""
 	    var lblSizeValue = Ti.UI.createLabel(Utils._.extend({}, _style.priceLabels, {
-			text: productData.size,
+			text: _size,
 			font: {
 	            fontSize: UI.fontSize(14),
 	            fontFamily: constant.FONT.DEFAULT_FONT
@@ -410,7 +411,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 	    };
 
 	    function addSizeChartLabel(){
-	    	if(productData.size !== 'FREE'){
+	    	if(_size !== 'FREE'){
 	   	 		brandView.add(lblLine2);
 		    
 		   	 	// console.log(productData);
@@ -461,7 +462,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 	    brandView.add(lblBrandValue);
 
 	    function addSizeLabel(){
-	    	if(productData.size){
+	    	if(_size){
 	    		brandView.add(lblLine);
 				if(_sizeChart === 'C'){ //add label UK for shoes
 					brandView.add(lblSizeCountry);
@@ -473,26 +474,26 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 	    if(_sizeChart === 'D'){ //accessories
 	    	addSizeLabel();
 	    }else if(_sizeChart === 'E'){ //bags
-			// var bagDimensions = "Height: " + productData.height + ", Length: " + productData.length;
-			if(productData.height || productData.length){
+		
+			if(_productHeight || _productLength){
 
-				if(!productData.height){
-					productData.height = 'na';
+				if(!_productHeight){
+					_productHeight = 'na';
 				}
 
-				if(!productData.length){
-					productData.length = 'na';
+				if(!_productLength){
+					_productLength = 'na';
 				}
 
 				productData.customSize = {
-					height: productData.height,
-					length: productData.length,
+					height: _productHeight,
+					length: _productLength,
 					readOnly: true 
 				};
 			    addSizeChartLabel();
 			}
 
-		}else if(productData.size) {
+		}else if(_size) {
 			addSizeLabel();
 			addSizeChartLabel();		
 		}
@@ -673,7 +674,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 				            amount: productData.discountPrice,
 				            originalPrice: productData.originalPrice,
 				            discount: productData.discountPercentage,
-				            size: productData.size,
+				            size: _size,
 				            brand: productData.brand,
 				            productImage: Utils.getFullURL(productData.primaryPhoto)
 			        	}, function(e) {
