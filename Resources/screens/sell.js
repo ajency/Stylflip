@@ -277,7 +277,9 @@ exports.get = function(tabSelected, wardrobeData, productData) {
      //    	likes: 0
 	    // };
 
-	    var _productDataToDisplay = _productDetails;	
+	    var _productDataToDisplay = _productDetails;
+	    _productDataToDisplay.brand = _productDetails.brandName
+	    _productDetails.likes = '0';	
 	    
 	    if(_productImages.length > 0) {
 	    	_productDataToDisplay.photos = {};

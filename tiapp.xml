@@ -50,19 +50,22 @@
                     </dict>
                 </array>
                 <key>FacebookAppID</key>
-                    <!-- Facebook App ID -->
-                    <string>1001569853245977</string>
-                    <key>FacebookDisplayName</key>
-                    <!-- Facebook App Name from developer.facebook.com -->
-                    <string>stylflip</string>
+                <!-- Facebook App ID -->
+                <string>1001569853245977</string>
+                <key>FacebookDisplayName</key>
+                <!-- Facebook App Name from developer.facebook.com -->
+                <string>stylflip</string>
             </dict>
         </plist>
     </ios>
     <android xmlns:android="http://schemas.android.com/apk/res/android">
         <manifest android:versionCode="1" android:versionName="1.0">
-            <application android:debuggable="false" android:icon="@drawable/appicon" android:label="StylFlip" android:largeHeap="true" android:theme="@style/Theme.NoActionBar">
-                <uses-sdk android:maxSdkVersion="21" android:minSdkVersion="10" android:targetSdkVersion="19"/>
-            </application>    
+            <application android:debuggable="false"
+                android:icon="@drawable/appicon"
+                android:label="StylFlip" android:largeHeap="true" android:theme="@style/Theme.NoActionBar">
+                <uses-sdk android:maxSdkVersion="21"
+                    android:minSdkVersion="10" android:targetSdkVersion="19"/>
+            </application>
         </manifest>
     </android>
     <property name="ti.android.bug2373.finishfalseroot" type="bool">true</property>
@@ -98,6 +101,6 @@
         <target device="iphone">true</target>
         <target device="mobileweb">false</target>
     </deployment-targets>
-    <sdk-version>3.5.2.v20160311103211</sdk-version>
+    <sdk-version>4.0.0.GA</sdk-version>
     <property name="appc-app-id" type="string">55b33072754e31ca156fc6d9</property>
 </ti:app>

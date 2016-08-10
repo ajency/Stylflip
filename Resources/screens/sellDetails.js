@@ -445,7 +445,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	    	// var discountPrice = (txtListingPrice.text).split(' ');
             var discountPrice = listingPrice.value;
 
-	    	discountPrice = discountPrice[1];
+	    	// discountPrice = discountPrice[1];
 	    	var discountPercentage = (100 - ((parseFloat(discountPrice)/parseFloat(txtOriginalPrice.value.trim()))*100)) < 0 ? 0 : (100 - ((parseFloat(discountPrice)/parseFloat(txtOriginalPrice.value.trim()))*100));
 
 	    	// console.log(txtTitle.value.trim());
@@ -737,6 +737,8 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 		    }), function(e) {
 		    	_brandSelected = e.buttonData.id;
 		    	_brandName = e.buttonData.title;
+                productDetails.brandName = _brandName;
+
 		    	if(e.buttonData.selected) {
 		    		return;
 		    	}
@@ -1270,33 +1272,47 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
         // keyboardType: Ti.UI.KEYBOARD_DECIMAL_PAD,
         borderWidth: 1,
         borderColor: '#bfbfbf',
-        bubbleParent: false
+        // bubbleParent: false,
+        layout: 'horizontal'
     }));
+
+    var rupeeLabel = Ti.UI.createLabel({
+        text: '\u20B9 ',
+        left: '26%',
+        // textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT,
+        font: {
+            fontSize: UI.fontSize(18),
+            fontFamily: constant.FONT.DEFAULT_FONT,
+            fontWeight: 'bold'
+        },
+    });
 
     var listingPrice = Ti.UI.createTextField(Utils._.extend({},_commonStyle.textField,{
         value: '',
         hintText: 'Listing Price',
+        textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
         keyboardType: Ti.UI.KEYBOARD_DECIMAL_PAD
     }));
 
+    listPriceView.add(rupeeLabel);
     listPriceView.add(listingPrice);
 
-    // var txtListingPrice = Ti.UI.createLabel(Utils._.extend({}, _commonStyle.txtField, {
-    // 	text: '\u20B9 0',
-    // 	top: -1,
-    //     width: UI.width(262),
-    // 	height: UI.height(40),
-    //     // hintText: 'display price',
-    //     keyboardType: Ti.UI.KEYBOARD_DECIMAL_PAD,
-    //     borderWidth: 1,
-    //     borderColor: '#bfbfbf',
-    //     font: {
-    //         fontSize: UI.fontSize(18),
-    //         fontFamily: constant.FONT.DEFAULT_FONT,
-    //         fontWeight: 'bold'
-    //     },
-    //     color: '#828282'
-    // }));
+    var txtListingPrice = Ti.UI.createLabel(Utils._.extend({}, _commonStyle.txtField, {
+    	text: '\u20B9 0',
+    	top: -1,
+        width: UI.width(262),
+    	height: UI.height(40),
+        // hintText: 'display price',
+        keyboardType: Ti.UI.KEYBOARD_DECIMAL_PAD,
+        borderWidth: 1,
+        borderColor: '#bfbfbf',
+        font: {
+            fontSize: UI.fontSize(18),
+            fontFamily: constant.FONT.DEFAULT_FONT,
+            fontWeight: 'bold'
+        },
+        color: '#828282'
+    }));
     
     var btnViewDetails = UI.createButton({
     	title: 'View Details',

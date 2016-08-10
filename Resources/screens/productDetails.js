@@ -51,7 +51,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
         Window.open(window);
 	};
     
-	var _sizeChart, _size, _productHeight, _productLength;
+	var _sizeChart, _size, _productHeight, _productLength, _brand;
 
     var _loadProductDetails = function(productData) {
     	// Ti.API.info(constant.APP + " productDetails _loadProductDetails init ");
@@ -61,12 +61,14 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 		_size = productData && productData.size ? productData.size : '';
 		_productHeight = productData && productData.height ? productData.height : '';
 		_productLength = productData && productData.length ? productData.length : '';
+		_productBrand = productData && productData.brand ? productData.brand : '';
 
 		Ti.API.info(constant.APP + " ############## _sizeChart: " + _sizeChart);
 		Ti.API.info(constant.APP + " ############## _size: " + _size);
+		Ti.API.info(constant.APP + " ############## _productBrand: " + _productBrand);
 		Ti.API.info(constant.APP + " ############## _productHeight: " + _productHeight);
 		Ti.API.info(constant.APP + " ############## _productLength: " + _productLength);
-
+		
     	productData.isToBeDonated = productData.isToBeDonated==1||productData.isToBeDonated==true;
     	productData.isPurchased = productData.isPurchased==1||productData.isPurchased==true;
 		var lblStatus = Ti.UI.createLabel(Utils._.extend({}, _style.lblStatus, {
@@ -348,7 +350,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 	        }
 	    }));
 	    var lblBrandValue = Ti.UI.createLabel(Utils._.extend({}, _style.priceLabels, {
-			text: productData.brand + (osname=='android'?'  ':''),
+			text: _productBrand + (osname=='android'?'  ':''),
 			font: {
 	            fontSize: UI.fontSize(14),
 	            fontFamily: constant.FONT.DEFAULT_FONT
