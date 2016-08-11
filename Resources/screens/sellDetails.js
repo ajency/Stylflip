@@ -53,10 +53,9 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	 * Calculating product's final price
 	 */
 	var _getCalculatedPrice = function(sellingPrice, originalPrice) {
-		Ti.API.info(constant.APP + " ############## _getCalculatedPrice CALLED #############");
+		// Ti.API.info(constant.APP + " ############## _getCalculatedPrice CALLED #############");
 		sellingPrice = isNaN(parseFloat(sellingPrice)) ? 0 : parseFloat(sellingPrice);
 		if(sellingPrice == 0) {
-			// return '\u20B9 0';
             return '';
 		}
 		originalPrice = isNaN(parseFloat(originalPrice)) ? 0 : parseFloat(originalPrice);
@@ -70,12 +69,11 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 			sellingPrice = 0;
 		}
 
-		// return '\u20B9 ' + Math.ceil(sellingPrice);
-        return Math.ceil(sellingPrice);
+        return Math.round(sellingPrice);
 	};
 	
     var _getSellingPrice = function(listPrice){
-        Ti.API.info(constant.APP + " ######### _getSellingPrice called ##########");
+        // Ti.API.info(constant.APP + " ######### _getSellingPrice called ##########");
         listPrice = parseFloat(listPrice);
         listPrice = isNaN(listPrice) ? 0 : listPrice;
 
@@ -1328,10 +1326,36 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     });
     var lblShippingInfo = Ti.UI.createLabel(Utils._.extend({}, _commonStyle.txtField, {
     	text: 'Listed Price includes Shipping & Handling, SF Commision and All Applicable Taxes.',
-    	top: UI.top(20),
+    	top: UI.top(10),
         width: UI.width(262),
     	height: Ti.UI.SIZE,
     	font: {
+            fontSize: UI.fontSize(12),
+            fontFamily: constant.FONT.DEFAULT_FONT
+        },
+        color: '#828282',
+        bubbleParent: true
+    }));
+
+    var btnPriceGuide = UI.createButton(Utils._.extend({},_commonStyle.txtField,{
+        title: 'Pricing Guide',
+        top: 0,
+        width: UI.width(100),
+        height: UI.height(30),
+        font: {
+            fontSize: UI.fontSize(12),
+            fontFamily: constant.FONT.DEFAULT_FONT
+        },
+        color: '#000',
+        bubbleParent: true
+    }));
+
+    var lblPriceGuideInfo = Ti.UI.createLabel(Utils._.extend({},_commonStyle.txtField,{
+        text: 'For more information checkout our',
+        top: UI.top(10),
+        width: UI.width(262),
+        height: Ti.UI.SIZE,
+        font: {
             fontSize: UI.fontSize(12),
             fontFamily: constant.FONT.DEFAULT_FONT
         },
@@ -1347,17 +1371,39 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     });
     var btnDonateView = UI.createClickableView({
     	left: UI.left(5),
-    	width: UI.width(30),
-    	height: UI.height(30)
+    	width: UI.width(35),
+    	height: UI.height(35)
     });
+    
     var btnDonate = UI.createButton({
-    	backgroundImage: _toBeDonated ? '/images/sell/form-check-on.png' : '/images/sell/form-check-off.png',
-    	width: UI.width(15),
+    	// backgroundImage: _toBeDonated ? '/images/sell/form-check-on.png' : '/images/sell/form-check-off.png',
+        backgroundImage: _toBeDonated ? '/images/sell/toggle-active.png' : '/images/sell/toggle-inactive.png',
+    	width: UI.width(25),
     	height: UI.height(15)
     });
+
+    // var basicSwitch = Ti.UI.createSwitch({
+    //   // style: Ti.UI.Android.SWITCH_STYLE_TOGGLEBUTTON,
+    //   style: Ti.UI.Android.SWITCH_STYLE_SWITCH, 
+    //   left: UI.left(5),
+    //   value: false,
+    //   textAlign:Ti.UI.TEXT_ALIGNMENT_RIGHT,
+    //   titleOn:'I would like to donate my earnings from this Sale to a Charitable Cause',
+    //   titleOff:'No thanks for the offer',
+    //   width: Ti.UI.FILL, 
+    //   height: UI.width(35)
+    // });
+    
+
+    // basicSwitch.addEventListener('change',function(e){
+    //   Ti.API.info('Switch value: ' + basicSwitch.value);
+    // });
+
     btnDonateView.add(btnDonate);
+    // btnDonateView.add(basicSwitch);
+
     var lblDonateText = Ti.UI.createLabel(Utils._.extend({}, _commonStyle.txtField, {
-    	text: 'I would like to Donate my earnings from this Sale to a Charitable Cause.',
+    	html: '<strong>I would like to Donate my earnings</strong> from this Sale to a Charitable Cause.',
     	left: UI.left(45),
         width: UI.width(215),
     	height: Ti.UI.SIZE,
@@ -1367,13 +1413,17 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
         },
         color: '#828282'
     }));
+
+    // donateView.add(basicSwitch);
     donateView.add(btnDonateView);
     donateView.add(lblDonateText);
     
     btnDonateView.addEventListener('click', function() {
     	//Ti.API.info(constant.APP + " ############## btnDonateView CLICKED #############");
-    	if(this.children[0].backgroundImage == '/images/sell/form-check-off.png') {
-    		this.children[0].backgroundImage = '/images/sell/form-check-on.png';
+    	// if(this.children[0].backgroundImage == '/images/sell/form-check-off.png') {
+        if(this.children[0].backgroundImage == '/images/sell/toggle-inactive.png') {    
+    		// this.children[0].backgroundImage = '/images/sell/form-check-on.png';
+            this.children[0].backgroundImage = '/images/sell/toggle-active.png';
     		_toBeDonated = true;
     		Analytics.trackEvent({
 		  		category: "Donate (Sell)",
@@ -1383,11 +1433,44 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 			});
     	}
     	else {
-    		this.children[0].backgroundImage = '/images/sell/form-check-off.png';
+    		// this.children[0].backgroundImage = '/images/sell/form-check-off.png';
+            this.children[0].backgroundImage = '/images/sell/toggle-inactive.png';
     		_toBeDonated = false;
     	}
     }); //end btnDonateView
     
+    var hr1 = Ti.UI.createView({
+        height: UI.height(1),
+        width: Ti.UI.FILL
+    });
+
+    var line1 = Ti.UI.createView({
+        height: UI.height(1),
+        bottom:0,
+        left:0,
+        right:0,
+        borderWidth:1,
+        borderColor:'#aaa'
+     });
+
+    hr1.add(line1);
+
+    var hr2 = Ti.UI.createView({
+        height: UI.height(1),
+        width: Ti.UI.FILL
+    });
+
+    var line2 = Ti.UI.createView({
+        height: UI.height(1),
+        bottom:0,
+        left:0,
+        right:0,
+        borderWidth:1,
+        borderColor:'#aaa'
+     });
+
+    hr2.add(line2);
+
     priceView.add(txtSellingPrice);
     // priceView.add(lblOriginalPrice);
     priceView.add(txtOriginalPrice);
@@ -1395,10 +1478,17 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     // priceView.add(txtListingPrice);
     priceView.add(lblShippingInfo);
     priceView.add(btnViewDetails);
+
+    priceView.add(hr1);
+
+    priceView.add(lblPriceGuideInfo);
+    priceView.add(btnPriceGuide);
+
+    priceView.add(hr2);
+
     priceView.add(donateView);
     
     btnViewDetails.addEventListener('click', function() {
-    	//Ti.API.info(constant.APP + " ############## btnViewDetails CLICKED #############");
     	Analytics.trackEvent({
 	  		category: "View Details (Sell)",
 	  		action: "click",
@@ -1408,12 +1498,28 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 		
     	var alertDialog = UI.createAlertDialog({
     		title: 'Price Break-up',
+            titleColor: '#ef4e6d',
     		message: 'Listing is always free on StylFlip. We mark-up your asking price by 20% and charge and additional \u20B9 120 for shipping if the display price is less than \u20B9 2000.\n\nAsking Price: \u20B9 '+(txtSellingPrice.value == '' || txtSellingPrice.value == '0' ? 0 : txtSellingPrice.value)+'\nSF Comm.: \u20B9 '+Math.ceil((txtSellingPrice.value * Utils.getCommisionPercentage()) / 100)+'\nS & H: '+_getShippingAndHandlingFees(txtSellingPrice.value)+'\nDisplay Price: '+listingPrice.value,
     		buttonNames: ['GOT IT']
     	});
+
     	alertDialog.show();
     	alertDialog = null;
     }); //end btnViewDetails click callback
+
+    btnPriceGuide.addEventListener('click', function() {
+        
+        var alertDialog = UI.createAlertDialog({
+            title: 'Pricing Guide',
+            titleColor: '#ef4e6d',
+            message: 'The percentage value below is the discount we recommend off the original retail price for your item',
+            secMessages: ['New with tags - <font color="#ef4e6d">20-25%</font>','New without tags - <font color="#ef4e6d">25-40%</font>','Barely used (once or twice) - <font color="#ef4e6d">40-60%</font>','Gently used - <font color="#ef4e6d">70-90%</font>'],
+            buttonNames: ['GOT IT']
+        });
+
+        alertDialog.show();
+        alertDialog = null;
+    }); //end btnViewDetails click callback    
     
     var sellingPriceCalled = false, calculatedPriceCalled = false;
     

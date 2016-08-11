@@ -518,6 +518,7 @@ exports.get = function(tabSelected, wardrobeData, productData) {
     	});
     	buttonBarView.show();
     	buttonBarView.addEventListener('click', function(e) {
+    		Ti.API.info(constant.APP + " ####################### _takeOrChoosePicture buttonBar clicked ######################");
     		switch(e.index) {
     			case 0: 
 			        _openCamera();

@@ -211,14 +211,16 @@ UI.createOverlayView = function(view, bgTransparent) {
  
     $.show = function() {
 		if(osname == 'android') {
-    		overlayView.animate({
-    			opacity: 1,
-    			duration: 200
-    		}, function(e) {
-    			overlayView.opacity = 1;
-    			e.source = null;
-    		});
-    		// overlayView.opacity = 1;
+            if(overlayView){
+                overlayView.animate({
+                    opacity: 1,
+                    duration: 200
+                }, function(e) {
+                    overlayView.opacity = 1;
+                    e.source = null;
+                });
+                // overlayView.opacity = 1;
+            }
     	}
     	else {
     		Animation.popIn(overlayView);
@@ -255,18 +257,21 @@ UI.createOverlayView = function(view, bgTransparent) {
     
     $.hide = function() {
     	if(osname == 'android') {
-    		overlayView.animate({
-    			opacity: 0,
-    			duration: 200
-    		}, function(e) {
-    			overlayView.opacity = 0;
-    			e.source = null;
-    			Utils._.isFunction(events.listener) && events.listener();
-    			_clearMemory();
-    		});
-    		// overlayView.opacity = 0;
-    		// Utils._.isFunction(events.listener) && events.listener();
-			// _clearMemory();
+            //TBD fix titanium error on image capture
+            if(overlayView){
+                overlayView.animate({
+                    opacity: 0,
+                    duration: 200
+                }, function(e) {
+                    overlayView.opacity = 0;
+                    e.source = null;
+                    Utils._.isFunction(events.listener) && events.listener();
+                    _clearMemory();
+                });
+                // overlayView.opacity = 0;
+                // Utils._.isFunction(events.listener) && events.listener();
+                // _clearMemory();
+            }
     	}
     	else {
     		Animation.popOut(overlayView, function() {
@@ -294,7 +299,9 @@ UI.alertDialog = function(props) {
     var optionsType = props.type ? props.type : 'radio';
     var dismissOnPositive = true;
     var dismissable = true;
-    
+    var titleColor = props && props.titleColor ? props.titleColor : '#fff';
+
+
     if(props.hasOwnProperty('dismissOnPositive')) {
     	dismissOnPositive = props.dismissOnPositive;
     }
@@ -313,6 +320,7 @@ UI.alertDialog = function(props) {
     
     var lblTitle = Ti.UI.createLabel({
         backgroundColor: 'transparent',
+        color: titleColor,
         text: props && props.title && Utils.toEachWordUppercase(props.title),
         top: UI.top(0),
         width: UI.width(280),
@@ -323,7 +331,7 @@ UI.alertDialog = function(props) {
             fontFamily: constant.FONT.ABEATBYKAI,
             fontWeight: 'bold'
         },
-        color: '#fff',
+        // color: '#fff',
         textAlign: 'center'
     });
     
@@ -332,10 +340,12 @@ UI.alertDialog = function(props) {
         top: UI.top(10),
         width: Ti.UI.FILL,
         height: Ti.UI.SIZE,
-        contentHeight: 'auto'
+        contentHeight: 'auto',
+        layout: 'vertical'
     });
     
     if(props && props.message) {
+        Ti.API.info(constant.APP + " ############ constructing message ################");
     	var lblMessage = Ti.UI.createLabel({
 	        text: props.message,
 	        left: UI.left(20),
@@ -351,6 +361,29 @@ UI.alertDialog = function(props) {
 	        textAlign: props.textAlign ? props.textAlign : 'center'
 	    });
 	    contentView.add(lblMessage);
+
+        if(props && props.secMessages && props.secMessages.length){
+            Ti.API.info(constant.APP + " ############ constructing secondary message ################");
+            var x = 0, secMessages = props.secMessages;
+            for(x = 0, Length = secMessages.length; x < Length; x++){
+                var secLabel = Ti.UI.createLabel({
+                    top: UI.top(5),
+                    color: '#fff',
+                    // text: secMessages[x],
+                    html: secMessages[x],
+                    height: Ti.UI.SIZE,
+                    width: Ti.UI.FILL,
+                    textAlign: props.textAlign ? props.textAlign : 'center',
+                    font: {
+                        fontSize: UI.fontSize(15),
+                        fontFamily: UI.fonts.DEFAULT_FONT
+                    }
+                });
+
+                Ti.API.info(constant.APP + " adding message: " + secMessages[x]);
+                contentView.add(secLabel);
+            }
+        }
     }
     else if(props && props.options) {
     	contentView.layout = 'vertical';
@@ -688,7 +721,8 @@ UI.buttonBarView = function(obj) {
     var arrButtons = obj.buttonNames;
     var buttonsLength = arrButtons.length;
     var BUTTON_HEIGHT = UI.height(60);
-    var ANIMATE_DURATION = 350;
+    // var ANIMATE_DURATION = 350;
+    var ANIMATE_DURATION = 1;
     var currentWindow = Window.getCurrentWindow();
     
     var overlayView = Ti.UI.createView({
