@@ -141,70 +141,107 @@ exports.get = function(config) {
 		btnFilterView.visible = false;
 	}
 	
-	
-	var _addBackButton = function() {
+	var _btnBackClickCb = function() {
+    	if(filterView) {
+    		var alertDialog = UI.createAlertDialog({
+    			title: constant.ALERT.TITLE.DONE_FILTERING,
+    			message: 'You will loose your changes to your filters. Proceed?',
+    			buttonNames: ['Ok', 'Cancel']
+    		});
+    		alertDialog.addEventListener('click', function(e) {
+    			if(e.index == 0) {
+					if(btnMenuView) {
+						btnMenuView.visible = true;
+					}
+					filterView.hide();
+					filterView = undefined;
+					headerView.remove(btnBackView);
+					_enableFilterDone(false);
+    			}
+    		});
+    		alertDialog.show();
+    		alertDialog = null;
+    	}
+    	else {
+    		config && config.backButtonCallback && Utils._.isFunction(config.backButtonCallback) && config.backButtonCallback();
+		 	Loader.hide();
+    		Window.getCurrentWindow().close();
+    	}
+    };
+
+	var _addBackButton = function(cb) {
+		if(btnBackView) return;
+		
 		btnBackView = Ti.UI.createView(_style.btnBackView);
         var btnBack = UI.createButton(_style.btnBack);  
         var imgBackLogo = Ti.UI.createImageView(_style.imgBackLogo);
-        btnBackView.add(btnBack);   
+          
         // btnBackView.add(imgBackLogo);   
         
-        btnBackView.addEventListener('click', function() {
-        	if(filterView) {
-        		var alertDialog = UI.createAlertDialog({
-        			title: constant.ALERT.TITLE.DONE_FILTERING,
-        			message: 'You will loose your changes to your filters. Proceed?',
-        			buttonNames: ['Ok', 'Cancel']
-        		});
-        		alertDialog.addEventListener('click', function(e) {
-        			if(e.index == 0) {
-						if(btnMenuView) {
-							btnMenuView.visible = true;
-						}
-						filterView.hide();
-						filterView = undefined;
-						headerView.remove(btnBackView);
-						_enableFilterDone(false);
-        			}
-        		});
-        		alertDialog.show();
-        		alertDialog = null;
-        	}
-        	else {
-        		config && config.backButtonCallback && Utils._.isFunction(config.backButtonCallback) && config.backButtonCallback();
-    		 	Loader.hide();
-        		Window.getCurrentWindow().close();
-        	}
-        });
+        if(cb && Utils._.isFunction(cb)){
+        	Ti.API.info(constant.APP + " $$$$$$$$$$$$$ ADDING BACK BUTTON WITH PASSED CB $$$$$$$$$$$$$$$");
+        	// btnBack = UI.createButton(_style.btnBackAct);
+        	btnBackView.addEventListener('click',cb);
+        }
+        else{
+        	Ti.API.info(constant.APP + " $$$$$$$$$$$$$ ADDING BACK BUTTON WITH DEFAULT CB $$$$$$$$$$$$$$$");
+        	// btnBack = UI.createButton(_style.btnBack);
+        	btnBackView.addEventListener('click',_btnBackClickCb);
+        }
         
+        btnBackView.add(btnBack); 
         headerView.add(btnBackView);
 	};
 	
+	var _menuViewCb = function() {
+		var leftMenu = require('/components/leftMenu').get(config.rightView);
+		leftMenu.show(function() {
+			leftMenu = null;
+		});
+	};
+
+	var _addMenuBar = function(){
+		if(btnMenuView) return;
+
+		btnMenuView = Ti.UI.createView(_style.btnMenuView);
+		var btnMenu = UI.createButton(_style.btnMenu);	
+		
+		btnMenuView.add(btnMenu);	
+		
+		btnMenuView.addEventListener('click',_menuViewCb);
+		
+		headerView.add(btnMenuView);
+	};
+
 	var _getView = function() {
 		if(config && config.showMenu && config.rightView) {
-			btnMenuView = Ti.UI.createView(_style.btnMenuView);
-			var btnMenu = UI.createButton(_style.btnMenu);	
-			
-			btnMenuView.add(btnMenu);	
-			
-			btnMenuView.addEventListener('click', function() {
-				var leftMenu = require('/components/leftMenu').get(config.rightView);
-				leftMenu.show(function() {
-					leftMenu = null;
-				});
-			});
-			
-			headerView.add(btnMenuView);
+			_addMenuBar();
 		}
-		else {
-			if(config && config.enableBackButton) {
-				_addBackButton();
-			}
+		else if(config && config.enableBackButton){
+			_addBackButton();
 		}
 
 		return headerContainerView;
 	};
+
+	var _remMenuBar = function(){
+		try{
+			headerView.remove(btnMenuView);
+			btnMenuView.removeEventListener('click',_menuViewCb);
+			btnMenuView = null;
+		}
+		catch(e){}
+	};
 	
+	var _remBackButton = function(){
+		try{
+			headerView.remove(btnBackView);
+			btnBackView.removeEventListener('click',_btnBackClickCb);
+			btnBackView = null;
+		}
+		catch(e){}
+	};
+
 	var _getHeaderView = function() {
 		return headerView;
 	};
@@ -356,6 +393,10 @@ exports.get = function(config) {
 		setSearchActive: _setSearchActive,
 		setCurrentFilterType: _setCurrentFilterType,
 		hideBackButton: _hideBackButton,
-		addEventListener: _addEventListener
+		addEventListener: _addEventListener,
+		addMenuBar: _addMenuBar,
+		addBackButton: _addBackButton,
+		remMenuBar: _remMenuBar,
+		remBackButton: _remBackButton
 	};
 };

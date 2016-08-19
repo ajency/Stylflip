@@ -581,7 +581,7 @@ UI.alertDialog = function(props) {
         alertView.height = pheight - UI.height(100);
         contentView.height = alertView.height - lblTitle.height;
     }
-};
+}; //end alertDialog
 
 
 UI.createAlertDialog = function(props) {
@@ -721,8 +721,8 @@ UI.buttonBarView = function(obj) {
     var arrButtons = obj.buttonNames;
     var buttonsLength = arrButtons.length;
     var BUTTON_HEIGHT = UI.height(60);
-    // var ANIMATE_DURATION = 350;
-    var ANIMATE_DURATION = 1;
+    var ANIMATE_DURATION = 350;
+    // var ANIMATE_DURATION = 1;
     var currentWindow = Window.getCurrentWindow();
     
     var overlayView = Ti.UI.createView({
@@ -1348,58 +1348,148 @@ UI.createScrollView = function(config) {
 	return view;
 };
 
+UI.openingModal = false;
+
 UI.showModal = function(windowTitle,view){
+    if(UI.openingModal) return;
+    UI.openingModal = true;
 
     if(!windowTitle){
         windowTitle = "Modal Message";
     }
+    var backGroundColor = '#27292e', textColor = '#ef4e6d'; 
 
-    function hideWindow(){
-        Loader.hide();  
-        modalWindow.close();
-    }
-
-    var modalWindow = Ti.UI.createWindow({
-        top: UI.top(10),
-        width: pwidth * 0.9,
-        height: pheight * 0.8,
-        title: windowTitle,
-        backgroundColor : '#ffffff'
-        // rightNavButton: cancelButton
+    var rootContainer = Ti.UI.createView({
+        width: pwidth,
+        height: pheight,
+        opacity: 0
     });
 
+    var backDrop = Ti.UI.createView({
+        top: UI.top(0),
+        width: pwidth,
+        height: pheight,
+        backgroundColor: '#000',
+        opacity: 0.5
+        // layout: 'vertical'
+    });
+
+    var modalWindow = Ti.UI.createView({
+        top: UI.top(60),
+        width: pwidth * 0.9,
+        height: pheight * 0.8,
+        // titleImage: '',
+        // title: windowTitle,
+        backgroundColor : '#ffffff',
+        borderRadius: 20,
+        layout: 'composite'
+    });
+
+    var headerView = Ti.UI.createView({
+        top: UI.top(0),
+        width: Ti.UI.FILL,
+        height: UI.height(40),
+        textAlign: 'center',
+        backgroundColor: backGroundColor,
+    });
+
+    var header = Ti.UI.createLabel({
+        text: windowTitle,
+        width: Ti.UI.SIZE,
+        font: {
+            fontSize: UI.fontSize(20),
+            fontFamily: constant.FONT.ABEATBYKAI,
+            fontWeight: 'bold'
+        },
+        color: textColor
+    });
+
+    headerView.add(header);
+
     var containerView  = Ti.UI.createView({  // Set height appropriately
+        top: UI.top(60),
         height: Ti.UI.SIZE,
         backgroundColor: '#FFF',
         layout: 'vertical'
     });
 
-    var closeButton = Ti.UI.createButton({
-        title: 'Got it',
-        bottom: 0
+    var closeButton = Ti.UI.createLabel({
+        text: 'GOT IT',
+        // backgroundColor: backGroundColor,
+        color: textColor,
+        bottom: 0,
+        font: {
+            fontSize: UI.fontSize(16),
+            fontFamily: constant.FONT.ABEATBYKAI
+        }
+        // borderRadius: 20
     });
-    closeButton.addEventListener('click', hideWindow);
-
-    if(osname == 'android') {
-        modalWindow.addEventListener('android:back', hideWindow);
-    }
 
     var closeButonView = Ti.UI.createView({
         height: Ti.UI.SIZE,
-        top: UI.top(20)
+        bottom: UI.bottom(10)
     });
+
+    var hideWindow = function(){
+
+        rootContainer.remove(backDrop);
+        rootContainer.remove(modalWindow);
+
+        rootContainer.hide();
+        Window.getCurrentWindow().remove(rootContainer);
+        
+        headerView = null;
+        rootContainer = null;
+        backDrop = null;
+        modalWindow = null;
+        containerView = null;
+        closeButton = null;
+        closeButonView = null;
+
+        UI.openingModal = false;
+    };
+
+    closeButton.addEventListener('click', hideWindow);
+
+    // if(osname == 'android') {
+    //     rootContainer.addEventListener('android:back', hideWindow);
+    // }
 
     closeButonView.add(closeButton);
+    
+    // containerView.add(headerView);
     containerView.add(view);
-    containerView.add(closeButonView);
+    // containerView.add(closeButonView);
 
+    modalWindow.add(headerView);
     modalWindow.add(containerView);
+    modalWindow.add(closeButonView);
 
-    modalWindow.open({
-        modal: true
-    });
+    rootContainer.add(backDrop);
+    rootContainer.add(modalWindow);
 
-    Loader.show('...');
+    Window.getCurrentWindow().add(rootContainer);
+
+    // if(osname === 'iphone' || osname === 'ipad'){
+    //     modalWindow.top = UI.top(40);
+    //     // modalWindow.open();
+    //     rootContainer.show();
+    // }
+    // else{
+        // rootContainer.show();
+        
+        rootContainer.animate({
+            opacity: 1,
+            duration: 250
+            // curve: Ti.UI.ANIMATION_CURVE_EASE_IN
+        }, function(e) {
+            rootContainer.opacity = 1;
+        });
+
+        Ti.API.info(constant.APP + " opening the sizeChart view");
+
+    // }
+    
     UI.modalWindowOpen = true;
 };
 
