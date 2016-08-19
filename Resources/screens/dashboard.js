@@ -1,4 +1,5 @@
 exports.get = function(tabToLoad) {
+	Ti.API.info(constant.APP + " ################################## LOADING DASHBOARD ##############################");
 	Analytics.trackUser({
 	  userId: Utils.isUserLoggedIn() ? Utils.loggedInUserId() : "0",
 	  category: osname,
@@ -9,18 +10,8 @@ exports.get = function(tabToLoad) {
     
     var _isSearchBarVisible = false;
     var _notificationCountToBeDecreased = false;
-    
-    Ti.App.addEventListener('app:searchbarFocus',function(e){
-		Ti.API.info(constant.APP + " ###################### adding search event here ######################");
-		addSearchChange();
-    });
 
-    Ti.App.addEventListener('app:searchbarBlur',function(e){
-    	Ti.API.info(constant.APP + " ###################### removing search event here ######################");
-    	remSearchChange();
-    });
-
-    var addSearchChange = function(){
+    var _addSearchChange = function(){
     	if(UI.currentTextFieldFocused){
     		UI.currentTextFieldFocused.addEventListener('change',_searchBarChangeCallback);
     	}
@@ -29,7 +20,7 @@ exports.get = function(tabToLoad) {
     	}
     };
 
-    var remSearchChange = function(){
+    var _remSearchChange = function(){
     	if(UI.currentTextFieldFocused){
     		UI.currentTextFieldFocused.removeEventListener('change',_searchBarChangeCallback);
     		UI.currentTextFieldFocused = null;
@@ -38,10 +29,23 @@ exports.get = function(tabToLoad) {
     		Ti.API.info(constant.APP + " ############ REM NO CURRENT SEARCH TEXT FIELD FOCUSED ################");
     	}
     };
+    
+    var _searchBarFocus = function(e){
+		Ti.API.info(constant.APP + " ###################### adding search event here ######################");
+		_addSearchChange();
+    };
 
+    Ti.App.addEventListener('app:searchbarFocus',_searchBarFocus);
+
+    var _searchBarBlur = function(e){
+    	Ti.API.info(constant.APP + " ###################### removing search event here ######################");
+    	_remSearchChange();
+    };
+
+    Ti.App.addEventListener('app:searchbarBlur',_searchBarBlur);
     
     var _searchBarChangeCallback = function(){
-		// Ti.API.info(constant.APP + " #################### SEARCH BAR KEYPRESSED ###################");
+		Ti.API.info(constant.APP + " #################### SEARCH BAR KEYPRESSED ###################");
 		if(UI.currentTextFieldFocused){
 			// Ti.API.info(" searchBarVisiblbe: " + searchBar.visible + " headerVisible: " + headerView.visible + " UI.currentTextFieldFocused.value: " + UI.currentTextFieldFocused.value);
 			if(headerView.visible){
@@ -58,31 +62,9 @@ exports.get = function(tabToLoad) {
 	};
 
 	var _searchIconClickCallback = function(e) {
-		Ti.API.info(constant.APP + " <<<<<<<<<<<<<<<<<<< SEARCH BAR PROCEDURE >>>>>>>>>>>>>>>>>>>");
-	    
-	    // var alertDialog = UI.createAlertDialog({
-	    // 	title: constant.ALERT.TITLE.DONE_SEARCHING,
-	    // 	message: 'Are you sure you want to clear your search?',
-	    // 	buttonNames: ['YES', 'NO']
-	    // });
-
-	    // alertDialog.addEventListener('click', function(e) {
-	    // 	if(e.index == 0) {
-	    // 		_clearSearchField();
-	    // 		try {
-	    // 			currentView.searchData();
-	    // 		}
-	    // 		catch(e) {}
-	    // 	}
-	    // 	else if(e.index == 1) {
-	    // 		Ti.API.info(constant.APP + " ################# SEARCH FIELD UNALTERED ####################");
-	    // 		searchBar.setHidden(true);
-	    // 		_isSearchBarVisible = false;
-	    // 	}
-	    // });
-	    
+		// Ti.API.info(constant.APP + " <<<<<<<<<<<<<<<<<<< SEARCH BAR PROCEDURE >>>>>>>>>>>>>>>>>>>");	    
 		if(e.show) {
-			Ti.API.info(constant.APP + " ################## SEARCH BAR SHOWN ##################");
+			Ti.API.info(constant.APP + " ################## SEARCH BAR SHOW PROCEDURE ##################");
 			searchBar.setHidden(false);
 			_isSearchBarVisible = true;
 			header.remMenuBar();
@@ -90,55 +72,21 @@ exports.get = function(tabToLoad) {
 			// addSearchChange();
 		}
 		else {
-			Ti.API.info(constant.APP + " ################# SEARCH BAR HIDE PROCEDURE ###################")
+			Ti.API.info(constant.APP + " ################# SEARCH BAR CLEAR PROCEDURE ###################")
 			switch(_currentKey) {
 				case 'stylefeed':
-					// if(_isSearchBarVisible && _feedSearchText) {
-					// 	// alertDialog.show();
-					// 	_clearSearchField();
-					// 	return;
-					// }
-					// else if(!_isSearchBarVisible && _feedSearchText) {
-					// 	searchBar.setHidden(false);
-					// 	_isSearchBarVisible = true;
-					// 	return;
-					// }
-
-					// if(_feedSearchText){
-					// 	_clearSearchField();
-					// }
-					// else{
 						searchBar.setText('');
-						// header.remBackButton();
-						// header.addMenuBar();
-					// }
+						searchTextArea.focus();
 				break;	
 				case 'shop':
-					// if(_shopSearchText){
-					// 	_clearSearchField();
-					// }
-					// else{
 						searchBar.setText('');
-						// header.remMenuBar();
-						// header.addBackButton();
-					// }
+						searchTextArea.focus();
 				break;
 				case 'social':
-					// if(_socialSearchText){
-					// 	_clearSearchField();
-					// }
-					// else{
 						searchBar.setText('');
-						// header.remMenuBar();
-						// header.addBackButton();
-					// }
+						searchTextArea.focus();
 				break;
 			}
-			// searchBar.setHidden(true);
-			// header.setSearchActive(false); //change the search icon
-			// _isSearchBarVisible = false;
-
-			// remSearchChange();
 		}
 	}; //end _searchIconClickCallback
     
@@ -182,6 +130,7 @@ exports.get = function(tabToLoad) {
 
 
     var searchBar = require('/components/searchBar').get();
+    var searchTextArea = searchBar.getTextSearch();
 	searchBar.setHintText('Search for Products, People, Updates...');
 	header.getHeaderView().add(searchBar.getView());
     
@@ -205,8 +154,9 @@ exports.get = function(tabToLoad) {
 	    header.remBackButton();
 	    header.addMenuBar();
 
-		remSearchChange();
+		_remSearchChange();
 		btnSearch.backgroundImage = '/images/header/search.png';	   	
+	   	
 	   	if(apiSearchText === '') return;
 
 		try {
@@ -215,7 +165,7 @@ exports.get = function(tabToLoad) {
 		}
 		catch(e) {}
     };
-	// var searchTextArea = searchBar.getTextSearch();
+	
 
     //	Enable header and icons and searchbar
     header.enableHeaderIcons(true);
@@ -224,22 +174,38 @@ exports.get = function(tabToLoad) {
     
 	var currentView, includeView, tmpView, includeTimeout, _currentKey;
 	
-	searchBar.addEventListener('search', function(e) {
+	var _searchCb = function(e) {
 		try {
 			currentView.searchData(e.text);
 			_showSearchBar(e.text);
 		}
 		catch(e) {}
-	});
+	};
+
+
+	searchBar.addEventListener('search', _searchCb);
 	
-	header.addEventListener('filter', function(e) {
+	var _headerFilterCb = function(e) {
 		try {
 			header.setFilterActive(Object.keys(e).length > 0);
 			currentView.filterData(e);
 		}
 		catch(e) {}
-	});
-	
+	};
+
+	header.addEventListener('filter', _headerFilterCb);
+
+	var currentWindow, window;
+	var _windowCb = function() {
+    	if(osname == 'android') {
+    		Window.clearMemory(currentWindow);
+			currentWindow = null;
+    	}
+    	else {
+    		currentWindow.close();
+    	}
+    };
+
 	/*
 	 * Left view Option select listener
 	 */
@@ -276,9 +242,9 @@ exports.get = function(tabToLoad) {
 				
 				_removeFromMemory();
 				
-				var currentWindow = Window.getCurrentWindow();
+				currentWindow = Window.getCurrentWindow();
 				
-				var window = Window.create(exitOnClose=true, toBeOpened=osname=='android');
+				window = Window.create(exitOnClose=true, toBeOpened=osname=='android');
 				var login = require('/screens/login').get();
 		        window.add(login.getView());
 		        Window.open(window);  
@@ -286,15 +252,7 @@ exports.get = function(tabToLoad) {
 		        /*
 		         * Clear memory on login window open
 		         */
-		        window.addEventListener('open', function() {
-		        	if(osname == 'android') {
-		        		Window.clearMemory(currentWindow);
-        				currentWindow = null;
-		        	}
-		        	else {
-		        		currentWindow.close();
-		        	}
-		        });
+		        window.addEventListener('open', _windowCb);
 			}
 			else {
 				if(_currentKey != e.key) {
@@ -406,9 +364,9 @@ exports.get = function(tabToLoad) {
 		}
 	};
 
+
 	var apiSearchText = '';
-	// Ti.App.fireEvent('app:apicallSuccess',{params});
-	Ti.App.addEventListener('app:apicallSuccess',function(e){
+	var _apiSuccessCb = function(e){
 		Ti.API.info(constant.APP + " ################### API SUCCESS CALLBACK ###################");
 		apiSearchText = e.params && e.params.serverArgs && e.params.serverArgs.searchText ? e.params.serverArgs.searchText : '';
 		if(apiSearchText){
@@ -418,7 +376,10 @@ exports.get = function(tabToLoad) {
 		else{
 			btnSearch.backgroundImage = '/images/header/search.png';
 		}
-	});
+	}
+
+	// Ti.App.fireEvent('app:apicallSuccess',{params});
+	Ti.App.addEventListener('app:apicallSuccess',_apiSuccessCb);
 
 	/*
 	 * Tab select listener
@@ -717,6 +678,7 @@ exports.get = function(tabToLoad) {
 	};
 	
 	var _removeFromMemory = function() {
+		Ti.API.info(constant.APP + " ###################### REMOVING DASHBOARD FROM MEMORY ####################");
 		Ti.App.removeEventListener('onOptionSelect', _onOptionSelect);
 		_onOptionSelect = null;
 		Ti.App.removeEventListener('onFooterTabSelect', _onFooterTabEventListener);
@@ -730,6 +692,34 @@ exports.get = function(tabToLoad) {
 		_deRegisterForPushNotification = null;
 		Ti.App.removeEventListener('removeFromMemory', _removeFromMemory);
 		_removeFromMemory = null;
+
+		try{
+			Ti.App.removeEventListener('app:apicallSuccess',_apiSuccessCb);
+			Ti.App.removeEventListener('app:searchbarFocus',_searchBarFocus);
+			Ti.App.removeEventListener('app:searchbarBlur',_searchBarBlur);
+			
+			if(window){
+				window.removeEventListener('open', _windowCb);
+			}
+			// searchBar.removeEventListener('search', _searchCb);
+			// header.removeEventListener('filter', _headerFilterCb);
+		}
+		catch(e){} 
+		
+		// _windowCb = null;
+		_apiSuccessCb = null;
+		_searchBarFocus = null;
+		_searchBarBlur = null;
+		_searchCb = null;		
+		_headerFilterCb = null;
+
+		_showSearchBar = null;
+		_clearSearchField = null;
+
+		_addSearchChange = null;
+		_remSearchChange();
+		_searchBarChangeCallback = null;
+		_remSearchChange = null;
 	};
 	
 	Ti.App.addEventListener('removeFromMemory', _removeFromMemory);
@@ -739,4 +729,5 @@ exports.get = function(tabToLoad) {
 		getView: _getView
 	};
 };
+
 

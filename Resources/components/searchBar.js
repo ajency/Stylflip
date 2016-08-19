@@ -5,6 +5,12 @@ exports.get = function() {
     
 	var mainView = Ti.UI.createView(_style.mainView);	
 	var txtSearch = UI.createTextField(_style.txtSearch);
+
+	if(osname === 'android'){
+		Ti.API.info(constant.APP + " ############# attaching keyboard focus event for android ##########");
+		txtSearch.softKeyboardOnFocus = Titanium.UI.Android.SOFT_KEYBOARD_SHOW_ON_FOCUS;
+	}
+
 	mainView.add(txtSearch);
 	
 	// if(osname == 'android') txtSearch.top = UI.top(2); 
@@ -24,8 +30,7 @@ exports.get = function() {
 		Ti.API.info(constant.APP + " #################### SEARCH BAR FOCUSED ###################");
 		UI.currentTextFieldFocused = txtSearch;
 		Ti.App.fireEvent('app:searchbarFocus',{type:'add'});
-		txtSearch.fireEvent('click');
-		console.log(e);
+		// txtSearch.fireEvent('click');
 	});
 	
 	txtSearch.addEventListener('blur', function(e) {
@@ -69,6 +74,7 @@ exports.get = function() {
 	var _setHintText = function(hintText) {
 		if(hintText && hintText.trim().length > 0) {
 			txtSearch.hintText = hintText.trim();
+			Ti.API.info(constant.APP + " ############### SET HINT TEXT TO " + txtSearch.hintText + " #############");
 		}
 	};
 	
@@ -86,6 +92,7 @@ exports.get = function() {
 			// txtSearch.focus();
 		}
 		else {
+			// Ti.API.info(constant.APP + " ################### BLURING SEARCH BAR #####################");
 			txtSearch.blur();
 		}
 	};

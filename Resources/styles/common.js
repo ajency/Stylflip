@@ -42,7 +42,7 @@ exports.get = function() {
         },
         priceTxt: {
             value: '',
-            hintText: 'Edit Price',
+            hintText: 'Enter',
             keyboardType: Ti.UI.KEYBOARD_DECIMAL_PAD,
             bubbleParent: false,
             backgroundColor: 'transparent',

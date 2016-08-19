@@ -31,6 +31,7 @@ exports.get = function() {
             },
             paddingLeft: 5,
             paddingRight: 5,
+            hintTextColor:'#000',
         	hintText: 'Search',
         	verticalAlign: Ti.UI.TEXT_VERTICAL_ALIGNMENT_CENTER,
         	bubbleParent: false,

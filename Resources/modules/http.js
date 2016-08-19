@@ -144,6 +144,7 @@ HttpClient.apiCall = function(params, method, api, successCallback, errorCallbac
 
 HttpClient.getResponse = function(config) {
 	//	Blur currently focused text field
+	Ti.API.info(constant.APP + " ##################### BLURRING FOCUSED TEXTFIELD ##################");
 	UI.focusedTextField && UI.focusedTextField.blur();
 	
 	var params = config.requestArgs;

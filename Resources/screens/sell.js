@@ -255,7 +255,30 @@ exports.get = function(tabSelected, wardrobeData, productData) {
         Window.open(window);  
     });
     
+    var _username = '';
+
+    var _requestArgs = {
+	        // showLoader: true,
+	        url: 'stylfile.php',
+	        method: 'post',
+	        serverArgs: {
+	        	action: 'profileInfo',
+	            userId: Utils.loggedInUserId()
+	        }
+	    };
     
+	HttpClient.getResponse({
+    	requestArgs: _requestArgs,
+    	success: function(response) {
+    		Ti.API.info(constant.APP + " ########################### RETRIVER USER INFO #############################");
+    		var _profileData = response.data[0];
+	        _username = _profileData.username;
+    	},
+    	error: function(error) {
+    		Ti.API.warn(constant.APP + " ########################### RETRIVER USER INFO #############################");
+    	}
+    });	    
+
     /*
      * VIEW button click handler
      */
@@ -280,7 +303,7 @@ exports.get = function(tabSelected, wardrobeData, productData) {
 	    var _productDataToDisplay = _productDetails;
 	    _productDataToDisplay.brand = _productDetails.brandName
 	    _productDetails.likes = '0';
-	    _productDetails.username = 'Username';
+	    _productDetails.username = _username === '' ? 'Username' : _username;
         _productDetails.timestamp = 'Just now';	
 	    
 	    if(_productImages.length > 0) {
@@ -395,7 +418,7 @@ exports.get = function(tabSelected, wardrobeData, productData) {
 		        			else {
 		        				_title = constant.ALERT.TITLE.WARDROBE_MALFUNCTION;
 		        				// _message = 'Your Bank Details are incomplete without which we cannot list your item. Complete your Bank Details now?';
-		        				_message = "Your bank details are incomplete, We can still list your product but won't be able to process your payment in case the product is sold. Complete your bank details now?";
+		        				_message = "Your bank details are incomplete, We can still list your product but won't be able to process your payment if the product is sold. Complete your bank details now?";
 		        			}
 		        			var alertDialog = UI.createAlertDialog({
 				                title: _title,

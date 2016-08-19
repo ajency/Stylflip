@@ -27,7 +27,8 @@ Window.create = function(exitOnClose, toBeOpened, disableClick) {
 	
 	if(!disableClick) {
 	    window.addEventListener('click', function() {
-            UI.currentTextFieldFocused && UI.currentTextFieldFocused.blur();
+	    	// Ti.API.info(constant.APP + " ##################### BLURRING CURRENT TEXTFIELD ON WINDOW CLICK ##################");
+      //       UI.currentTextFieldFocused && UI.currentTextFieldFocused.blur();
         });
 	}
 	
@@ -83,6 +84,7 @@ Window.create = function(exitOnClose, toBeOpened, disableClick) {
  * opening a tab or window depending upon OS
  */
 Window.open = function(currentWindow) {
+	Ti.API.info(constant.APP + " ##################### BLURRING CURRENT TEXTFIELD ON WINDOW OPEN ##################");
 	UI.currentTextFieldFocused && UI.currentTextFieldFocused.blur();
 	
 	if(!currentWindow.toBeOpened) {

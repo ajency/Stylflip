@@ -266,6 +266,7 @@ exports.get = function() {
 	            
 	            if(_pageIndex == 0 && _productData.length == 0) {
             		listView.setData([UI.createNoDataView()], false);
+            		Ti.App.fireEvent('app:apicallSuccess',{params: _requestArgs});
             		return;
             	}
             	

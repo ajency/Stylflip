@@ -900,7 +900,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 			    }
 			    
 			    var _sKeyLength = Object.keys(_sizeParent.secondary).length;
-			    var viewWidth = (110 / 3) + '%';
+			    var viewWidth = '0%';
 			    // if(_productDetailsLaunch){
 			    	if(_sKeyLength > 1){ // clothing apparel
 				    	viewWidth = (110 / 3) + '%';
@@ -913,7 +913,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 			    // 	viewWidth = '30%';
 			    // }
 			    
-
+                var flWidth = viewWidth;
 			    for(var key in _sizeParent.secondary) {
 			    	var burstView = Ti.UI.createView(Utils._.extend({}, _style.burstView, {
 				    	top: -1,
@@ -925,10 +925,17 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 				    // 	width: viewWidth
 				    // });
 					
+                    if(key === 'WAIST'){
+                        flWidth = (105 / 3) + '%';
+                    }
+                    else{
+                        flWidth = viewWidth;
+                    }
+
 					//Ti.API.info(constant.APP + " ########## FIRST KEY: " + constant.SIZE_FULL_FORM[key]);
 				    var lblBurst = Ti.UI.createLabel(Utils._.extend({}, _style.lblBurst, {
 				    	text: constant.SIZE_FULL_FORM[key],
-				    	left: viewWidth
+				    	left: flWidth
 				    }));
 
 				    // lblBurstView.add(lblBurst);

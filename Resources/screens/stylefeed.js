@@ -903,6 +903,7 @@ exports.get = function(header) {
             		_listData.push(UI.createNoDataView());
             		// listView.setData([UI.createNoDataView()], false);
             		listView.setData(_listData, false, true);
+            		Ti.App.fireEvent('app:apicallSuccess',{params: _requestArgs});
             		return;
             	}
             	
