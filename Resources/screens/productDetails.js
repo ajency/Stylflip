@@ -86,10 +86,19 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 			text: (productData.timestamp?productData.timestamp:'-') // + ' | ' + (productData.userLocation?productData.userLocation:'-')
 	    }));
 	    if(canBeEdited && canBeEdited.editableDeletable && productData.userId == Utils.loggedInUserId() && !productData.isPurchased) {
-	    	var btnEditDeleteProductDetails = UI.createButton(Utils._.extend({}, _commonStyle.menuButton, {
-				top: UI.top(10),
-				right: UI.right(10)
+    	    var btnEditDeleteProductDetails = UI.createClickableView(Utils._.extend({},_commonStyle.menuButton,{
+		    	top: UI.top(10),
+				right: UI.right(10),
+		    	width: UI.width(20),
+		    	height: UI.height(20)
 		    }));
+
+	   //  	var btnEditDeleteProductDetails = UI.createButton(Utils._.extend({}, _commonStyle.menuButton, {
+				// top: UI.top(10),
+				// right: UI.right(10),
+				// width: UI.width(15),
+				// height: UI.height(15)
+		  //   }));
 	    }
 	    else if(productData.isToBeDonated) {
 	    	var btnDonateView = Ti.UI.createView(Utils._.extend({}, _style.btnDonateView, {
@@ -434,12 +443,20 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 			    	// textAlign: 'right'
 			    });
 
-			    var lblImgScale = Ti.UI.createLabel({
-			    	backgroundImage: "/images/shop/ruler.png",
+			    // var lblImgScale = Ti.UI.createLabel({
+			    // 	backgroundImage: "/images/shop/ruler.png",
+			    // 	width: UI.width(14),
+			    // 	height: UI.height(14),
+			    // 	left: 0
+			    // });
+
+			    var imgScale = Ti.UI.createImageView({
+			    	image: "/images/shop/ruler.png",
 			    	width: UI.width(14),
 			    	height: UI.height(14),
 			    	left: 0
 			    });
+
 
 			    var lblSizeChart = Ti.UI.createLabel(Utils._.extend({},_style.priceLabels,{
 			    	text: "Size Chart",
@@ -447,17 +464,16 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 			    		fontSize: UI.fontSize(14),
 			    		fontFamily: constant.FONT.DEFAULT_FONT
 			    	},
-			    	left: lblImgScale.width + UI.width(1),
+			    	// left: lblImgScale.width + UI.width(1), imgScale
+			    	left: imgScale.width + UI.width(1)
 			    }));
 
-			    lblClickContainer.add(lblImgScale);
+			    lblClickContainer.add(imgScale);
 			    lblClickContainer.add(lblSizeChart);
 			    lblClickContainer.addEventListener('click',_sizeChartLblClick);
 
 		    	// brandView.add(lblSizeChart);
 		    	brandView.add(lblClickContainer);
-
-		    			
 	   	 	}
 	    } //end addSizeChartLabel
 
@@ -1150,8 +1166,17 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
         return mainView;
     };
     
+    // var _clearSizeChartFlags = function(){
+    // 	Ti.API.info(constant.APP + " ############### clearing size chart flags ###########"); 
+    // 	UI.openingModal = false;
+    // 	UI.modalWindowOpen = false;
+    // };
+
+    // mainView.addEventListener('android:back',_clearSizeChartFlags);
+
     var _removeFromMemory = function() {
     	_style = null;
+    	// mainView.removeEventListener('android:back',_clearSizeChartFlags);
         Window.clearMemory(mainView);
         mainView = null;
         _getView = null;

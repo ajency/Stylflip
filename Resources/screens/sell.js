@@ -279,7 +279,9 @@ exports.get = function(tabSelected, wardrobeData, productData) {
 
 	    var _productDataToDisplay = _productDetails;
 	    _productDataToDisplay.brand = _productDetails.brandName
-	    _productDetails.likes = '0';	
+	    _productDetails.likes = '0';
+	    _productDetails.username = 'Username';
+        _productDetails.timestamp = 'Just now';	
 	    
 	    if(_productImages.length > 0) {
 	    	_productDataToDisplay.photos = {};
@@ -392,7 +394,8 @@ exports.get = function(tabSelected, wardrobeData, productData) {
 		        			}
 		        			else {
 		        				_title = constant.ALERT.TITLE.WARDROBE_MALFUNCTION;
-		        				_message = 'Your Bank Details are incomplete without which we cannot list your item. Complete your Bank Details now?';
+		        				// _message = 'Your Bank Details are incomplete without which we cannot list your item. Complete your Bank Details now?';
+		        				_message = "Your bank details are incomplete, We can still list your product but won't be able to process your payment in case the product is sold. Complete your bank details now?";
 		        			}
 		        			var alertDialog = UI.createAlertDialog({
 				                title: _title,
@@ -508,11 +511,18 @@ exports.get = function(tabSelected, wardrobeData, productData) {
 		});
 	});
 	
-	
 	/*
 	 * Choose or take picture
 	 */
+	var tapBusy = false;
 	var _takeOrChoosePicture = function(_arrButtonOptions) {
+		if(tapBusy) return;
+
+		tapBusy = true;
+		setTimeout(function(){
+			tapBusy = false;
+		},1000);
+
 		var buttonBarView = UI.createButtonBarView({
     		buttonNames: _arrButtonOptions
     	});

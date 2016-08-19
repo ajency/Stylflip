@@ -43,7 +43,13 @@ exports.get = function() {
 	        width: UI.width(15),
 	        height: UI.height(24)
 	    },
-	    
+	    btnBackAct: {
+	    	backgroundImage: '/images/header/back-active.png',
+	        left: UI.left(5),
+	        width: UI.width(15),
+	        height: UI.height(24)
+	    },
+
 	    imgBackLogo: {
         	image: '/images/header/header-logo.png',
         	left: UI.left(25),

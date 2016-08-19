@@ -10,26 +10,14 @@ exports.get = function(tabToLoad) {
     var _isSearchBarVisible = false;
     var _notificationCountToBeDecreased = false;
     
-    var _clearSearchField = function(){
-    	Ti.API.info(constant.APP + " ################# CLEARING SEARCH FIELD ####################");
-	    searchBar.setHidden(true);
-	   	searchBar.setText('');
-	    header.setSearchActive(false);
-	    _isSearchBarVisible = false;
-		try {
-			currentView.searchData();
-			_showSearchBar();
-		}
-		catch(e) {}
-    };
+    Ti.App.addEventListener('app:searchbarFocus',function(e){
+		Ti.API.info(constant.APP + " ###################### adding search event here ######################");
+		addSearchChange();
+    });
 
-    Ti.App.addEventListener('app:searchbarfocus',function(e){
-    	if(e.type === 'add'){
-    		addSearchChange();
-    	}
-    	else if(e.type === 'rem'){
-    		remSearchChange();
-    	}
+    Ti.App.addEventListener('app:searchbarBlur',function(e){
+    	Ti.API.info(constant.APP + " ###################### removing search event here ######################");
+    	remSearchChange();
     });
 
     var addSearchChange = function(){
@@ -51,18 +39,18 @@ exports.get = function(tabToLoad) {
     	}
     };
 
+    
     var _searchBarChangeCallback = function(){
 		// Ti.API.info(constant.APP + " #################### SEARCH BAR KEYPRESSED ###################");
 		if(UI.currentTextFieldFocused){
-			var headerView = header.getView();
-			Ti.API.info(" searchBarVisiblbe: " + searchBar.visible + " headerVisible: " + headerView.visible + " UI.currentTextFieldFocused.value: " + UI.currentTextFieldFocused.value);
+			// Ti.API.info(" searchBarVisiblbe: " + searchBar.visible + " headerVisible: " + headerView.visible + " UI.currentTextFieldFocused.value: " + UI.currentTextFieldFocused.value);
 			if(headerView.visible){
 				if((UI.currentTextFieldFocused.value).trim() !== '') {
 					// Ti.API.info(constant.APP + " #################### CLOSE ICON VISIBLE ###################");
 					btnSearch.backgroundImage = '/images/header/closeicon.png';
 				}
 				else{
-					// Ti.API.info(constant.APP + " #################### SEARCH-ACTIVE ICON VISIBLE ###################");
+					Ti.API.info(constant.APP + " #################### SEARCH-ACTIVE ICON VISIBLE ###################");
 					btnSearch.backgroundImage = '/images/header/search-active.png';
 				}
 			}
@@ -71,6 +59,7 @@ exports.get = function(tabToLoad) {
 
 	var _searchIconClickCallback = function(e) {
 		Ti.API.info(constant.APP + " <<<<<<<<<<<<<<<<<<< SEARCH BAR PROCEDURE >>>>>>>>>>>>>>>>>>>");
+	    
 	    // var alertDialog = UI.createAlertDialog({
 	    // 	title: constant.ALERT.TITLE.DONE_SEARCHING,
 	    // 	message: 'Are you sure you want to clear your search?',
@@ -96,7 +85,8 @@ exports.get = function(tabToLoad) {
 			Ti.API.info(constant.APP + " ################## SEARCH BAR SHOWN ##################");
 			searchBar.setHidden(false);
 			_isSearchBarVisible = true;
-
+			header.remMenuBar();
+			header.addBackButton(_clearSearchField);
 			// addSearchChange();
 		}
 		else {
@@ -113,28 +103,35 @@ exports.get = function(tabToLoad) {
 					// 	_isSearchBarVisible = true;
 					// 	return;
 					// }
-					if(_feedSearchText){
-						_clearSearchField();
-					}
-					else{
+
+					// if(_feedSearchText){
+					// 	_clearSearchField();
+					// }
+					// else{
 						searchBar.setText('');
-					}
+						// header.remBackButton();
+						// header.addMenuBar();
+					// }
 				break;	
 				case 'shop':
-					if(_shopSearchText){
-						_clearSearchField();
-					}
-					else{
+					// if(_shopSearchText){
+					// 	_clearSearchField();
+					// }
+					// else{
 						searchBar.setText('');
-					}
+						// header.remMenuBar();
+						// header.addBackButton();
+					// }
 				break;
 				case 'social':
-					if(_socialSearchText){
-						_clearSearchField();
-					}
-					else{
+					// if(_socialSearchText){
+					// 	_clearSearchField();
+					// }
+					// else{
 						searchBar.setText('');
-					}
+						// header.remMenuBar();
+						// header.addBackButton();
+					// }
 				break;
 			}
 			// searchBar.setHidden(true);
@@ -154,6 +151,8 @@ exports.get = function(tabToLoad) {
     	enableBackButton: false,
     	searchIconClickCallback: _searchIconClickCallback
     });
+
+    var headerView = header.getView();
     
     var contentView = Ti.UI.createView(Utils._.extend({}, _commonStyle.contentView, {
         top: 0
@@ -188,11 +187,34 @@ exports.get = function(tabToLoad) {
     
 	var footer = require('/components/footer').get(defaultSelectedTab=tabToLoad?tabToLoad:'stylefeed', subTab=false);
     
-    mainView.add(header.getView());
+    mainView.add(headerView);
     mainView.add(contentView);
     mainView.add(footer.getView());
     
     var btnSearch = header.getbtnSearch();
+
+    var _clearSearchField = function(){
+    	Ti.API.info(constant.APP + " ################# CLEARING SEARCH FIELD ####################");
+
+    	// _showSearchBar();
+    	searchBar.setText('');
+	    searchBar.setHidden(true);	   
+	    header.setSearchActive(false);
+	    _isSearchBarVisible = false;
+
+	    header.remBackButton();
+	    header.addMenuBar();
+
+		remSearchChange();
+		btnSearch.backgroundImage = '/images/header/search.png';	   	
+	   	if(apiSearchText === '') return;
+
+		try {
+			currentView.searchData();
+			_showSearchBar();
+		}
+		catch(e) {}
+    };
 	// var searchTextArea = searchBar.getTextSearch();
 
     //	Enable header and icons and searchbar
@@ -356,10 +378,16 @@ exports.get = function(tabToLoad) {
 		if(searchText){
 			searchBar.setHidden(false);
 			_isSearchBarVisible = true;
+
+			header.remMenuBar();
+			header.addBackButton(_clearSearchField);
 		}
 		else{
 			searchBar.setHidden(true);
 			_isSearchBarVisible = false;
+			
+			header.remBackButton();
+	    	header.addMenuBar();
 		}
 
 		if(showSearchStatus){
@@ -378,13 +406,17 @@ exports.get = function(tabToLoad) {
 		}
 	};
 
+	var apiSearchText = '';
 	// Ti.App.fireEvent('app:apicallSuccess',{params});
 	Ti.App.addEventListener('app:apicallSuccess',function(e){
 		Ti.API.info(constant.APP + " ################### API SUCCESS CALLBACK ###################");
-		var searchText = e.params && e.params.serverArgs && e.params.serverArgs.searchText ? e.params.serverArgs.searchText : "";
-		if(searchText){
+		apiSearchText = e.params && e.params.serverArgs && e.params.serverArgs.searchText ? e.params.serverArgs.searchText : '';
+		if(apiSearchText){
 			Ti.API.info(constant.APP + " ################### SEARCH TEXT FOUND ###################");
-			_showSearchBar(searchText,true);
+			_showSearchBar(apiSearchText,true);
+		}
+		else{
+			btnSearch.backgroundImage = '/images/header/search.png';
 		}
 	});
 
@@ -392,6 +424,7 @@ exports.get = function(tabToLoad) {
 	 * Tab select listener
 	 */
 	var _onFooterTabSelect = function(e, allowDuplicate) {
+		apiSearchText = "";
 		console.log(constant.APP + " _onFooterTabSelect entered");
 		if(_isSearchBarVisible) {
 			searchBar.setHidden(true);

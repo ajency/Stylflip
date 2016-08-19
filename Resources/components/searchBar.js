@@ -20,16 +20,18 @@ exports.get = function() {
 		UI.currentTextFieldFocused = txtSearch;
 	});
 	
-	txtSearch.addEventListener('focus', function() {
+	txtSearch.addEventListener('focus', function(e) {
 		Ti.API.info(constant.APP + " #################### SEARCH BAR FOCUSED ###################");
 		UI.currentTextFieldFocused = txtSearch;
-		Ti.App.fireEvent('app:searchbarfocus',{type:'add'});
+		Ti.App.fireEvent('app:searchbarFocus',{type:'add'});
+		txtSearch.fireEvent('click');
+		console.log(e);
 	});
 	
-	txtSearch.addEventListener('blur', function() {
+	txtSearch.addEventListener('blur', function(e) {
 		Ti.API.info(constant.APP + " #################### SEARCH BAR BLURED ###################");
 		// UI.currentTextFieldFocused = null;
-		Ti.App.fireEvent('app:searchbarfocus',{type:'rem'});
+		Ti.App.fireEvent('app:searchbarBlur',{type:'rem'});
 	});
 	
 	txtSearch.addEventListener('return', function() {
@@ -70,7 +72,6 @@ exports.get = function() {
 		}
 	};
 	
-	
 	var _setText = function(text) {
 		txtSearch.value = text.trim();
 		if(txtSearch.value != '' && osname == 'android') {
@@ -82,7 +83,7 @@ exports.get = function() {
 	var _setHidden = function(bool) {
 		mainView.visible = bool?false:true;
 		if(!bool) {
-			txtSearch.focus();
+			// txtSearch.focus();
 		}
 		else {
 			txtSearch.blur();

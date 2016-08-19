@@ -627,7 +627,8 @@ exports.get = function() {
             return; 
         }
         
-        Loader.show();
+        /* hide this for ios */
+        // Loader.show();
     	
     	Social.facebook('login');
     });

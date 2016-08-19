@@ -1,6 +1,7 @@
 var Window = {};
 var _currentWindow;
 var _openWindows = [];
+var UI = require('/modules/ui');
 /*
  * creating a new window
  */
@@ -39,6 +40,8 @@ Window.create = function(exitOnClose, toBeOpened, disableClick) {
 		window.addEventListener('android:back', function() {
 			Loader.hide();	
 			window.close();
+			UI.openingModal = false;
+    		UI.modalWindowOpen = false;
 			Ti.API.info(constant.APP + " ################# android back button clicked #################");
 		});
 	}

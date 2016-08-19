@@ -28,7 +28,51 @@ exports.get = function() {
             textAlign: 'center',
             bubbleParent: false
         },
-        
+        priceTxtView:{
+            top: -1,
+            width: UI.width(262),
+            // value: '',
+            height: UI.height(40),
+            // hintText: 'Listing Price',
+            // keyboardType: Ti.UI.KEYBOARD_DECIMAL_PAD,
+            borderWidth: 1,
+            borderColor: '#bfbfbf',
+            // bubbleParent: false,
+            layout: 'horizontal'
+        },
+        priceTxt: {
+            value: '',
+            hintText: 'Edit Price',
+            keyboardType: Ti.UI.KEYBOARD_DECIMAL_PAD,
+            bubbleParent: false,
+            backgroundColor: 'transparent',
+            padding: 0,
+            // borderColor: '#ebebeb',
+            // borderWidth: 1,
+            width: Ti.UI.SIZE,
+            height: UI.height(40),
+            font: {
+                fontSize: UI.fontSize(14),
+                fontFamily: constant.FONT.DEFAULT_FONT
+            },
+            color: '#757575',
+            // borderColor: '#000',
+            // borderWidth: 5,
+            // paddingLeft: 5,
+            // keyboardType: Ti.UI.KEYBOARD_PHONE_PAD,
+            maxLength: 30,
+            textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT
+        },
+        ruppeLabel: {
+            text: '\u20B9 ',
+            left: '26%',
+            // textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT,
+            font: {
+                fontSize: UI.fontSize(14),
+                fontFamily: constant.FONT.DEFAULT_FONT,
+                fontWeight: 'bold'
+            }
+        },
         roundedButton: {
             // backgroundColor: '#428f96',
             top: UI.top(22),
