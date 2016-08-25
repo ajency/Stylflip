@@ -10,7 +10,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	
     var titleHint = "Enter title here... Max 150 Characters";
 
-	var _currentButtonIndex = 0;
+	var _currentButtonIndex = 0, _prevButtonIndex = 0;
 	var _categorySelected = productDetails && productDetails.categoryId ? productDetails.categoryId : undefined, 
 	_subcategorySelected = productDetails && productDetails.subcategoryId ? productDetails.subcategoryId : undefined, 
 	_brandSelected = productDetails && productDetails.brandId ? productDetails.brandId : undefined, 
@@ -60,39 +60,76 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 		if(sellingPrice == 0) {
             return '';
 		}
-		originalPrice = isNaN(parseFloat(originalPrice)) ? 0 : parseFloat(originalPrice);
-		var _isShippingToBeAdded = sellingPrice < 2000;
-		sellingPrice = sellingPrice + ((sellingPrice * Utils.getCommisionPercentage()) / 100);
-		if(_isShippingToBeAdded) {
-			sellingPrice = sellingPrice + 120;	//	120 is the shipping fees
-		}
+		
+        // originalPrice = isNaN(parseFloat(originalPrice)) ? 0 : parseFloat(originalPrice);
+	
+        // var _isShippingToBeAdded = sellingPrice < 2000;
+		
+        // sellingPrice = sellingPrice + ((sellingPrice * Utils.getCommisionPercentage()) / 100);
+		
+  //       if(_isShippingToBeAdded) {
+		// 	sellingPrice = sellingPrice + 120;	//	120 is the shipping fees
+		// }
 
-		if(isNaN(sellingPrice)){
-			sellingPrice = 0;
-		}
+		// if(isNaN(sellingPrice)){
+		// 	sellingPrice = 0;
+		// }
 
-        return Math.round(sellingPrice);
+        var dispPrice = Math.round( sellingPrice / ( 1 - ( Utils.getCommisionPercentage() / 100 ) ) );
+
+        _getCommission(dispPrice,sellingPrice,'disp');
+
+        if(sellingPrice < 2000){
+            dispPrice += 120
+        }
+        
+        return Math.round(dispPrice);
 	};
 	
+    /*calculate product asking price*/
     var _getSellingPrice = function(listPrice){
         // Ti.API.info(constant.APP + " ######### _getSellingPrice called ##########");
-        listPrice = parseFloat(listPrice);
+        var listPrice = parseFloat(listPrice);
         listPrice = isNaN(listPrice) ? 0 : listPrice;
 
-        if(!listPrice || listPrice <= 120){
+        if(!listPrice){
             return '';
         }
 
-        var subShippingPrice = listPrice <= 2519;
+        // var subShippingPrice = listPrice <= 2519;
+        // if(subShippingPrice){
+        //     listPrice = listPrice - 120;
+        // }
+        // sellPrice = ( listPrice * 100 ) / ( 100 + Utils.getCommisionPercentage() );
 
-        if(subShippingPrice){
-            listPrice = listPrice - 120;
+        var askPrice = Math.round( listPrice * ( 1 - ( Utils.getCommisionPercentage() / 100 ) ) );
+
+        _getCommission(listPrice,askPrice,'ask');
+        if(askPrice < 2000){
+            askPrice -= 120;
         }
 
-        sellPrice = ( listPrice * 100 ) / ( 100 + Utils.getCommisionPercentage() );
-        return Math.round(sellPrice);
+        if(askPrice <= 0){
+            _getCommission();
+            return '';
+        }
+        else{
+            return Math.round(askPrice);
+        }
+        
     };
 	
+    var _commPrice = 0;
+    var _getCommission = function(dPrice,aPrice,type){
+        if(dPrice && aPrice){
+            _commPrice = (dPrice - aPrice);
+        }
+        else{
+            _commPrice = 0;
+        }
+        
+    };
+
 	var _getShippingAndHandlingFees = function(sellingPrice) {
 		//Ti.API.info(constant.APP + " ############## _getShippingAndHandlingFees CALLED #############");
 		sellingPrice = isNaN(parseFloat(sellingPrice)) ? 0 : parseFloat(sellingPrice);
@@ -151,8 +188,8 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 
     var undoIncrement = function(index){
     		Ti.API.info(constant.APP + " ################ undoing increment ############");
+            _prevButtonIndex = index;
     		_currentButtonIndex = index - 1;
-    		// _currentButtonIndex = _prevSelectedIndex;
     };
 
     var _checkProductDetails = function(event){
@@ -318,9 +355,14 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
         alertDialog = null;
 	};
     
+    var btnPrevClicked = false, btnNextClicked = false;
     btnPrev.addEventListener('click', function() {
-    	//Ti.API.info(constant.APP + " ############## btnPrev CLICK CALLED #############");
+    	// Ti.API.info(constant.APP + " ############## btnPrev CLICK CALLED #############");
+        btnPrevClicked = true;
+        btnNextClicked = false;
+
     	if(_currentButtonIndex > 0) {
+            _prevButtonIndex = _currentButtonIndex;
     		_currentButtonIndex--;
     		buttonBar.selectButton(_currentButtonIndex);
     	}
@@ -328,8 +370,13 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     
     //debug
     btnNext.addEventListener('click', function() {
-    	//Ti.API.info(constant.APP + " ############## btnNext CLICK CALLED #############");
+    	// Ti.API.info(constant.APP + " ############## btnNext CLICK CALLED #############");
+
+        btnNextClicked = true;
+        btnPrevClicked = false;
+      
     	if(this.title == 'NEXT' && _currentButtonIndex < _objButtons.length - 1) {
+            _prevButtonIndex = _currentButtonIndex;
     		_currentButtonIndex++;
     		buttonBar.selectButton(_currentButtonIndex);
     		return;
@@ -394,7 +441,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	    		// _areFieldsInComplete = true;
 	    	// }
 	    	Ti.API.info(constant.APP + "### checking text selling price info");
-	    	if( txtSellingPrice.value.trim() == '' || ( txtSellingPrice.value.trim() != '' && isNaN(txtSellingPrice.value.trim()) ) ) {
+	    	if( askingPrice.value.trim() == '' || ( askingPrice.value.trim() != '' && isNaN(askingPrice.value.trim()) ) ) {
 	    		// alert('Please enter selling price');
 	    		// return;
 	    		_areFieldsInComplete = true;
@@ -437,13 +484,13 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	    	
 	    	txtTitle.blur();
 	    	txtDescription.blur();
-	    	txtSellingPrice.blur();
+	    	askingPrice.blur();
 	    	txtOriginalPrice.blur();
 	    	
 	    	Ti.API.info(constant.APP + "### finalizing product info");
 	    	// Window.closeAll(function() {
-	    	// var discountPrice = (txtListingPrice.text).split(' ');
-            var discountPrice = listingPrice.value;
+	    	// var discountPrice = (txtdisplayPrice.text).split(' ');
+            var discountPrice = displayPrice.value;
 
 	    	// discountPrice = discountPrice[1];
 	    	var discountPercentage = (100 - ((parseFloat(discountPrice)/parseFloat(txtOriginalPrice.value.trim()))*100)) < 0 ? 0 : (100 - ((parseFloat(discountPrice)/parseFloat(txtOriginalPrice.value.trim()))*100));
@@ -452,7 +499,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	    	// console.log(txtDescription.value.trim());
 	    	// console.log(_categorySelected);
 	    	// console.log(_subcategorySelected);
-	    	// console.log(txtSellingPrice.value.trim());
+	    	// console.log(askingPrice.value.trim());
 	    	// console.log(txtOriginalPrice.value.trim());
 	    	// console.log(discountPrice);
 	    	// console.log(discountPercentage);
@@ -472,7 +519,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 		        	productDescription: txtDescription.value.trim() == txtDescription.hintText ? '' : txtDescription.value.trim(),
 		        	categoryId: _categorySelected,
 		        	subcategoryId: _subcategorySelected,
-		        	sellingPrice: txtSellingPrice.value.trim(),
+		        	sellingPrice: askingPrice.value.trim(),
 		        	originalPrice: txtOriginalPrice.value.trim(),
 		        	discountPrice: discountPrice,
 		        	discountPercentage: discountPercentage,
@@ -499,6 +546,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     
    	var _lastButtonSelectedIndex = -1;
 	var _selectedButtonIndex = -1;
+
 	var _createButtonView = function(arrButtons, buttonViewStyle, selectedButtonStyle, unselectedButtonStyle, clickCallback, enableSearch) {
 		Ti.API.info(constant.APP + " ############## _createButtonView CALLED #############");
 		var buttonView = Ti.UI.createTableView(Utils._.extend({}, buttonViewStyle, {
@@ -599,7 +647,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     
 
 	var _loadCategories = function() {
-		//Ti.API.info(constant.APP + " ############## _loadCategories CALLED #############");
+		Ti.API.info(constant.APP + " ############## _loadCategories CALLED #############");
 		_lastButtonSelectedIndex = -1;
 	    _selectedButtonIndex = -1;
 
@@ -610,6 +658,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
    		Utils.getCategories(function(responseData) {
    			var _buttonsData = [];
    			for(var i=0; i<responseData.length; i++) {
+                Ti.API.info(constant.APP + " ###################### [" + responseData[i].name + "] #######################");
 				_buttonsData.push({
 					id: responseData[i].categoryId,
 					title: responseData[i].name,
@@ -623,12 +672,14 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 			    	Utils._.extend({}, _style.button, {backgroundColor: 'transparent', color: '#454545'}), 
 			    	function(e) {
 				    	_categorySelected = e.buttonData.id;
+                        Ti.API.info(constant.APP + " ############### category selected set to [" + _categorySelected + "] ################");
 				    	_categoryName = (e.buttonData.title).toLowerCase();
 				    	if(e.buttonData.selected) {
-				    		_loadSubCategories(e.buttonData.id);
+				    		// _loadSubCategories(e.buttonData.id);
 				    		return;
 				    	}
 				    	_subcategorySelected = undefined;
+                        _prevButtonIndex = _currentButtonIndex;
 				    	buttonBar.selectButton(_currentButtonIndex+1);
 				    	/*
 				    	 * Reset size selection
@@ -641,7 +692,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 								sizesView.remove(sizesView.children[i]);
 							}
 						}
-				    	_loadSubCategories(e.buttonData.id);
+				    	// _loadSubCategories(e.buttonData.id);
 				    }
 			    );
 		    categoryButtonViewContainer.add(buttonsView);
@@ -649,7 +700,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	};
 	
 	var _loadSubCategories = function(categoryId) {
-		//Ti.API.info(constant.APP + " ############## _loadSubCategories CALLED #############");
+		Ti.API.info(constant.APP + " ############## _loadSubCategories CALLED #############");
 		_lastButtonSelectedIndex = -1;
 	    _selectedButtonIndex = -1;
 
@@ -665,6 +716,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 				// selected: productDetails && productDetails.subcategoryId == 0
 			// });
    			for(var i=0; i<responseData.length; i++) {
+                Ti.API.info(constant.APP + " ###################### [" + responseData[i].name + "] #######################");
 				_buttonsData.push({
 					id: responseData[i].categoryId,
 					title: responseData[i].name,
@@ -703,6 +755,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 		    	else {
 		    		lblSelectSize.text = 'Select Size';
 		    	}
+                _prevButtonIndex = _currentButtonIndex;
 		    	buttonBar.selectButton(_currentButtonIndex+1);
 		    });
 		    subcategoryButtonViewContainer.add(buttonsView);
@@ -723,6 +776,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
    			Loader.show();
    			var _buttonsData = [];
    			for(var i=0; i<responseData.length; i++) {
+                Ti.API.info(constant.APP + " ###################### [" + responseData[i].name + "] #######################");
 				_buttonsData.push({
 					id: responseData[i].brandId,
 					title: responseData[i].name,
@@ -742,6 +796,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 		    	if(e.buttonData.selected) {
 		    		return;
 		    	}
+                _prevButtonIndex = _currentButtonIndex;
 		    	buttonBar.selectButton(_currentButtonIndex+1);
 		    }, true);
 		    brandsView.add(buttonsView);
@@ -768,7 +823,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
    	 * Create size chart view
    	 */
    	var _createSizeChartView = function(size) {
-   		//Ti.API.info(constant.APP + " ############## _createSizeChartView CALLED #############");
+   		Ti.API.info(constant.APP + " ############## _createSizeChartView CALLED #############");
 
    		var sizeChartView = Ti.UI.createView({
    			width: Ti.UI.FILL,
@@ -901,17 +956,17 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 			    
 			    var _sKeyLength = Object.keys(_sizeParent.secondary).length;
 			    var viewWidth = '0%';
-			    // if(_productDetailsLaunch){
-			    	if(_sKeyLength > 1){ // clothing apparel
-				    	viewWidth = (110 / 3) + '%';
-				    }
-				    else{ // for sizeChart  type E  (shoes)
-				    	viewWidth = '28%';
-				    }
+
+		    	// if(_sKeyLength > 1){ // clothing apparel
+			    // 	viewWidth = (110 / 3) + '%';
 			    // }
-			    // else{
-			    // 	viewWidth = '30%';
+			    // else{ // for sizeChart  type E  (shoes)
+			    // 	viewWidth = '28%';
 			    // }
+
+                if(_sKeyLength == 1){
+                    viewWidth = '28%';
+                }
 			    
                 var flWidth = viewWidth;
 			    for(var key in _sizeParent.secondary) {
@@ -921,63 +976,65 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 				    	borderWidth: 1
 				    }));
 
-				    // var lblBurstView = Ti.UI.createView({
-				    // 	width: viewWidth
-				    // });
-					
-                    if(key === 'WAIST'){
-                        flWidth = (105 / 3) + '%';
+
+					if(key === 'BURST'){
+                        flWidth = '37%';
+                    }else if(key === 'WAIST'){
+                        flWidth = '35%';
                     }
-                    else{
-                        flWidth = viewWidth;
+                    else if(key === 'HIP'){
+                        flWidth = '38%';
                     }
 
-					//Ti.API.info(constant.APP + " ########## FIRST KEY: " + constant.SIZE_FULL_FORM[key]);
+
 				    var lblBurst = Ti.UI.createLabel(Utils._.extend({}, _style.lblBurst, {
 				    	text: constant.SIZE_FULL_FORM[key],
 				    	left: flWidth
 				    }));
 
-				    // lblBurstView.add(lblBurst);
+                    if(_productDetailsLaunch){
+                        var lblBurstValue = Ti.UI.createLabel(Utils._.extend({}, _style.lblBurstValue, {
+                            // left: 0,
+                            text: '',
+                            // width: UI.width(45),
+                            width: Ti.UI.SIZE,
+                            // height: UI.height(30),
+                            height: Ti.UI.SIZE,
+                            maxLength: 5,
+                            paddingRight: 2
+                            // textAlign: 'right',
+                            // touchEnabled: false
+                        }));    
 
-				    // var lblBurstValueView = Ti.UI.createView({
-				    // 	width: Ti.UI.SIZE
-				    // });
+                        lblBurstValue.text =_sizeParent.secondary[key] ? _sizeParent.secondary[key] : '';
 
-				    var lblBurstValue = Ti.UI.createTextField(Utils._.extend({}, _style.lblBurstValue, {
-				    	// left: 0,
-				    	value: '',
-				    	// width: UI.width(45),
-				    	width: Ti.UI.SIZE,
-				    	// height: UI.height(30),
-				    	height: Ti.UI.SIZE,
-				    	maxLength: 5,
-				    	paddingRight: 2,
-				    	// textAlign: 'right',
-				    	touchEnabled: false
-				    }));
+                    }
+                    else{
+                        var lblBurstValue = Ti.UI.createTextField(Utils._.extend({}, _style.lblBurstValue, {
+                            // left: 0,
+                            value: '',
+                            // width: UI.width(45),
+                            width: Ti.UI.SIZE,
+                            // height: UI.height(30),
+                            height: Ti.UI.SIZE,
+                            maxLength: 5,
+                            paddingRight: 2,
+                            // textAlign: 'right',
+                            touchEnabled: false
+                        }));
 
-				    lblBurstValue.value =_sizeParent.secondary[key] ? _sizeParent.secondary[key] : '';
-				    // lblBurstValueView.add(lblBurstValue);
+                        lblBurstValue.value =_sizeParent.secondary[key] ? _sizeParent.secondary[key] : '';
+                    }
 				    
-				    // var lblBurstInView = Ti.UI.createView({
-				    // 	width: Ti.UI.SIZE
-				    // });
-
 				    var lblBurstIn = Ti.UI.createLabel(Utils._.extend({}, _style.lblBurstValue, {
 				    	text: 'in.'
 				    	// left: UI.left(170)
 				    }));
 
-				    // lblBurstInView.add(lblBurstIn);
 				    
 				    burstView.add(lblBurst);
 				    burstView.add(lblBurstValue);
 				    burstView.add(lblBurstIn);
-
-				    // burstView.add(lblBurstView);
-				    // burstView.add(lblBurstValueView);
-				    // burstView.add(lblBurstInView);
 
 				    sizeChartView.add(burstView);
 			    }
@@ -1140,11 +1197,11 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     
     sizesView.add(selectSizeView);
     
-    var sizeChartViewRef = null;
+    var _sizeChartViewRef = null;
 
     if(_sizeChartSelected) {
-    	sizeChartViewRef = _createSizeChartView(_sizeSelected);
-    	sizesView.add(sizeChartViewRef);
+    	_sizeChartViewRef = _createSizeChartView(_sizeSelected);
+    	sizesView.add(_sizeChartViewRef);
     	if(_sizeChartSelected == 'E') {
     		lblSelectSize.text = 'Enter Sizes';
     	}
@@ -1153,6 +1210,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     	// }
     }
 
+    var _sizeOptionsView = null;
     selectSizeView.addEventListener('click', function() {
     	Ti.API.info(constant.APP + " ############## selectSizeView CLICKED #############");
     	Ti.API.info(constant.APP + " _sizeChartSelected: " + _sizeChartSelected);
@@ -1164,7 +1222,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     		return;
     	}
     	var _sizeOptions = _getSizeOptions(_sizeChartSelected);
-    	var optiosView = require('/components/popOver').get({
+    	_sizeOptionsView = require('/components/popOver').get({
     		optionStyle: {
     			backgroundColor: '#f4f4f4',
     			font: {
@@ -1180,18 +1238,20 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 			options: _sizeOptions,
 			selectedOption: _sizeSelected ? _sizeSelected + (constant.SIZE_FULL_FORM[_sizeSelected] != undefined ? ' - ' + constant.SIZE_FULL_FORM[_sizeSelected] : '') : undefined
 		});
-		optiosView.show();
-		optiosView.addEventListener('click', function(e) {
-			//Ti.API.info(constant.APP + " ############## selectSizeView optiosView CLICKED #############");
+		_sizeOptionsView.show();
+		_sizeOptionsView.addEventListener('click', function(e) {
+			//Ti.API.info(constant.APP + " ############## selectSizeView _sizeOptionsView CLICKED #############");
 			_sizeSelected = e.option.key;
 			for(var i = 0; i < sizesView.children.length; i++) {
 				if(sizesView.children[i].type != 'selectSize') {
 					sizesView.remove(sizesView.children[i]);
 				}
 			}
-			sizesView.add(_createSizeChartView(_sizeSelected));
+
+            _sizeChartViewRef = _createSizeChartView(_sizeSelected)
+			sizesView.add(_sizeChartViewRef);
 			// lblSelectSize.text = _sizeSelected + (constant.SIZE_FULL_FORM[_sizeSelected] != undefined ? ' - ' + constant.SIZE_FULL_FORM[_sizeSelected] : '');
-			optiosView.hide();
+			_sizeOptionsView.hide();
 			// buttonBar.selectButton(_currentButtonIndex+1);
 		});
     }); //end selectSizeView
@@ -1259,7 +1319,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
         }
     });
 
-    var txtSellingPrice = UI.createTextField(Utils._.extend({}, _commonStyle.priceTxt,{
+    var askingPrice = UI.createTextField(Utils._.extend({}, _commonStyle.priceTxt,{
         maxLength: 6
     }));
 
@@ -1271,12 +1331,12 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     });
 
     sellPriceEdit.addEventListener('click',function(){
-        txtSellingPrice.focus();
+        askingPrice.focus();
     });
 
     sellPriceView.add(sellPriceLabel);
     sellPriceView.add(sellPriceRLabel);
-    sellPriceView.add(txtSellingPrice);
+    sellPriceView.add(askingPrice);
     sellPriceView.add(sellPriceEdit);
 
     var lblOriginalPrice = Ti.UI.createLabel(Utils._.extend({}, _commonStyle.txtField, {
@@ -1327,18 +1387,21 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     oriPriceView.add(txtOriginalPrice);
     oriPriceView.add(oriPriceEdit);
 
-    var listPriceView = Ti.UI.createView({
-        top: -1,
-        width: UI.width(262),
-        // value: '',
-        height: UI.height(40),
-        // hintText: 'Listing Price',
-        // keyboardType: Ti.UI.KEYBOARD_DECIMAL_PAD,
-        borderWidth: 1,
-        borderColor: '#bfbfbf',
-        // bubbleParent: false,
-        layout: 'horizontal'
-    });
+
+    var listPriceView = Ti.UI.createView(Utils._.extend({},_commonStyle.priceTxtView));
+    
+    // var listPriceView = Ti.UI.createView({
+    //     top: -1,
+    //     width: UI.width(262),
+    //     // value: '',
+    //     height: UI.height(40),
+    //     // hintText: 'Listing Price',
+    //     // keyboardType: Ti.UI.KEYBOARD_DECIMAL_PAD,
+    //     borderWidth: 1,
+    //     borderColor: '#bfbfbf',
+    //     // bubbleParent: false,
+    //     layout: 'horizontal'
+    // });
 
     var listPriceLabel = Ti.UI.createLabel(Utils._.extend({},_commonStyle.label,{
         left: '15%',
@@ -1356,7 +1419,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
         }
     });
 
-    var listingPrice = Ti.UI.createTextField(Utils._.extend({}, _commonStyle.priceTxt,{
+    var displayPrice = Ti.UI.createTextField(Utils._.extend({}, _commonStyle.priceTxt,{
         maxLength: 6
     }));
 
@@ -1368,12 +1431,12 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     });
 
     listPriceEdit.addEventListener('click',function(){
-        listingPrice.focus();
+        displayPrice.focus();
     });
 
     if(osname === 'iphone' || osname === 'ipad'){
         rupeeLabel.top = 10;
-        listingPrice.top = 10;
+        displayPrice.top = 10;
     }
 
     // {
@@ -1389,9 +1452,9 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     // }
     listPriceView.add(listPriceLabel);
     listPriceView.add(rupeeLabel);
-    listPriceView.add(listingPrice);
+    listPriceView.add(displayPrice);
     listPriceView.add(listPriceEdit);
-    // var txtListingPrice = Ti.UI.createLabel(Utils._.extend({}, _commonStyle.txtField, {
+    // var txtdisplayPrice = Ti.UI.createLabel(Utils._.extend({}, _commonStyle.txtField, {
     // 	text: '\u20B9 0',
     // 	top: -1,
     //     width: UI.width(262),
@@ -1437,7 +1500,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     var btnPriceGuide = UI.createButton(Utils._.extend({},_commonStyle.txtField,{
         title: 'Pricing Guide',
         top: 0,
-        width: UI.width(100),
+        width: Ti.UI.SIZE,
         height: UI.height(30),
         font: {
             fontSize: UI.fontSize(12),
@@ -1448,7 +1511,8 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     }));
 
     var lblPriceGuideInfo = Ti.UI.createLabel(Utils._.extend({},_commonStyle.txtField,{
-        text: 'For more information checkout our',
+        // text: 'For more information checkout our',
+        text: 'Get help on pricing, checkout our',
         top: UI.top(10),
         width: UI.width(262),
         height: Ti.UI.SIZE,
@@ -1598,8 +1662,9 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     	var alertDialog = UI.createAlertDialog({
     		title: 'Price Break-up',
             titleColor: '#ef4e6d',
-    		message: 'Listing is always free on Stylflip. If the amount you get (asking price) is less than \u20B9 2000, we mark-up this price by 20% and charge an additional \u20B9 120 for shipping.\n\nDisplay Price: '+(listingPrice.value === '' || listingPrice.value === '0' ? 0 : listingPrice.value) + '\nSF Comm.: \u20B9 '+Math.ceil((txtSellingPrice.value * Utils.getCommisionPercentage()) / 100)+'\nS & H: '+_getShippingAndHandlingFees(txtSellingPrice.value)+'\nAmount you get: \u20B9 '+(txtSellingPrice.value == '' || txtSellingPrice.value == '0' ? 0 : txtSellingPrice.value),
-    		buttonNames: ['GOT IT']
+    		// message: 'Listing is always free on Stylflip. If the amount you get (asking price) is less than \u20B9 2000, we mark-up this price by 20% and charge an additional \u20B9 120 for shipping.\n\nDisplay Price: '+(displayPrice.value === '' || displayPrice.value === '0' ? 0 : displayPrice.value) + '\nSF Comm.: \u20B9 '+Math.ceil((askingPrice.value * Utils.getCommisionPercentage()) / 100)+'\nS & H: '+_getShippingAndHandlingFees(askingPrice.value)+'\nAmount you get: \u20B9 '+(askingPrice.value == '' || askingPrice.value == '0' ? 0 : askingPrice.value),
+    		message: 'Listing is always free on Stylflip. If the amount you get (asking price) is less than \u20B9 2000, we mark-up this price by 20% and charge an additional \u20B9 120 for shipping.\n\nDisplay Price: '+(displayPrice.value === '' || displayPrice.value === '0' ? 0 : displayPrice.value) + '\nSF Comm.: \u20B9 '+ _commPrice +'\nS & H: '+_getShippingAndHandlingFees(askingPrice.value)+'\nAmount you get: \u20B9 '+(askingPrice.value == '' || askingPrice.value == '0' ? 0 : askingPrice.value),
+            buttonNames: ['GOT IT']
     	});
 
     	alertDialog.show();
@@ -1620,30 +1685,49 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
         alertDialog = null;
     }); //end btnViewDetails click callback    
     
-    var sellingPriceCalled = false, calculatedPriceCalled = false;
+    var askPriceChange = false, dispPriceChange = false;
     
-    txtSellingPrice.addEventListener('change', function() {
-    	// Ti.API.info(constant.APP + " ############## txtSellingPrice changed #############");
-        if(calculatedPriceCalled){
-            calculatedPriceCalled = false;
+    askingPrice.addEventListener('change', function() {
+    	// Ti.API.info(constant.APP + " ############## askingPrice changed #############");
+        if(dispPriceChange){
+            dispPriceChange = false;
+            if(displayPrice.value !== ''){
+                askingPrice.editable = false;
+                askingPrice.touchEnabled = false;
+            }
+            else{
+                askingPrice.editable = true;
+                askingPrice.touchEnabled = true;
+            }
             return;
         }
-        sellingPriceCalled = true;
-        listingPrice.value = _getCalculatedPrice(txtSellingPrice.value.trim(), txtOriginalPrice.value.trim());
+        askPriceChange = true;
+        displayPrice.value = _getCalculatedPrice(askingPrice.value.trim(), txtOriginalPrice.value.trim());
+        
     });
-    txtOriginalPrice.addEventListener('change', function() {
-    	// Ti.API.info(constant.APP + " ############## txtOriginalPrice changed #############");
-        listingPrice.value = _getCalculatedPrice(txtSellingPrice.value.trim(), txtOriginalPrice.value.trim());
-    });
+
+    // txtOriginalPrice.addEventListener('change', function() {
+    // 	// Ti.API.info(constant.APP + " ############## txtOriginalPrice changed #############");
+    //     // displayPrice.value = _getCalculatedPrice(askingPrice.value.trim(), txtOriginalPrice.value.trim());
+    // });
     
-    listingPrice.addEventListener('change',function(){
+    displayPrice.addEventListener('change',function(){
         // Ti.API.info(constant.APP + " ############## txtOriginalPrice changed #############");
-        if(sellingPriceCalled){
-            sellingPriceCalled = false;
+        if(askPriceChange){
+            askPriceChange = false;
+            if(askingPrice.value !== ''){
+                displayPrice.editable = false;
+                displayPrice.touchEnabled = false;
+            }
+            else{
+                displayPrice.editable = true;
+                displayPrice.touchEnabled = true;
+            }
             return;
         }
-        calculatedPriceCalled = true;
-        txtSellingPrice.value = _getSellingPrice(listingPrice.value.trim());
+        dispPriceChange = true;
+        askingPrice.value = _getSellingPrice(displayPrice.value.trim());
+
     });
 
     /*
@@ -1667,6 +1751,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     	if(e.buttonData.selected) {
     		return;
     	}
+        _prevButtonIndex = _currentButtonIndex;
     	buttonBar.selectButton(_currentButtonIndex+1);
     });
     
@@ -1830,6 +1915,18 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     
     //debug
    	var _buttonBarClickCallback = function(e) {
+        Ti.API.info(constant.APP + " ############################ _buttonBarClickCallback [" + e.title + "] #############################");
+
+        // if(_prevButtonIndex < _currentButtonIndex){
+        //     Ti.API.info(constant.APP + " @@@@@@@@@@@@@@@@ going forward @@@@@@@@@@@@@@@@@@@@");
+        // }
+        // else if(_prevButtonIndex > _currentButtonIndex){
+        //     Ti.API.info(constant.APP + " @@@@@@@@@@@@@@@@ goiing back @@@@@@@@@@@@@@@@@@@@@@@");
+        // }
+        // else if(_prevButtonIndex === _currentButtonIndex){
+        //     Ti.API.info(constant.APP + " @@@@@@@@@@@@@@@@ buttons equal @@@@@@@@@@@@@@@@@@@");
+        // }
+
    		if(_brandsTimeout) {
    			clearTimeout(_brandsTimeout);
    			_brandsTimeout = undefined;
@@ -1854,7 +1951,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
    		
     	txtTitle.blur();
     	txtDescription.blur();
-    	txtSellingPrice.blur();
+    	askingPrice.blur();
     	txtOriginalPrice.blur();
     	
 		titleView.visible = false;
@@ -1900,7 +1997,18 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     	
     	if(e.title == 'SIZE') {
     		Ti.API.info(constant.APP + " ################ FIRING SIZE VIEW ################");
-    		selectSizeView.fireEvent('click');
+
+            if(_prevButtonIndex < _currentButtonIndex){
+                // Ti.API.info(constant.APP + " @@@@@@@@@@@@@@@@ going forward @@@@@@@@@@@@@@@@@@@@");
+                selectSizeView.fireEvent('click');
+            }
+            else if(_prevButtonIndex > _currentButtonIndex){
+                // Ti.API.info(constant.APP + " @@@@@@@@@@@@@@@@ goiing back @@@@@@@@@@@@@@@@@@@@@@@");
+                _sizeChartViewRef.show();
+            }
+            // else if(_prevButtonIndex === _currentButtonIndex){
+            //     Ti.API.info(constant.APP + " @@@@@@@@@@@@@@@@ buttons equal @@@@@@@@@@@@@@@@@@@");
+            // }
     	}
     	
     	if(e.title == 'BRAND') {
@@ -1990,20 +2098,22 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	
 	txtTitle.addEventListener('return', function() {
 		//Ti.API.info(constant.APP + " ############## txtTitle RETURN #############");
+        _prevButtonIndex = _currentButtonIndex;
 		buttonBar.selectButton(_currentButtonIndex+1);
 	});
 	
 	txtDescription.addEventListener('return', function() {
 		//Ti.API.info(constant.APP + " ############## txtDescription RETURN #############");
-		buttonBar.selectButton(_currentButtonIndex+1);
+		_prevButtonIndex = _currentButtonIndex;
+        buttonBar.selectButton(_currentButtonIndex+1);
 	});
 	
     if(productDetails) {
     	txtOriginalPrice.value = _productOriginalPrice;
-    	txtSellingPrice.value = _productSellingPrice;
-    	// txtListingPrice.text = '\u20B9 ' + _productDiscount;
+    	askingPrice.value = _productSellingPrice;
+    	// txtdisplayPrice.text = '\u20B9 ' + _productDiscount;
         if(_productDiscount){
-            listingPrice.value = _productDiscount;
+            displayPrice.value = _productDiscount;
         }
     }
     
@@ -2025,7 +2135,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     	//Ti.API.info(constant.APP + " ############## mainView SWIPE #############");
     	txtTitle.blur();
     	txtDescription.blur();
-    	txtSellingPrice.blur();
+    	askingPrice.blur();
     	txtOriginalPrice.blur();
     });
 
@@ -2049,7 +2159,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     
     return {
         getView: _getView,
-        sizeChartView: sizeChartViewRef,
+        sizeChartView: _sizeChartViewRef,
         removeFromMemory: _removeFromMemory
     };
 };

@@ -66,6 +66,7 @@ exports.get = function(tabToLoad) {
 		if(e.show) {
 			Ti.API.info(constant.APP + " ################## SEARCH BAR SHOW PROCEDURE ##################");
 			searchBar.setHidden(false);
+			searchTextArea.focus();
 			_isSearchBarVisible = true;
 			header.remMenuBar();
 			header.addBackButton(_clearSearchField);

@@ -87,6 +87,7 @@ exports.get = function() {
 	
 	
 	var _setHidden = function(bool) {
+		Ti.API.info(constant.APP + " ########################### _setHidden [" + bool + "] ############################");
 		mainView.visible = bool?false:true;
 		if(!bool) {
 			// txtSearch.focus();

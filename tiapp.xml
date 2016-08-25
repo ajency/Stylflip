@@ -12,7 +12,8 @@
     <fullscreen>false</fullscreen>
     <navbar-hidden>true</navbar-hidden>
     <analytics>false</analytics>
-    <guid>da925ab3-b2da-4297-9111-c615478777de</guid>
+    <!-- <guid>da925ab3-b2da-4297-9111-c615478777de</guid> -->
+    <guid>4227ef02-7487-49cc-9333-49d49064bd34</guid>
     <property name="ti.ui.defaultunit">system</property>
     <ios>
         <plist>

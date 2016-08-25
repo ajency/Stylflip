@@ -79,21 +79,24 @@ var openImageEditor = function(image, callback) {
 	
 	
 	var btnCancel = UI.createButton(Utils._.extend({}, _commonStyle.smallButtonBold, {
-		backgroundColor: '#000',
+		backgroundColor: '#828282',
+		color: '#000',
 		title: '  CANCEL  ',
 		left: UI.left(10),
 		bottom: UI.bottom(15),
-		borderColor: '#828282',
+		borderColor: '#000000',
 		borderWidth: 1,
 		borderRadius: 2,
 		viewParent: 'cameraView'
     }));
     var btnChoose = UI.createButton(Utils._.extend({}, _commonStyle.smallButtonBold, {
-		backgroundColor: '#000',
-		title: '  CHOOSE  ',
+		backgroundColor: '#828282',
+		color: '#000',
+		// title: '  CHOOSE  ',
+		title: '  CROP  ',
 		right: UI.right(10),
 		bottom: UI.bottom(15),
-		borderColor: '#828282',
+		borderColor: '#000000',
 		borderWidth: 1,
 		borderRadius: 2,
 		viewParent: 'cameraView'
@@ -294,6 +297,11 @@ var openImageEditor = function(image, callback) {
 	
 
 	var _removeFromMemory = function() {
+		// btnChoose.removeEventListener('click', _btnChooseCb);
+		// _btnChooseCb = null;
+		// btnCancel.removeEventListener('click', _btnCancelCb);
+		// _btnCancelCb = null;
+		// _clearDebounce = null;
 		_leftLimit = null;
 		_croppingWidth = null;
 		_overlayViewHeight = null;
@@ -330,8 +338,16 @@ var openImageEditor = function(image, callback) {
 	/*
 	 * Capture button click listener
 	 */
-	btnChoose.addEventListener('click', function() {
+	var debounceFlag = false;
+	var _clearDebounce = function(){
+		debounceFlag = false;
+	};
+
+	var _btnChooseCb = function() {
+		if(debounceFlag) return;
+
 		if(this.viewParent == 'cameraView') {
+			Ti.API.info(constant.APP + " ################# capturing image ################");
 			var croppedImageLeftPos = -(_leftLimit - cameraImageView.left);
 			var croppedImageTopPos = -(_overlayViewHeight - cameraImageView.top);
 			cameraView.remove(cameraImageView);
@@ -357,21 +373,32 @@ var openImageEditor = function(image, callback) {
 			// rotateImageView.image = osname=='android'?actualCroppingView.toImage().media:actualCroppingView.toImage();
 			cameraView.visible = false;
 			rotateView.visible = true;
+			btnChoose.title = '  CHOOSE  ';
 		}
 		else {
+			Ti.API.info(constant.APP + " ######################## attaching image #######################");
 			// Ti.API.info(rotateImageViewContainer.toImage());
 			callback({success: true, image: osname=='android'?rotateImageViewContainer.toImage().media:rotateImageViewContainer.toImage()});
 			_removeFromMemory();
 		}
-	});
+
+		debounceFlag = true;
+		setTimeout(_clearDebounce,1500);
+	};
+
+	Ti.API.info(constant.APP + " ############################ adding btnChoose listener ########################");
+	btnChoose.addEventListener('click', _btnChooseCb);
 	
 	
 	/*
 	 * Close button click listener
 	 */
-	btnCancel.addEventListener('click', function() {
+	var _btnCancelCb = function() {
 		_removeFromMemory();
-	});	
+	}; 
+
+	Ti.API.info(constant.APP + " ############################ adding btnCancel listener ########################");
+	btnCancel.addEventListener('click', _btnCancelCb);	
 	
 	var rotateView = Ti.UI.createView({
 		backgroundColor: '#000',
@@ -388,13 +415,15 @@ var openImageEditor = function(image, callback) {
 	// });
 	// rotateImageViewContainer.add(rotateImageView);
 	var btnRotate = UI.createButton(Utils._.extend({}, _commonStyle.smallButtonBold, {
-		backgroundColor: '#000',
+		backgroundColor: '#828282',
+		color: '#000',
 		title: '  ROTATE  ',
 		bottom: UI.bottom(15),
-		borderColor: '#828282',
+		borderColor: '#4000000',
 		borderWidth: 1,
 		borderRadius: 2
     }));
+
 	rotateView.add(rotateImageViewContainer);
     rotateView.add(btnRotate);
 	
@@ -410,7 +439,7 @@ var openImageEditor = function(image, callback) {
 	
 	Window.getCurrentWindow().add(cameraView);
 	Window.getCurrentWindow().add(rotateView);
-};
+}; //end openImageEditor
 
 /*
  * Success callback
@@ -454,9 +483,13 @@ var successCallback = function(event, imageChangeCallBack, toBeEdited) {
 	            _resizeWidth = (_eventWidth*_resizeHeight)/_eventHeight;                                          
 	        }
 	    	var photo = eventImage.imageAsResized(_resizeWidth, _resizeHeight);
+
+	    	Ti.API.info(constant.APP + " ########################## openImageEditor photo ###########################");
 	    	openImageEditor(photo, imageChangeCallBack);
+	    	
         }
         catch(e) {
+        	Ti.API.info(constant.APP + " ########################## openImageEditor eventImage ###########################");
         	openImageEditor(eventImage, imageChangeCallBack);
         }
 	} 

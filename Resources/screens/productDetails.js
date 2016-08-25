@@ -86,12 +86,19 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 			text: (productData.timestamp?productData.timestamp:'-') // + ' | ' + (productData.userLocation?productData.userLocation:'-')
 	    }));
 	    if(canBeEdited && canBeEdited.editableDeletable && productData.userId == Utils.loggedInUserId() && !productData.isPurchased) {
-    	    var btnEditDeleteProductDetails = UI.createClickableView(Utils._.extend({},_commonStyle.menuButton,{
+    	    var btnEditDeleteProductDetails = UI.createClickableView({
 		    	top: UI.top(10),
 				right: UI.right(10),
-		    	width: UI.width(20),
-		    	height: UI.height(20)
+		    	width: UI.width(35),
+		    	height: UI.height(35)
+		    });
+
+    	    var menuButton = Ti.UI.createImageView(Utils._.extend({},_commonStyle.menuButton,{
+		    	top: UI.top(0),
+				right: UI.right(0)
 		    }));
+
+    	    btnEditDeleteProductDetails.add(menuButton);
 
 	   //  	var btnEditDeleteProductDetails = UI.createButton(Utils._.extend({}, _commonStyle.menuButton, {
 				// top: UI.top(10),
