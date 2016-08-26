@@ -1197,6 +1197,13 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     
     sizesView.add(selectSizeView);
     
+    var sizeChartView = Ti.UI.createView({
+        top: 0,
+        width: Ti.UI.FILL,
+        height: Ti.UI.SIZE, // UI.height(260),
+        layout: 'vertical'
+    });
+
     var _sizeChartViewRef = null;
 
     if(_sizeChartSelected) {
@@ -1248,10 +1255,10 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 				}
 			}
 
-            _sizeChartViewRef = _createSizeChartView(_sizeSelected)
-			sizesView.add(_sizeChartViewRef);
+            _sizeOptionsView.hide();
+            btnNext.fireEvent('click');
 			// lblSelectSize.text = _sizeSelected + (constant.SIZE_FULL_FORM[_sizeSelected] != undefined ? ' - ' + constant.SIZE_FULL_FORM[_sizeSelected] : '');
-			_sizeOptionsView.hide();
+			
 			// buttonBar.selectButton(_currentButtonIndex+1);
 		});
     }); //end selectSizeView
@@ -1959,6 +1966,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 		subcategoryView.visible = false;
 		brandsView.visible = false;
 		sizesView.visible = false;
+        sizeChartView.visible = false;
 		descriptionView.visible = false;
 		priceView.visible = false;
 		conditionView.visible = false;
@@ -1995,22 +2003,44 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     		break;
     	}
     	
-    	if(e.title == 'SIZE') {
+    	if(e.title == 'SELECT SIZE') {
     		Ti.API.info(constant.APP + " ################ FIRING SIZE VIEW ################");
 
-            if(_prevButtonIndex < _currentButtonIndex){
+            // if(_prevButtonIndex < _currentButtonIndex){
                 // Ti.API.info(constant.APP + " @@@@@@@@@@@@@@@@ going forward @@@@@@@@@@@@@@@@@@@@");
                 selectSizeView.fireEvent('click');
-            }
-            else if(_prevButtonIndex > _currentButtonIndex){
-                // Ti.API.info(constant.APP + " @@@@@@@@@@@@@@@@ goiing back @@@@@@@@@@@@@@@@@@@@@@@");
-                _sizeChartViewRef.show();
-            }
+            // }
+            // else if(_prevButtonIndex > _currentButtonIndex){
+            //     // Ti.API.info(constant.APP + " @@@@@@@@@@@@@@@@ goiing back @@@@@@@@@@@@@@@@@@@@@@@");
+            //     _sizeChartViewRef.show();
+            // }
             // else if(_prevButtonIndex === _currentButtonIndex){
             //     Ti.API.info(constant.APP + " @@@@@@@@@@@@@@@@ buttons equal @@@@@@@@@@@@@@@@@@@");
             // }
     	}
     	
+        if(e.title === 'SIZE CHART'){
+            
+            if(!_sizeChartSelected || _sizeSelected === 'FREE' || _sizeChartSelected === 'E' || _sizeChartSelected === 'D' ){ //bags or jewellery
+                if(_prevButtonIndex < _currentButtonIndex){
+                    btnNext.fireEvent('click');
+                }
+                else if(_prevButtonIndex > _currentButtonIndex){
+                    btnPrev.fireEvent('click');
+                }
+                return;
+            }
+            
+
+            try{
+                sizeChartView.remove(_sizeChartViewRef);
+            }
+            catch(e){}
+
+            _sizeChartViewRef = _createSizeChartView(_sizeSelected)
+            sizeChartView.add(_sizeChartViewRef);
+        }
+
     	if(e.title == 'BRAND') {
     		_brandsTimeout = setTimeout(function() {
 	    		if(e.viewToShow) {
@@ -2035,7 +2065,8 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     	{title: 'CATEGORY', viewToShow: categoryView},
     	{title: 'SUB-CATEGORY', viewToShow: subcategoryView},
     	{title: 'BRAND', viewToShow: brandsView},
-    	{title: 'SIZE', viewToShow: sizesView},
+    	{title: 'SELECT SIZE', viewToShow: sizesView},
+        {title: 'SIZE CHART', viewToShow: sizeChartView},
     	{title: 'CONDITION', viewToShow: conditionView},
     	{title: 'PICK-UP FROM', viewToShow: pickupFromView},
     	{title: 'PRICE', viewToShow: priceView}
@@ -2079,6 +2110,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     inputView.add(subcategoryView);
     inputView.add(brandsView);
     inputView.add(sizesView);
+    inputView.add(sizeChartView);
     inputView.add(descriptionView);
     inputView.add(priceView);
     inputView.add(conditionView);
@@ -2089,6 +2121,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	subcategoryView.visible = false;
 	brandsView.visible = false;
 	sizesView.visible = false;
+    sizeChartView.visible = false;
 	descriptionView.visible = false;
 	priceView.visible = false;
 	conditionView.visible = false;
