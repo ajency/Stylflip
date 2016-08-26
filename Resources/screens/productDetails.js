@@ -89,13 +89,14 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
     	    var btnEditDeleteProductDetails = UI.createClickableView({
 		    	top: UI.top(10),
 				right: UI.right(10),
-		    	width: UI.width(35),
+		    	// width: UI.width(35),
+		    	width: UI.width(60),
 		    	height: UI.height(35)
 		    });
 
     	    var menuButton = Ti.UI.createImageView(Utils._.extend({},_commonStyle.menuButton,{
 		    	top: UI.top(0),
-				right: UI.right(0)
+				right: UI.right(3)
 		    }));
 
     	    btnEditDeleteProductDetails.add(menuButton);
