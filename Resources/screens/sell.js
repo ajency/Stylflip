@@ -537,14 +537,14 @@ exports.get = function(tabSelected, wardrobeData, productData) {
 	/*
 	 * Choose or take picture
 	 */
-	var tapBusy = false;
+	// var tapBusy = false;
 	var _takeOrChoosePicture = function(_arrButtonOptions) {
-		if(tapBusy) return;
+		// if(tapBusy) return;
 
-		tapBusy = true;
-		setTimeout(function(){
-			tapBusy = false;
-		},1000);
+		// tapBusy = true;
+		// setTimeout(function(){
+		// 	tapBusy = false;
+		// },1000);
 
 		var buttonBarView = UI.createButtonBarView({
     		buttonNames: _arrButtonOptions

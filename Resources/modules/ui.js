@@ -345,7 +345,7 @@ UI.alertDialog = function(props) {
     });
     
     if(props && props.message) {
-        Ti.API.info(constant.APP + " ############ constructing message ################");
+        //Ti.API.info(constant.APP + " ############ constructing message ################");
     	var lblMessage = Ti.UI.createLabel({
 	        text: props.message,
 	        left: UI.left(20),
@@ -363,7 +363,7 @@ UI.alertDialog = function(props) {
 	    contentView.add(lblMessage);
 
         if(props && props.secMessages && props.secMessages.length){
-            Ti.API.info(constant.APP + " ############ constructing secondary message ################");
+            //Ti.API.info(constant.APP + " ############ constructing secondary message ################");
             var x = 0, secMessages = props.secMessages;
             for(x = 0, Length = secMessages.length; x < Length; x++){
                 var secLabel = Ti.UI.createLabel({
@@ -380,7 +380,7 @@ UI.alertDialog = function(props) {
                     }
                 });
 
-                Ti.API.info(constant.APP + " adding message: " + secMessages[x]);
+                //Ti.API.info(constant.APP + " adding message: " + secMessages[x]);
                 contentView.add(secLabel);
             }
         }
@@ -761,7 +761,9 @@ UI.buttonBarView = function(obj) {
 	    }));
 	    buttonBarView.add(button);
 	    
-	    button.addEventListener('click', function() {
+	    button.addEventListener('click', function(e) {
+            //Ti.API.info(constant.APP + " ################## BUTTON CLICKED ##################");
+            e.source.setEnabled(false);
 	    	Utils._.isFunction(events.listener) && events.listener({ index: this.index, title: this.title });
 	    	$.hide();
 	    });
@@ -792,11 +794,13 @@ UI.buttonBarView = function(obj) {
     };
     
     $.addEventListener = function(event, callback) {
+        //Ti.API.info(constant.APP + " ################# ADDING EVENT LISTENER TO BUTTONBARVIEW #################");
         events.event = event;
         events.listener = callback;
     };
     
     $.hide = function() {
+        overlayView.setTouchEnabled(false);
     	overlayView.animate({
     		opacity: 0,
     		duration: ANIMATE_DURATION
@@ -1486,7 +1490,7 @@ UI.showModal = function(windowTitle,view){
             rootContainer.opacity = 1;
         });
 
-        Ti.API.info(constant.APP + " opening the sizeChart view");
+        //Ti.API.info(constant.APP + " opening the sizeChart view");
 
     // }
     

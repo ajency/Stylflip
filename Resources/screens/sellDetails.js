@@ -54,37 +54,20 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     /*
 	 * Calculating product's final price
 	 */
-	var _getCalculatedPrice = function(sellingPrice, originalPrice) {
-		// Ti.API.info(constant.APP + " ############## _getCalculatedPrice CALLED #############");
-		sellingPrice = isNaN(parseFloat(sellingPrice)) ? 0 : parseFloat(sellingPrice);
-		if(sellingPrice == 0) {
+    var _getCalculatedPrice = function(sellingPrice, originalPrice) {
+        sellingPrice = isNaN(parseFloat(sellingPrice)) ? 0 : parseFloat(sellingPrice);
+        if(sellingPrice == 0) {
             return '';
-		}
-		
-        // originalPrice = isNaN(parseFloat(originalPrice)) ? 0 : parseFloat(originalPrice);
-	
-        // var _isShippingToBeAdded = sellingPrice < 2000;
-		
-        // sellingPrice = sellingPrice + ((sellingPrice * Utils.getCommisionPercentage()) / 100);
-		
-  //       if(_isShippingToBeAdded) {
-		// 	sellingPrice = sellingPrice + 120;	//	120 is the shipping fees
-		// }
-
-		// if(isNaN(sellingPrice)){
-		// 	sellingPrice = 0;
-		// }
-
-        var dispPrice = Math.round( sellingPrice / ( 1 - ( Utils.getCommisionPercentage() / 100 ) ) );
-
-        _getCommission(dispPrice,sellingPrice,'disp');
-
-        if(sellingPrice < 2000){
-            dispPrice += 120
         }
-        
-        return Math.round(dispPrice);
-	};
+        originalPrice = isNaN(parseFloat(originalPrice)) ? 0 : parseFloat(originalPrice);
+        var _isShippingToBeAdded = sellingPrice < 2000;
+        sellingPrice = sellingPrice + ((sellingPrice * Utils.getCommisionPercentage()) / 100);
+        if(_isShippingToBeAdded) {
+            sellingPrice = sellingPrice + 120;  //  120 is the shipping fees
+        }
+        // return '\u20B9 ' + Math.ceil(sellingPrice);
+        return Math.ceil(sellingPrice);
+    };
 	
     /*calculate product asking price*/
     var _getSellingPrice = function(listPrice){
@@ -1307,45 +1290,26 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     var priceView = Ti.UI.createView(_style.priceView);
     priceView.top = 0;
 
-    var sellPriceView = Ti.UI.createView(Utils._.extend({},_commonStyle.priceTxtView));
+    var askPriceView = Ti.UI.createView(Utils._.extend({},_commonStyle.priceTxtView));
 
-    var sellPriceLabel = Ti.UI.createLabel(Utils._.extend({},_commonStyle.label,{
-        left: '10%',
-        text: 'Amount you get'
-    }));
 
-    var sellPriceRLabel = Ti.UI.createLabel({
-        left: '5%',
-        text: '\u20B9',
-        color: '#757575',
-        // borderColor: "#000",
-        // borderWidth: 5,
-        // textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT,
-        font: {
-            fontSize: UI.fontSize(14),
-            fontFamily: constant.FONT.DEFAULT_FONT
-        }
-    });
+    // var sellPriceRLabel = Ti.UI.createLabel({
+    //     text: '\u20B9',
+    //     color: '#757575',
+    //     font: {
+    //         fontSize: UI.fontSize(14),
+    //         fontFamily: constant.FONT.DEFAULT_FONT
+    //     }
+    // });
 
     var askingPrice = UI.createTextField(Utils._.extend({}, _commonStyle.priceTxt,{
+        width: Ti.UI.FILL,
+        textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
+        hintText:'Asking Price',
         maxLength: 6
     }));
 
-    var sellPriceEdit = Ti.UI.createImageView({
-      // left: '2%',
-      image:'/images/common/edit-icon.png',
-      width: UI.width(15),
-      height: UI.height(15)  
-    });
-
-    sellPriceEdit.addEventListener('click',function(){
-        askingPrice.focus();
-    });
-
-    sellPriceView.add(sellPriceLabel);
-    sellPriceView.add(sellPriceRLabel);
-    sellPriceView.add(askingPrice);
-    sellPriceView.add(sellPriceEdit);
+    askPriceView.add(askingPrice);
 
     var lblOriginalPrice = Ti.UI.createLabel(Utils._.extend({}, _commonStyle.txtField, {
         text: '+ Shipping & Handling',
@@ -1359,68 +1323,40 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 
     var oriPriceView = Ti.UI.createView(Utils._.extend({},_commonStyle.priceTxtView));
 
-    var oriPriceLabel = Ti.UI.createLabel(Utils._.extend({},_commonStyle.label,{
-        left: '5%',
-        text: 'Original Price (Optional)'
-    }));
-
-    var oriPriceRLabel = Ti.UI.createLabel({
-        text: '\u20B9',
-        color: '#757575',
-        left: '5%',
-        // textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT,
-        font: {
-            fontSize: UI.fontSize(14),
-            fontFamily: constant.FONT.DEFAULT_FONT
-        }
-    });
+    // var oriPriceRLabel = Ti.UI.createLabel({
+    //     text: '\u20B9',
+    //     color: '#757575',
+    //     left: '25%',
+    //     font: {
+    //         fontSize: UI.fontSize(14),
+    //         fontFamily: constant.FONT.DEFAULT_FONT
+    //     }
+    // });
 
     var txtOriginalPrice = UI.createTextField(Utils._.extend({}, _commonStyle.priceTxt,{
+        width: Ti.UI.FILL,
+        textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
+        hintText: 'Original Price',
         maxLength: 6
     }));
 
-    var oriPriceEdit = Ti.UI.createImageView({
-      // left: '2%',
-      image:'/images/common/edit-icon.png',
-      width: UI.width(15),
-      height: UI.height(15)  
-    });
-
-    // oriPriceEdit.addEventListener('click',function(){
-    //     txtOriginalPrice.focus();
+    // var oriPriceEdit = Ti.UI.createImageView({
+    //   image:'/images/common/edit-icon.png',
+    //   width: UI.width(15),
+    //   height: UI.height(15)  
     // });
 
-    oriPriceView.add(oriPriceLabel);
-    oriPriceView.add(oriPriceRLabel);
+    // oriPriceView.add(oriPriceRLabel);
     oriPriceView.add(txtOriginalPrice);
-    oriPriceView.add(oriPriceEdit);
+    // oriPriceView.add(oriPriceEdit);
 
 
     var listPriceView = Ti.UI.createView(Utils._.extend({},_commonStyle.priceTxtView));
-    
-    // var listPriceView = Ti.UI.createView({
-    //     top: -1,
-    //     width: UI.width(262),
-    //     // value: '',
-    //     height: UI.height(40),
-    //     // hintText: 'Listing Price',
-    //     // keyboardType: Ti.UI.KEYBOARD_DECIMAL_PAD,
-    //     borderWidth: 1,
-    //     borderColor: '#bfbfbf',
-    //     // bubbleParent: false,
-    //     layout: 'horizontal'
-    // });
-
-    var listPriceLabel = Ti.UI.createLabel(Utils._.extend({},_commonStyle.label,{
-        left: '15%',
-        text: 'Display Price'
-    }));
 
     var rupeeLabel = Ti.UI.createLabel({
         text: '\u20B9',
         color: '#757575',
-        left: '5%',
-        // textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT,
+        left: '30%',
         font: {
             fontSize: UI.fontSize(14),
             fontFamily: constant.FONT.DEFAULT_FONT
@@ -1428,56 +1364,21 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     });
 
     var displayPrice = Ti.UI.createTextField(Utils._.extend({}, _commonStyle.priceTxt,{
-        maxLength: 6
+        hintText: 'Listing Price',
+        maxLength: 6,
+        editable: false,
+        touchEnabled: false
     }));
-
-    var listPriceEdit = Ti.UI.createImageView({
-      // left: '2%',
-      image:'/images/common/edit-icon.png',
-      width: UI.width(15),
-      height: UI.height(15)  
-    });
-
-    listPriceEdit.addEventListener('click',function(){
-        displayPrice.focus();
-    });
 
     if(osname === 'iphone' || osname === 'ipad'){
         rupeeLabel.top = 10;
         displayPrice.top = 10;
     }
 
-    // {
-    //     top: -1,
-    //     value: '',
-    //     width: UI.width(262),
-    //     height: UI.height(40),
-    //     hintText: 'Asking Price',
-    //     keyboardType: Ti.UI.KEYBOARD_DECIMAL_PAD,
-    //     borderWidth: 1,
-    //     borderColor: '#bfbfbf',
-    //     bubbleParent: false
-    // }
-    listPriceView.add(listPriceLabel);
+
     listPriceView.add(rupeeLabel);
     listPriceView.add(displayPrice);
-    listPriceView.add(listPriceEdit);
-    // var txtdisplayPrice = Ti.UI.createLabel(Utils._.extend({}, _commonStyle.txtField, {
-    // 	text: '\u20B9 0',
-    // 	top: -1,
-    //     width: UI.width(262),
-    // 	height: UI.height(40),
-    //     // hintText: 'display price',
-    //     keyboardType: Ti.UI.KEYBOARD_DECIMAL_PAD,
-    //     borderWidth: 1,
-    //     borderColor: '#bfbfbf',
-    //     font: {
-    //         fontSize: UI.fontSize(18),
-    //         fontFamily: constant.FONT.DEFAULT_FONT,
-    //         fontWeight: 'bold'
-    //     },
-    //     color: '#828282'
-    // }));
+
     
     var btnViewDetails = UI.createButton({
     	title: 'View Details',
@@ -1644,9 +1545,11 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 
     hr2.add(line2);
 
-    priceView.add(listPriceView);
+    priceView.add(askPriceView);
     priceView.add(oriPriceView);
-    priceView.add(sellPriceView);
+    priceView.add(listPriceView);
+    
+    
     priceView.add(lblShippingInfo);
     priceView.add(btnViewDetails);
 
