@@ -1135,7 +1135,14 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 		    	requestArgs: _requestArgs,
 		    	success: function(response) {
 		    		if(response.data[0]) {
+		    			var respData = response.data[0];
+
+		    			for(var ix in respData){
+		    				Ti.API.info(respData[ix]);
+		    			}
+
 		    			_loadProductDetails(response.data[0]);
+		    			// Ti.API.info(constant.APP + " ################################### _loadProductDetails parsed #####################################");
 		    		}
 		    		else {
 		    			var alertDialog = UI.createAlertDialog({

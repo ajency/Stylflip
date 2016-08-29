@@ -626,9 +626,10 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     		
     		if(selectedButtonStyle) {
     			Ti.API.info(constant.APP + " COPYING SELECT-BUTON STYLE");
-    			eRowStr = JSON.stringify(e.row.children[0]);
     			
-    			console.log(eRowStr);
+       //          eRowStr = JSON.stringify(e.row.children[0]);
+    			// console.log(eRowStr);
+                
 				for(key in selectedButtonStyle) {
 					e.row.children[0][key] = selectedButtonStyle[key];
 				}
@@ -1208,7 +1209,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 
     if(_sizeChartSelected) {
     	_sizeChartViewRef = _createSizeChartView(_sizeSelected);
-    	sizesView.add(_sizeChartViewRef);
+    	// sizesView.add(_sizeChartViewRef);
     	if(_sizeChartSelected == 'E') {
     		lblSelectSize.text = 'Enter Sizes';
     	}

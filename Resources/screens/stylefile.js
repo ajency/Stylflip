@@ -360,7 +360,7 @@ exports.get = function(tabSelected, userId, followCallback) {
 	    	}
 	    }
 	    return imgProductView;
-    };
+    }; //end _createItemColumn
     
     
     var _setDataToView = function(isRefresh) {
@@ -822,6 +822,7 @@ exports.get = function(tabSelected, userId, followCallback) {
 			    // });
 			    
 			    gridView.addEventListener('click', function(e) {
+			    	Ti.API.info(constant.APP + " ############################### GRID VIEW CLICKED #################################");
 			    	if(e.column.type == 'addNewItemToWardrobe') {
 			    		Analytics.trackEvent({
 					  		category: "Camera (Feed)",
@@ -872,10 +873,12 @@ exports.get = function(tabSelected, userId, followCallback) {
 							    });
 				    		}
 				    	});
+				    	Ti.API.info(constant.APP + " ############################### ADDNEWITEMTOWARDROBE #################################");
 			    	}
 			    	
 			    	if(e.column.productId != undefined) {
 			    		//	Goto details view
+			    		Ti.API.info(constant.APP + " ############################### EXISTING PRODUCT #################################");
 				        var window = Window.create(exitOnClose=false);
 				        var productDetails = require('/screens/productDetails').get(tabSelected != undefined ? tabSelected : 'stylefile', e.column.productId, function(e) {
 				        	if(e.type == 'purchase') {
@@ -930,7 +933,7 @@ exports.get = function(tabSelected, userId, followCallback) {
 				        	}
 			        	});
 				        window.add(productDetails.getView());
-				        Window.open(window); 
+				        Window.open(window);
 			    	}
 			    });
 			    

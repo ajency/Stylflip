@@ -189,6 +189,7 @@ exports.get = function(config) {
 	 * Grid view click listener
 	 */
 	var _gridViewClickListener = function(e) {
+		Ti.API.info(constant.APP + " ########################### _gridViewClickListener #######################");
 		var child = _getChild(e.source, function(child) {
 			var data = {
 				index: child.index,
