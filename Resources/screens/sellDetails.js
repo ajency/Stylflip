@@ -102,16 +102,16 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
         
     };
 	
-    var _commPrice = 0;
-    var _getCommission = function(dPrice,aPrice,type){
-        if(dPrice && aPrice){
-            _commPrice = (dPrice - aPrice);
-        }
-        else{
-            _commPrice = 0;
-        }
+    // var _commPrice = 0;
+    // var _getCommission = function(dPrice,aPrice,type){
+    //     if(dPrice && aPrice){
+    //         _commPrice = (dPrice - aPrice);
+    //     }
+    //     else{
+    //         _commPrice = 0;
+    //     }
         
-    };
+    // };
 
 	var _getShippingAndHandlingFees = function(sellingPrice) {
 		//Ti.API.info(constant.APP + " ############## _getShippingAndHandlingFees CALLED #############");
@@ -1356,7 +1356,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     var rupeeLabel = Ti.UI.createLabel({
         text: '\u20B9',
         color: '#757575',
-        left: '30%',
+        left: '40%',
         font: {
             fontSize: UI.fontSize(14),
             fontFamily: constant.FONT.DEFAULT_FONT
@@ -1364,10 +1364,14 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     });
 
     var displayPrice = Ti.UI.createTextField(Utils._.extend({}, _commonStyle.priceTxt,{
-        hintText: 'Listing Price',
+        hintText: '0',
         maxLength: 6,
         editable: false,
-        touchEnabled: false
+        touchEnabled: false,
+        font: {
+            fontSize: UI.fontSize(14),
+            fontFamily: constant.FONT.DEFAULT_FONT
+        }
     }));
 
     if(osname === 'iphone' || osname === 'ipad'){
@@ -1574,7 +1578,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     		title: 'Price Break-up',
             titleColor: '#ef4e6d',
     		// message: 'Listing is always free on Stylflip. If the amount you get (asking price) is less than \u20B9 2000, we mark-up this price by 20% and charge an additional \u20B9 120 for shipping.\n\nDisplay Price: '+(displayPrice.value === '' || displayPrice.value === '0' ? 0 : displayPrice.value) + '\nSF Comm.: \u20B9 '+Math.ceil((askingPrice.value * Utils.getCommisionPercentage()) / 100)+'\nS & H: '+_getShippingAndHandlingFees(askingPrice.value)+'\nAmount you get: \u20B9 '+(askingPrice.value == '' || askingPrice.value == '0' ? 0 : askingPrice.value),
-    		message: 'Listing is always free on Stylflip. If the amount you get (asking price) is less than \u20B9 2000, we mark-up this price by 20% and charge an additional \u20B9 120 for shipping.\n\nDisplay Price: '+(displayPrice.value === '' || displayPrice.value === '0' ? 0 : displayPrice.value) + '\nSF Comm.: \u20B9 '+ _commPrice +'\nS & H: '+_getShippingAndHandlingFees(askingPrice.value)+'\nAmount you get: \u20B9 '+(askingPrice.value == '' || askingPrice.value == '0' ? 0 : askingPrice.value),
+    		message: 'Listing is always free on Stylflip. If the amount you get (asking price) is less than \u20B9 2000, we mark-up this price by 20% and charge an additional \u20B9 120 for shipping.\n\nDisplay Price: '+(displayPrice.value === '' || displayPrice.value === '0' ? 0 : displayPrice.value) + '\nSF Comm.: \u20B9 '+ Math.ceil((askingPrice.value * Utils.getCommisionPercentage()) / 100) +'\nS & H: '+_getShippingAndHandlingFees(askingPrice.value)+'\nAmount you get: \u20B9 '+(askingPrice.value == '' || askingPrice.value == '0' ? 0 : askingPrice.value),
             buttonNames: ['GOT IT']
     	});
 

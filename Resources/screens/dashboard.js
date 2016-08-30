@@ -509,6 +509,7 @@ exports.get = function(tabToLoad) {
 						currentView = require('/screens/feedDetails').get(tabSelected='stylefeed', Utils.getPushItemId());
 					break;
 					default:
+						Ti.API.info(constant.APP + " loading route ...");
 						currentView = require('/screens/'+(e.key)).get(e.key == 'social' ? footer : undefined);
 					break;
 				}
