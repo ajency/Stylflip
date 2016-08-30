@@ -18,8 +18,17 @@ exports.get = function(header) {
 	});
 	
 	listView.setRowSpacing(1);
-	
-	mainView.add(feedView);
+
+    var feedWebView = Ti.UI.createWebView({
+    	// url:'https://www.google.co.in/?gws_rd=ssl',
+    	url:'/screens/stylefeed/stylefeed.html',
+    	width: Ti.UI.FILL,
+    	height: Ti.UI.FILL
+    });
+
+    mainView.add(feedWebView);
+
+	// mainView.add(feedView);
 	
 	feedView.add(listView.getView());
 	

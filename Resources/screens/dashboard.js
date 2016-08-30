@@ -509,7 +509,7 @@ exports.get = function(tabToLoad) {
 						currentView = require('/screens/feedDetails').get(tabSelected='stylefeed', Utils.getPushItemId());
 					break;
 					default:
-						Ti.API.info(constant.APP + " loading route ...");
+						Ti.API.info(constant.APP + " loading route [" + e.key + "] ...");
 						currentView = require('/screens/'+(e.key)).get(e.key == 'social' ? footer : undefined);
 					break;
 				}
@@ -679,6 +679,12 @@ exports.get = function(tabToLoad) {
 		return mainView;	
 	};
 	
+	var _webViewSFClick = function(){
+		Ti.API.info(constant.APP + " ############# WEBVIEW STYLE FEED CLICKED ###############");
+	};
+
+	Ti.App.addEventListener('webViewStyleFeed:click',_webViewSFClick);
+
 	var _removeFromMemory = function() {
 		Ti.API.info(constant.APP + " ###################### REMOVING DASHBOARD FROM MEMORY ####################");
 		Ti.App.removeEventListener('onOptionSelect', _onOptionSelect);
@@ -705,6 +711,7 @@ exports.get = function(tabToLoad) {
 			}
 			// searchBar.removeEventListener('search', _searchCb);
 			// header.removeEventListener('filter', _headerFilterCb);
+			Ti.App.removeEventListener('webViewStyleFeed:click',_webViewSFClick);
 		}
 		catch(e){} 
 		
