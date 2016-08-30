@@ -90,144 +90,171 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 
 	    //Ti.API.info(constant.APP + " productDetails postion 2 ");
 
-	    if(canBeEdited && canBeEdited.editableDeletable && productData.userId == Utils.loggedInUserId() && !productData.isPurchased) {
-    	    var btnEditDeleteProductDetails = UI.createClickableView({
-		    	top: UI.top(10),
-				right: UI.right(10),
-		    	// width: UI.width(35),
-		    	width: UI.width(60),
-		    	height: UI.height(35)
-		    });
-
-    	    var menuButton = Ti.UI.createImageView(Utils._.extend({},_commonStyle.menuButton,{
-		    	top: UI.top(0),
-				right: UI.right(3)
-		    }));
-
-    	    btnEditDeleteProductDetails.add(menuButton);
-
-	   //  	var btnEditDeleteProductDetails = UI.createButton(Utils._.extend({}, _commonStyle.menuButton, {
-				// top: UI.top(10),
+	   //  if(canBeEdited && canBeEdited.editableDeletable && productData.userId == Utils.loggedInUserId() && !productData.isPurchased) {
+    // 	    var btnEditDeleteProductDetails = UI.createClickableView({
+		  //   	top: UI.top(10),
 				// right: UI.right(10),
-				// width: UI.width(15),
-				// height: UI.height(15)
-		  //   }));
-	    }
-	    else if(productData.isToBeDonated) {
-	    	var btnDonateView = Ti.UI.createView(Utils._.extend({}, _style.btnDonateView, {
-				top: UI.top(10),
-				right: UI.right(10)
-		    }));
-		    var btnDonate = UI.createButton(_style.btnDonate);
-		    btnDonateView.add(btnDonate);
-	    }
+		  //   	// width: UI.width(35),
+		  //   	width: UI.width(60),
+		  //   	height: UI.height(35)
+		  //   });
 
-		Ti.API.info(constant.APP + " productDetails postion 3 ");
+    // 	    var menuButton = Ti.UI.createImageView(Utils._.extend({},_commonStyle.menuButton,{
+		  //   	top: UI.top(0),
+				// right: UI.right(3)
+		  //   }));
+
+    // 	    btnEditDeleteProductDetails.add(menuButton);
+
+	   // //  	var btnEditDeleteProductDetails = UI.createButton(Utils._.extend({}, _commonStyle.menuButton, {
+				// // top: UI.top(10),
+				// // right: UI.right(10),
+				// // width: UI.width(15),
+				// // height: UI.height(15)
+		  // //   }));
+	   //  }
+	   //  else if(productData.isToBeDonated) {
+	   //  	var btnDonateView = Ti.UI.createView(Utils._.extend({}, _style.btnDonateView, {
+				// top: UI.top(10),
+				// right: UI.right(10)
+		  //   }));
+		  //   var btnDonate = UI.createButton(_style.btnDonate);
+		  //   btnDonateView.add(btnDonate);
+	   //  }
+
+		// Ti.API.info(constant.APP + " productDetails postion 3 ");
 
 	    profileView.add(imgProfilePic);
 	    profileView.add(lblUsername);
 	    profileView.add(lblTimeAndLocation);
 
 	    if(canBeEdited && canBeEdited.editableDeletable && productData.userId == Utils.loggedInUserId()) {
-	    	Ti.API.info(constant.APP + " entered if statement");
-	    	profileView.add(btnEditDeleteProductDetails);
 	    	
-	    	
-	    	btnEditDeleteProductDetails.addEventListener('click', function(e) {
-	    		Ti.API.info(constant.APP + " ##################################### entered click event listener");
-	    		var _arrOptions;
-	    		productData.isPurchased = productData.isPurchased == 1 ? true : false;
-	    		// if(productData.isPurchased) {
-	    			// _arrOptions = ['Delete'];
-	    		// }
-	    		// else {
-	    			_arrOptions = ['Edit', 'Delete'];
-	    		// }
-				var optionsView = require('/components/popOver').get({
-					optionStyle: {
-		    			backgroundColor: '#fff',
-		    			// borderColor: '#bfbfbf',
-		    			// borderWidth: 1
-		    		},
-		    		width: UI.width(80),
-		    		height: UI.height(80),
-		    		sourceView: this,
-		    		options: _arrOptions,
-		    		borderColor: '#bfbfbf',
-	    			borderWidth: 1
-		    	});
+	    	if(!productData.isPurchased){
+	    		var btnEditDeleteProductDetails = UI.createClickableView({
+			    	top: UI.top(10),
+					right: UI.right(10),
+			    	// width: UI.width(35),
+			    	width: UI.width(60),
+			    	height: UI.height(35)
+			    });
 
-		    	optionsView.show();
-		    	optionsView.addEventListener('click', function(e) {
-		    		Ti.API.info(constant.APP +  " entered options view click";)
-		    		optionsView.hide();
-		    		switch(e.index) {
-		    			case 0:
-		    				//for(var photo in productData.data.photos) {
-		    				// 	productData.data.photos[photo] = 
-		    				//}
-		    				productData.brandName = productData.brand;
-		    				var window = Window.create(exitOnClose=false);
-					    	var sell = require('/screens/sell').get(tabSelected, undefined, {
-					    		data: productData,
-					    		onUpdate: canBeEdited.onUpdate
-					    	});
-						 	window.add(sell.getView());
-					        Window.open(window);
-		    			break;
-		    			
-		    			case 1:
-		    				var alertDialog = UI.createAlertDialog({
-				                title: constant.ALERT.TITLE.CONFIRM_DELETE,
-				                message: 'Are you sure you want to delete this listing from the shop?',
-				                buttonNames: ['yes', 'no']
-				            });    
-				            alertDialog.show();
-				            alertDialog.addEventListener('click', function(e) {
-				            	if(e.index == 0) {
-				            		var _requestArgs = {
-								        showLoader: true,
-								        url: 'product.php',
-								        method: 'post',
-								        serverArgs: {
-								        	action: 'deleteProduct',
-								            userId: Utils.loggedInUserId(),
-								            productId: productId 
-								        }
-								    };
-								    
-								    /*
-								     * Hit web service
-								     */
-								    HttpClient.getResponse({
-								    	requestArgs: _requestArgs,
-								    	success: function(response) {
-								            if(response.data.status == '1') {
-								            	Window.closeAll(function() {
-								            		canBeEdited.onDelete();
-								            	});
-								            }
-								    	},
-								    	error: function(error) {
-								            var alertDialog = UI.createAlertDialog({
-								                title: error.errorTitle,
-								                message: error.errorMessage
-								            });
-								            alertDialog.show();
-								            alertDialog = null;
-								    	}
-								    });
-				            	}
-				            	alertDialog = null;
-				            });
-		    			break;
-		    		}
-		    	});
-	    	});
+	    	    var menuButton = Ti.UI.createImageView(Utils._.extend({},_commonStyle.menuButton,{
+			    	top: UI.top(0),
+					right: UI.right(3)
+			    }));
 
-	    	Ti.API.info(constant.APP + " ###################################### if block complete");
+	    	    btnEditDeleteProductDetails.add(menuButton);
+
+		    	profileView.add(btnEditDeleteProductDetails);	    	
+		    	
+		    	btnEditDeleteProductDetails.addEventListener('click', function(e) {
+		    		Ti.API.info(constant.APP + " ##################################### entered click event listener");
+		    		var _arrOptions;
+		    		productData.isPurchased = productData.isPurchased == 1 ? true : false;
+		    		// if(productData.isPurchased) {
+		    			// _arrOptions = ['Delete'];
+		    		// }
+		    		// else {
+		    			_arrOptions = ['Edit', 'Delete'];
+		    		// }
+					var optionsView = require('/components/popOver').get({
+						optionStyle: {
+			    			backgroundColor: '#fff',
+			    			// borderColor: '#bfbfbf',
+			    			// borderWidth: 1
+			    		},
+			    		width: UI.width(80),
+			    		height: UI.height(80),
+			    		sourceView: this,
+			    		options: _arrOptions,
+			    		borderColor: '#bfbfbf',
+		    			borderWidth: 1
+			    	});
+
+					Ti.API.info(constant.APP + " ##################################### adding optionsView click listener");
+
+			    	optionsView.show();
+			    	optionsView.addEventListener('click', function(e) {
+			    		Ti.API.info(constant.APP +  " entered options view click");
+			    		optionsView.hide();
+			    		switch(e.index) {
+			    			case 0:
+			    				//for(var photo in productData.data.photos) {
+			    				// 	productData.data.photos[photo] = 
+			    				//}
+			    				productData.brandName = productData.brand;
+			    				var window = Window.create(exitOnClose=false);
+						    	var sell = require('/screens/sell').get(tabSelected, undefined, {
+						    		data: productData,
+						    		onUpdate: canBeEdited.onUpdate
+						    	});
+							 	window.add(sell.getView());
+						        Window.open(window);
+			    			break;
+			    			
+			    			case 1:
+			    				var alertDialog = UI.createAlertDialog({
+					                title: constant.ALERT.TITLE.CONFIRM_DELETE,
+					                message: 'Are you sure you want to delete this listing from the shop?',
+					                buttonNames: ['yes', 'no']
+					            });    
+					            alertDialog.show();
+					            alertDialog.addEventListener('click', function(e) {
+					            	if(e.index == 0) {
+					            		Ti.API.info(constant.APP + " ##################################### alertDialog event listener added #####################################");
+					            		var _requestArgs = {
+									        showLoader: true,
+									        url: 'product.php',
+									        method: 'post',
+									        serverArgs: {
+									        	action: 'deleteProduct',
+									            userId: Utils.loggedInUserId(),
+									            productId: productId 
+									        }
+									    };
+									    
+									    /*
+									     * Hit web service
+									     */
+									    HttpClient.getResponse({
+									    	requestArgs: _requestArgs,
+									    	success: function(response) {
+									            if(response.data.status == '1') {
+									            	Window.closeAll(function() {
+									            		canBeEdited.onDelete();
+									            	});
+									            }
+									    	},
+									    	error: function(error) {
+									            var alertDialog = UI.createAlertDialog({
+									                title: error.errorTitle,
+									                message: error.errorMessage
+									            });
+									            alertDialog.show();
+									            alertDialog = null;
+									    	}
+									    });
+					            	}
+					            	alertDialog = null;
+					            });
+			    			break;
+			    		}
+			    		Ti.API.info(constant.APP + " ##################################### optionsView click handle done #####################################");
+			    	});
+		    	});
+	    	} //end if
 	    }
 	    else if(productData.isToBeDonated) {
+
+	    	var btnDonateView = Ti.UI.createView(Utils._.extend({}, _style.btnDonateView, {
+				top: UI.top(10),
+				right: UI.right(10)
+		    }));
+
+		    var btnDonate = UI.createButton(_style.btnDonate);
+		    btnDonateView.add(btnDonate);
+
 	    	profileView.add(btnDonateView);
 	    }
 	    

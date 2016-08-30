@@ -43,6 +43,14 @@ exports.get = function(tabSelected, userId, followCallback) {
     var _isAddNewItemViewAdded = false;
     
     var _createItemColumn = function(itemData) {
+
+    	for(var ix in itemData){
+    		if(itemData.propertyIsEnumerable(itemData[ix])){
+    			Ti.API.info(constant.APP + " itemData key: " + ix + " value: " + itemData[ix]); 
+    		}
+    	}
+
+
     	var imgProductView = Ti.UI.createView(Utils._.extend({}, _style.itemView, {
 			width: _columnWidth,
 			height: _columnWidth,
