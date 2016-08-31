@@ -1353,15 +1353,15 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 
     var listPriceView = Ti.UI.createView(Utils._.extend({},_commonStyle.priceTxtView));
 
-    var rupeeLabel = Ti.UI.createLabel({
-        text: '\u20B9',
-        color: '#757575',
-        left: '40%',
-        font: {
-            fontSize: UI.fontSize(14),
-            fontFamily: constant.FONT.DEFAULT_FONT
-        }
-    });
+    // var rupeeLabel = Ti.UI.createLabel({
+    //     text: '\u20B9',
+    //     color: '#757575',
+    //     left: '40%',
+    //     font: {
+    //         fontSize: UI.fontSize(14),
+    //         fontFamily: constant.FONT.DEFAULT_FONT
+    //     }
+    // });
 
     var displayPrice = Ti.UI.createTextField(Utils._.extend({}, _commonStyle.priceTxt,{
         hintText: '0',
@@ -1380,7 +1380,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     }
 
 
-    listPriceView.add(rupeeLabel);
+    // listPriceView.add(rupeeLabel);
     listPriceView.add(displayPrice);
 
     

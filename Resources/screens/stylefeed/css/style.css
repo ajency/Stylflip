@@ -1,7 +1,25 @@
 html,body{
 	background: rgb(255,200,200);
+	overflow: auto;
 }
 
 h1{
 	text-align: center;	
+}
+
+.images{
+	width: 80%;
+	height: 50%;
+	margin: 5% 0%;
+	border: 1px solid black;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+#image1{
+	background-image: url('images/image1.png');
+}
+
+#image2{
+	background-image: url('images/image2.png');
 }

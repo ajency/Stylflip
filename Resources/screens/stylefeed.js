@@ -931,6 +931,7 @@ exports.get = function(header) {
 				if(isRefresh) {
 					listView.setData(_listData);
 					Ti.App.fireEvent('app:apicallSuccess',{params: _requestArgs});
+					Ti.App.fireEvent('app:styleFeedWebView',{respArgs: response.data});
 				}
 				else {
 					listView.appendData(_listData);
@@ -985,8 +986,17 @@ exports.get = function(header) {
     	_loadData(true);
     };
     
+    var _webViewSFClick = function(e){
+		Ti.API.info(constant.APP + " ############# WEBVIEW STYLE FEED CLICKED ###############");
+		_loadProductDetails(e.productId);
+	};
+
+	Ti.App.addEventListener('webViewStyleFeed:click',_webViewSFClick);
+
     var _removeFromMemory = function() {
     	_style = null;
+    	Ti.App.removeEventListener('webViewStyleFeed:click',_webViewSFClick);
+    	_webViewSFClick = null;
         Window.clearMemory(mainView);
         mainView = null;
         _getView = null;
