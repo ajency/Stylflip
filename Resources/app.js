@@ -65,6 +65,12 @@ var _onAppResume = function(e) {
     Ti.API.info(constant.APP + " ##################### RESUMING APP #####################");
     // Ti.API.info(constant.APP + " logged in user: " + Utils.loggedInUserId());
 	
+    // var toast = Ti.UI.createNotification({
+    //     message:"Resuming App",
+    //     duration: Ti.UI.NOTIFICATION_DURATION_LONG
+    // });
+    // toast.show();
+
     if(!Utils.isUserLoggedIn()) {
 		return;
 	}

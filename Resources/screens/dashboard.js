@@ -146,7 +146,6 @@ exports.get = function(tabToLoad) {
     var _clearSearchField = function(){
     	Ti.API.info(constant.APP + " ################# CLEARING SEARCH FIELD ####################");
 
-    	// _showSearchBar();
     	searchBar.setText('');
 	    searchBar.setHidden(true);	   
 	    header.setSearchActive(false);

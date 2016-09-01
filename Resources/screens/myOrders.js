@@ -116,8 +116,15 @@ exports.get = function(screenType) {
 		HttpClient.getResponse({
 			requestArgs: _requestArgs,
 			success: function(response) {
+				Ti.API.info(constant.APP + " ############################## MYORDER API SUCCESS CALLBACK ##############################");
 				var _orderData = response.data;
 		        var _listData = [];
+
+		        // for(var x = 0, length = _orderData.length; x < length; x++){
+		        // 	if(Object.prototype.propertyIsEnumerable.call(_orderData,x)){
+		        // 		Ti.API.info(constant.APP + " key: " + x + " value: " + _orderData[x]);
+		        // 	}
+		        // }
 		        
 		    	if(_orderData.length == 0 && _pageIndex == 0) {
 		    		listView.setData([UI.createNoDataView()], false);

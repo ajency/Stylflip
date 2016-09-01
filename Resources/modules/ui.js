@@ -1240,8 +1240,39 @@ UI.createImageWithTextView = function(style) {
 	    	label.transform = Ti.UI.create2DMatrix().rotate(-45);
 	    	square.add(label);
     	break;
+        case 'new':
+            label.font = {
+                fontSize: UI.fontSize(8),
+                fontFamily: constant.FONT.DEFAULT_FONT,
+                fontWeight: 'bold'
+            };
+            label.width = UI.width(25);
+            label.height = Ti.UI.SIZE;
+            label.text = 'NEW';
+            label.backgroundColor = '#ef4e6d';
+            label.left = UI.left(0);
+            label.top = UI.top(0);
+            // label.transform = Ti.UI.create2DMatrix().rotate(-45);
+            
+            // var iWidth = style.width ? Math.round(style.width / 4) : UI.width(10);
+            // var iWidth = style.width ? Math.round(style.width / 4) : UI.width(10);
+            // var iHeight = style.height ? (style.width / 4) : UI.width(10);
+
+            // var newTagView = Ti.UI.createImageView({
+            //     image: 'images/common/tag-active.png',
+            //     width: iWidth,
+            //     height: iWidth,
+            //     top: UI.top(5),
+            //     left: UI.left(5)
+            // });
+            // square.add(newTagView);
+            square.width = style.width;
+            square.height = style.height;
+
+            square.add(label);
+        ;break;
     	case 'pending kyc':
-    		overlayView.height = UI.height(50),
+    		overlayView.height = UI.height(50);
     		label.height = UI.height(50);
     		label.text = 'Pending Bank Details';
 	    	label.backgroundColor = 'transparent';
@@ -1258,16 +1289,19 @@ UI.createImageWithTextView = function(style) {
 	    	label.bottom = UI.bottom(20);
     	break;
     }
+
     if(style.image != undefined) {
     	containerView.add(imageView);
     }
-    if(style.type != 'sold') {
+
+    if(style.type === 'sold' || style.type === 'new'){
+        containerView.add(square);
+    }
+    else if(style.type != 'sold') {
     	containerView.add(overlayView);
     	containerView.add(label);
     }
-    else {
-    	containerView.add(square);
-    }
+    
     return containerView;
 };
 
@@ -1447,23 +1481,18 @@ UI.showModal = function(windowTitle,view){
         backDrop = null;
         modalWindow = null;
         containerView = null;
+        closeButton.removeEventListener('click',hideWindow);
         closeButton = null;
         closeButonView = null;
-
         UI.openingModal = false;
+        hideWindow = null;
     };
 
     closeButton.addEventListener('click', hideWindow);
 
-    // if(osname == 'android') {
-    //     rootContainer.addEventListener('android:back', hideWindow);
-    // }
-
     closeButonView.add(closeButton);
     
-    // containerView.add(headerView);
     containerView.add(view);
-    // containerView.add(closeButonView);
 
     modalWindow.add(headerView);
     modalWindow.add(containerView);
@@ -1473,14 +1502,6 @@ UI.showModal = function(windowTitle,view){
     rootContainer.add(modalWindow);
 
     Window.getCurrentWindow().add(rootContainer);
-
-    // if(osname === 'iphone' || osname === 'ipad'){
-    //     modalWindow.top = UI.top(40);
-    //     // modalWindow.open();
-    //     rootContainer.show();
-    // }
-    // else{
-        // rootContainer.show();
         
         rootContainer.animate({
             opacity: 1,
@@ -1489,11 +1510,7 @@ UI.showModal = function(windowTitle,view){
         }, function(e) {
             rootContainer.opacity = 1;
         });
-
-        //Ti.API.info(constant.APP + " opening the sizeChart view");
-
-    // }
-    
+  
     UI.modalWindowOpen = true;
 };
 

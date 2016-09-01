@@ -299,6 +299,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 	    	productData.isPurchased = productData.isPurchased == 1 ? true : false;
 	    	
 	    	for(var _photo in productData.photos) {
+
 	    		if(productData.isPurchased) {
 		    		var imgProductPhoto = UI.createImageWithTextView({
 		    			defaultImage: '/images/common/default-shop-big.jpg',
@@ -306,6 +307,15 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 				    	width: UI.width(300),
 				    	height: UI.height(280),
 						type: 'sold'
+				    });
+		    	}
+		    	else if(productData.condition === 'Brand new with tags'){
+		    		var imgProductPhoto = UI.createImageWithTextView({
+		    			defaultImage: '/images/common/default-shop-big.jpg',
+				    	image: Utils.getFullURL(productData.photos[_photo]),
+						width: UI.width(300),
+						height: UI.height(280),
+						type: 'new'
 				    });
 		    	}
 		    	else {

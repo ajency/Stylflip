@@ -320,23 +320,34 @@ exports.get = function() {
 						borderWidth: 0
 				    }));
 				    if(_productData[i].photos.productImage1 != '') {
+
 				    	if(_productData[i].isPurchased) {
 				    		var imgProduct = UI.createImageWithTextView({
-				    			defaultImage: '/images/common/default-shop-big.jpg',
+				    			defaultImage: '/images/common/default-shop-small.jpg',
 						    	image: Utils.getFullURL(_productData[i].photos.productImage1),
 								width: Ti.UI.FILL,
 								height: Ti.UI.FILL,
 								type: 'sold'
 						    });
 				    	}
+				    	else if(_productData[i].condition === 'Brand new with tags'){
+				    		var imgProduct = UI.createImageWithTextView({
+				    			defaultImage: '/images/common/default-shop-small.jpg',
+						    	image: Utils.getFullURL(_productData[i].photos.productImage1),
+								width: Ti.UI.FILL,
+								height: Ti.UI.FILL,
+								type: 'new'
+						    });
+				    	}
 				    	else {
 				    		var imgProduct = Ti.UI.createImageView(Utils._.extend({}, _style.imgProduct, {
-				    			defaultImage: '/images/common/default-shop-big.jpg',
+				    			defaultImage: '/images/common/default-shop-small.jpg',
 								image: Utils.getFullURL(_productData[i].photos.productImage1),
 								width: Ti.UI.FILL,
 								height: Ti.UI.FILL
 						    }));
 				    	}
+
 				    	imgProductView.add(imgProduct);
 				    }
 				    else {
@@ -456,7 +467,6 @@ exports.get = function() {
 			}
 		}
 
-		Ti.API.info(constant.APP + " ####################### SETTING GRID VIEW ##########################");
 		var _requestArgs = {
 	        showLoader: true,
 	        url: 'product.php',
@@ -487,17 +497,27 @@ exports.get = function() {
         HttpClient.getResponse({
         	requestArgs: _requestArgs,
         	success: function(response) {
+        		// Ti.API.info(constant.APP + " ################# SHOP SCREEN GRID VIEW API CALLBACK #################");
 	            var _gridData = [];
 	            var _productData = response.data;
 	            
 	            if(_productData.length == 0 && _pageIndex == 0) {
             		gridView.setData([UI.createNoDataView()], false);
+            		Ti.App.fireEvent('app:apicallSuccess',{params: _requestArgs});
             		return;
             	}
             	
             	Loader.show();
 	            
 				for(var i=0; i<_productData.length; i++) {
+					// var prodRef = _productData[i];
+
+					// for(var ix in prodRef){
+					// 	if(prodRef.propertyIsEnumerable(ix)){
+					// 		Ti.API.info(constant.APP + " key: [" + ix + "] value: [" + prodRef[ix] + "]");
+					// 	}
+					// }
+
 					_productData[i].isPurchased = _productData[i].isPurchased == 1;
 					var feedColumn = Ti.UI.createView(Utils._.extend({}, _style.feedColumn, {
 						width: _columnWidth,
@@ -556,6 +576,7 @@ exports.get = function() {
 				    }));
 				    
 				    if(_productData[i].photos.productImage1 != '') {
+
 				    	if(_productData[i].isPurchased) {
 				    		var imgProduct = UI.createImageWithTextView({
 				    			defaultImage: '/images/common/default-shop-small.jpg',
@@ -563,6 +584,15 @@ exports.get = function() {
 								width: Ti.UI.FILL,
 								height: Ti.UI.FILL,
 								type: 'sold'
+						    });
+				    	}
+				    	else if(_productData[i].condition === 'Brand new with tags'){
+				    		var imgProduct = UI.createImageWithTextView({
+				    			defaultImage: '/images/common/default-shop-small.jpg',
+						    	image: Utils.getFullURL(_productData[i].photos.productImage1),
+								width: Ti.UI.FILL,
+								height: Ti.UI.FILL,
+								type: 'new'
 						    });
 				    	}
 				    	else {

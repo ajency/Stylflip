@@ -47,7 +47,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 
 
 	var interMediaryWrapper = function(){
-		Ti.API.info(constant.APP + " interMediaryWrapper call " + productDetails);
+		// Ti.API.info(constant.APP + " interMediaryWrapper call " + productDetails);
 		backButtonCallback(productDetails);
 	};
 
@@ -57,7 +57,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     var _getCalculatedPrice = function(sellingPrice, originalPrice) {
         sellingPrice = isNaN(parseFloat(sellingPrice)) ? 0 : parseFloat(sellingPrice);
         if(sellingPrice == 0) {
-            return '';
+            return '\u20B9 0';
         }
         originalPrice = isNaN(parseFloat(originalPrice)) ? 0 : parseFloat(originalPrice);
         var _isShippingToBeAdded = sellingPrice < 2000;
@@ -65,42 +65,41 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
         if(_isShippingToBeAdded) {
             sellingPrice = sellingPrice + 120;  //  120 is the shipping fees
         }
-        // return '\u20B9 ' + Math.ceil(sellingPrice);
-        return Math.ceil(sellingPrice);
+        return '\u20B9 ' + Math.ceil(sellingPrice);
     };
 	
     /*calculate product asking price*/
-    var _getSellingPrice = function(listPrice){
-        // Ti.API.info(constant.APP + " ######### _getSellingPrice called ##########");
-        var listPrice = parseFloat(listPrice);
-        listPrice = isNaN(listPrice) ? 0 : listPrice;
+    // var _getSellingPrice = function(listPrice){
+    //     // Ti.API.info(constant.APP + " ######### _getSellingPrice called ##########");
+    //     var listPrice = parseFloat(listPrice);
+    //     listPrice = isNaN(listPrice) ? 0 : listPrice;
 
-        if(!listPrice){
-            return '';
-        }
+    //     if(!listPrice){
+    //         return '';
+    //     }
 
-        // var subShippingPrice = listPrice <= 2519;
-        // if(subShippingPrice){
-        //     listPrice = listPrice - 120;
-        // }
-        // sellPrice = ( listPrice * 100 ) / ( 100 + Utils.getCommisionPercentage() );
+    //     // var subShippingPrice = listPrice <= 2519;
+    //     // if(subShippingPrice){
+    //     //     listPrice = listPrice - 120;
+    //     // }
+    //     // sellPrice = ( listPrice * 100 ) / ( 100 + Utils.getCommisionPercentage() );
 
-        var askPrice = Math.round( listPrice * ( 1 - ( Utils.getCommisionPercentage() / 100 ) ) );
+    //     var askPrice = Math.round( listPrice * ( 1 - ( Utils.getCommisionPercentage() / 100 ) ) );
 
-        _getCommission(listPrice,askPrice,'ask');
-        if(askPrice < 2000){
-            askPrice -= 120;
-        }
+    //     _getCommission(listPrice,askPrice,'ask');
+    //     if(askPrice < 2000){
+    //         askPrice -= 120;
+    //     }
 
-        if(askPrice <= 0){
-            _getCommission();
-            return '';
-        }
-        else{
-            return Math.round(askPrice);
-        }
+    //     if(askPrice <= 0){
+    //         _getCommission();
+    //         return '';
+    //     }
+    //     else{
+    //         return Math.round(askPrice);
+    //     }
         
-    };
+    // };
 	
     // var _commPrice = 0;
     // var _getCommission = function(dPrice,aPrice,type){
@@ -170,28 +169,28 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     var _prevSelectedIndex = 0;
 
     var undoIncrement = function(index){
-    		Ti.API.info(constant.APP + " ################ undoing increment ############");
+    		// Ti.API.info(constant.APP + " ################ undoing increment ############");
             _prevButtonIndex = index;
     		_currentButtonIndex = index - 1;
     };
 
     var _checkProductDetails = function(event){
-    	Ti.API.info(constant.APP + " ################ checking visible page");
+    	// Ti.API.info(constant.APP + " ################ checking visible page");
     	var currIndex = event.source.index;
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
-    	Ti.API.info(constant.APP + " index: " + currIndex);
+    	// Ti.API.info(constant.APP + " index: " + currIndex);
     	
     	if(_prevSelectedIndex > currIndex){
-    		Ti.API.info(constant.APP + "############ skip button check #############");
+    		// Ti.API.info(constant.APP + "############ skip button check #############");
     		_prevSelectedIndex = currIndex;
     		return true;
     	}
 
     	var txt = "";
     	if(titleView.visible){
-    		Ti.API.info(constant.APP + " ####################### titleView visible ################### ");
+    		// Ti.API.info(constant.APP + " ####################### titleView visible ################### ");
     		txt = txtTitle.value.trim();
-            Ti.API.info(constant.APP + " text title: [" + txt + "]");
+            // Ti.API.info(constant.APP + " text title: [" + txt + "]");
 
     		if(!txt || txt === titleHint){
     			_showIncompleteAlert('title');
@@ -203,7 +202,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     		}
     	}
     	if(descriptionView.visible){
-    		Ti.API.info(constant.APP + " ####################### descriptionView visible ################### ");
+    		// Ti.API.info(constant.APP + " ####################### descriptionView visible ################### ");
     		txt = txtDescription.value.trim();
     		// if(!txt){
     		// 	_showIncompleteAlert('description');
@@ -215,7 +214,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     		}
     	}
     	if(categoryView.visible){
-    		Ti.API.info(constant.APP + " ####################### categoryView visible ################### ");
+    		// Ti.API.info(constant.APP + " ####################### categoryView visible ################### ");
     		if(!_categorySelected){
     			_showIncompleteAlert('category');
     			undoIncrement(currIndex);
@@ -226,7 +225,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     		}
     	}
     	if(subcategoryView.visible){
-    		Ti.API.info(constant.APP + " ####################### subcategoryView visible ################### ");
+    		// Ti.API.info(constant.APP + " ####################### subcategoryView visible ################### ");
     		if(!_subcategorySelected){
     			_showIncompleteAlert('subcategory');
     			undoIncrement(currIndex);
@@ -237,7 +236,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     		}
     	}
     	if(brandsView.visible){
-    		Ti.API.info(constant.APP + " ####################### brandsView visible ################### ");
+    		// Ti.API.info(constant.APP + " ####################### brandsView visible ################### ");
     		if(!_brandSelected){
     			_showIncompleteAlert('brand');
     			undoIncrement(currIndex);
@@ -248,7 +247,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     		}
     	}
     	if(sizesView.visible){
-    		Ti.API.info(constant.APP + " ####################### sizesView visible  _sizeSelected: " + _sizeSelected  + " _sizeChartSelected: " + _sizeChartSelected + " ################### ");
+    		// Ti.API.info(constant.APP + " ####################### sizesView visible  _sizeSelected: " + _sizeSelected  + " _sizeChartSelected: " + _sizeChartSelected + " ################### ");
 			// if(!_sizeSelected && !_sizeChartSelected){
    //  			_showIncompleteAlert('size');
    //  			undoIncrement(currIndex);
@@ -270,7 +269,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 
     	}
     	if(conditionView.visible){
-    		Ti.API.info(constant.APP + " ####################### conditionView visible ################### ");
+    		// Ti.API.info(constant.APP + " ####################### conditionView visible ################### ");
     		if(!_conditionSelected){
     			_showIncompleteAlert('condition');
     			undoIncrement(currIndex);
@@ -281,7 +280,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     		}
     	}
     	if(pickupFromView.visible){
-    		Ti.API.info(constant.APP + " ####################### pickupFromView visible ################### ");
+    		// Ti.API.info(constant.APP + " ####################### pickupFromView visible ################### ");
     		if(!_pickupFrom){
     			_showIncompleteAlert('pickup location');
     			undoIncrement(currIndex);
@@ -371,7 +370,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     	try{
 	    	var _areFieldsInComplete = false, _inCompleteFields = [];
 	    	
-	    	Ti.API.info(constant.APP + "### checking text title");
+	    	// Ti.API.info(constant.APP + "### checking text title");
 
 		   	if(txtTitle.value.trim() == '' || txtTitle.value.trim() == txtTitle.hintText) {
 	    		// alert('Please enter title');
@@ -386,19 +385,19 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	    	// 	_inCompleteFields.push('Description');
 	    	// }
 
-	    	Ti.API.info(constant.APP + "### checking category");
+	    	// Ti.API.info(constant.APP + "### checking category");
 	    	if(_categorySelected == undefined) {
 	    		// alert('Please select at least one category');
 	    		// return;
 	    		_areFieldsInComplete = true;
-	    		_inCompleteFields.push('Category');
+	    		// _inCompleteFields.push('Category');
 	    	}
 	    	// if(_subcategorySelected == undefined) {
 	    		// alert('Please select at least one subcategory');
 	    		// return;
 	    	// }
 
-	    	Ti.API.info(constant.APP + "### checking brand");
+	    	// Ti.API.info(constant.APP + "### checking brand");
 	    	if(_brandSelected == undefined) {
 	    		// alert('Please select brand');
 	    		// return;
@@ -406,14 +405,14 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	    		_inCompleteFields.push('Brand');
 	    	}
 
-	    	Ti.API.info(constant.APP + "### checking size info");
+	    	// Ti.API.info(constant.APP + "### checking size info");
 	    	if(_sizeSelected == undefined && _sizeChartSelected == undefined) {
 	    		// alert("_sizeSelected isnt valid")
 	    		_areFieldsInComplete = true;
 	    		_inCompleteFields.push('Size');
 	    	}
 
-	    	Ti.API.info(constant.APP + "### checking size chart info");
+	    	// Ti.API.info(constant.APP + "### checking size chart info");
 	    	if(_sizeSelected == 'custom' && (lblBurstValue.value.trim() == '' || lblWaistValue.value.trim() == '' || lblLowWaistValue.value.trim() == '' || lblHipValue.value.trim() == '')) {
 	    		// alert('size fields are invalid');
 	    		_areFieldsInComplete = true;
@@ -423,7 +422,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	    		// // return;
 	    		// _areFieldsInComplete = true;
 	    	// }
-	    	Ti.API.info(constant.APP + "### checking text selling price info");
+	    	// Ti.API.info(constant.APP + "### checking text selling price info");
 	    	if( askingPrice.value.trim() == '' || ( askingPrice.value.trim() != '' && isNaN(askingPrice.value.trim()) ) ) {
 	    		// alert('Please enter selling price');
 	    		// return;
@@ -437,14 +436,14 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	    		// _areFieldsInComplete = true;
 	    		// _inCompleteFields.push('Original Price');
 	    	// }
-	    	Ti.API.info(constant.APP + "### checking text original price info");
+	    	// Ti.API.info(constant.APP + "### checking text original price info");
 	    	if( txtOriginalPrice.value.trim() != '' && isNaN(txtOriginalPrice.value.trim()) ) {
 	    		// alert('Please enter valid original price');
 	    		// return;
 	    		_areFieldsInComplete = true;
 	    	}
 
-	    	Ti.API.info(constant.APP + "### checking product condition info");
+	    	// Ti.API.info(constant.APP + "### checking product condition info");
 	    	if(_conditionSelected == undefined) {
 	    		// alert('Please select condition');
 	    		// return;
@@ -452,7 +451,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	    		_inCompleteFields.push('Condition');
 	    	}
 
-	    	Ti.API.info(constant.APP + "### checking product pickup info");
+	    	// Ti.API.info(constant.APP + "### checking product pickup info");
 	    	if(_pickupFrom == undefined) {
 	    		// alert('Please select pickup');
 	    		// return;
@@ -470,12 +469,12 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	    	askingPrice.blur();
 	    	txtOriginalPrice.blur();
 	    	
-	    	Ti.API.info(constant.APP + "### finalizing product info");
+	    	// Ti.API.info(constant.APP + "### finalizing product info");
 	    	// Window.closeAll(function() {
-	    	// var discountPrice = (txtdisplayPrice.text).split(' ');
-            var discountPrice = displayPrice.value;
+	    	var discountPrice = (displayPrice.value).split(' ');
+            // var discountPrice = displayPrice.value;
 
-	    	// discountPrice = discountPrice[1];
+	    	discountPrice = discountPrice[1];
 	    	var discountPercentage = (100 - ((parseFloat(discountPrice)/parseFloat(txtOriginalPrice.value.trim()))*100)) < 0 ? 0 : (100 - ((parseFloat(discountPrice)/parseFloat(txtOriginalPrice.value.trim()))*100));
 
 	    	// console.log(txtTitle.value.trim());
@@ -496,7 +495,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	    	// console.log(_userAddresses);
 	    	// console.log(_toBeDonated);	
 
-	    	Ti.API.info(constant.APP + "### discount product info");
+	    	// Ti.API.info(constant.APP + "### discount product info");
 	        	Utils._.isFunction(successCallback) && successCallback({
 	        		productTitle: txtTitle.value.trim(),
 		        	productDescription: txtDescription.value.trim() == txtDescription.hintText ? '' : txtDescription.value.trim(),
@@ -517,12 +516,12 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 		        	toBeDonated: _toBeDonated
 	        	});
 
-	        Ti.API.info(constant.APP + " ###### closing window");	
+	        // Ti.API.info(constant.APP + " ###### closing window");	
 	        _win.close();
 	        // });
     	}
     	catch(e){
-    		Ti.API.info(constant.APP + " SOMETHING HAS CRASHED HERE");
+    		// Ti.API.info(constant.APP + " SOMETHING HAS CRASHED HERE");
     		_showIncompleteAlert();
     	}
     }); //end btnNext click event
@@ -531,7 +530,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	var _selectedButtonIndex = -1;
 
 	var _createButtonView = function(arrButtons, buttonViewStyle, selectedButtonStyle, unselectedButtonStyle, clickCallback, enableSearch) {
-		Ti.API.info(constant.APP + " ############## _createButtonView CALLED #############");
+		// Ti.API.info(constant.APP + " ############## _createButtonView CALLED #############");
 		var buttonView = Ti.UI.createTableView(Utils._.extend({}, buttonViewStyle, {
 	        height: Ti.UI.FILL
 	    }));
@@ -595,10 +594,10 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	    // });
 
 	    buttonView.addEventListener('click', function(e) {
-	    	Ti.API.info(constant.APP + " ############## buttonView CLICKED #############");
+	    	// Ti.API.info(constant.APP + " ############## buttonView CLICKED #############");
 
     		if(unselectedButtonStyle) {
-    			Ti.API.info(constant.APP + " COPYING UNSELECT-BUTON STYLE");
+    			// Ti.API.info(constant.APP + " COPYING UNSELECT-BUTON STYLE");
     			// for(item in _tableData){
     			for(item = 0, tLength = _tableData.length; item < tLength; item++){	
     				for(key in unselectedButtonStyle) {
@@ -608,7 +607,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 			}
     		
     		if(selectedButtonStyle) {
-    			Ti.API.info(constant.APP + " COPYING SELECT-BUTON STYLE");
+    			// Ti.API.info(constant.APP + " COPYING SELECT-BUTON STYLE");
     			
        //          eRowStr = JSON.stringify(e.row.children[0]);
     			// console.log(eRowStr);
@@ -631,7 +630,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     
 
 	var _loadCategories = function() {
-		Ti.API.info(constant.APP + " ############## _loadCategories CALLED #############");
+		// Ti.API.info(constant.APP + " ############## _loadCategories CALLED #############");
 		_lastButtonSelectedIndex = -1;
 	    _selectedButtonIndex = -1;
 
@@ -642,7 +641,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
    		Utils.getCategories(function(responseData) {
    			var _buttonsData = [];
    			for(var i=0; i<responseData.length; i++) {
-                Ti.API.info(constant.APP + " ###################### [" + responseData[i].name + "] #######################");
+                // Ti.API.info(constant.APP + " ###################### [" + responseData[i].name + "] #######################");
 				_buttonsData.push({
 					id: responseData[i].categoryId,
 					title: responseData[i].name,
@@ -656,7 +655,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 			    	Utils._.extend({}, _style.button, {backgroundColor: 'transparent', color: '#454545'}), 
 			    	function(e) {
 				    	_categorySelected = e.buttonData.id;
-                        Ti.API.info(constant.APP + " ############### category selected set to [" + _categorySelected + "] ################");
+                        // Ti.API.info(constant.APP + " ############### category selected set to [" + _categorySelected + "] ################");
 				    	_categoryName = (e.buttonData.title).toLowerCase();
 				    	if(e.buttonData.selected) {
 				    		// _loadSubCategories(e.buttonData.id);
@@ -684,7 +683,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	};
 	
 	var _loadSubCategories = function(categoryId) {
-		Ti.API.info(constant.APP + " ############## _loadSubCategories CALLED #############");
+		// Ti.API.info(constant.APP + " ############## _loadSubCategories CALLED #############");
 		_lastButtonSelectedIndex = -1;
 	    _selectedButtonIndex = -1;
 
@@ -700,7 +699,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 				// selected: productDetails && productDetails.subcategoryId == 0
 			// });
    			for(var i=0; i<responseData.length; i++) {
-                Ti.API.info(constant.APP + " ###################### [" + responseData[i].name + "] #######################");
+                // Ti.API.info(constant.APP + " ###################### [" + responseData[i].name + "] #######################");
 				_buttonsData.push({
 					id: responseData[i].categoryId,
 					title: responseData[i].name,
@@ -747,7 +746,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	};
     
    	var _loadBrands = function() {
-   		Ti.API.info(constant.APP + " ############## _loadBrands CALLED #############");
+   		// Ti.API.info(constant.APP + " ############## _loadBrands CALLED #############");
    		brandsView.visible = true;
    		// _lastButtonSelectedIndex = -1;
 	    // _selectedButtonIndex = -1;
@@ -760,7 +759,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
    			Loader.show();
    			var _buttonsData = [];
    			for(var i=0; i<responseData.length; i++) {
-                Ti.API.info(constant.APP + " ###################### [" + responseData[i].name + "] #######################");
+                // Ti.API.info(constant.APP + " ###################### [" + responseData[i].name + "] #######################");
 				_buttonsData.push({
 					id: responseData[i].brandId,
 					title: responseData[i].name,
@@ -792,7 +791,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
    	 * Get size options list
    	 */
    	var _getSizeOptions = function(type) {
-   		Ti.API.info(constant.APP + " ############## _getSizeOptions CALLED #############");
+   		// Ti.API.info(constant.APP + " ############## _getSizeOptions CALLED #############");
    		var _list = [];
    		for(var size in constant.SIZE_CHARTS[type]) {
    			_list.push({
@@ -807,7 +806,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
    	 * Create size chart view
    	 */
    	var _createSizeChartView = function(size) {
-   		Ti.API.info(constant.APP + " ############## _createSizeChartView CALLED #############");
+   		// Ti.API.info(constant.APP + " ############## _createSizeChartView CALLED #############");
 
    		var sizeChartView = Ti.UI.createView({
    			width: Ti.UI.FILL,
@@ -1203,8 +1202,8 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 
     var _sizeOptionsView = null;
     selectSizeView.addEventListener('click', function() {
-    	Ti.API.info(constant.APP + " ############## selectSizeView CLICKED #############");
-    	Ti.API.info(constant.APP + " _sizeChartSelected: " + _sizeChartSelected);
+    	// Ti.API.info(constant.APP + " ############## selectSizeView CLICKED #############");
+    	// Ti.API.info(constant.APP + " _sizeChartSelected: " + _sizeChartSelected);
 
     	if(_sizeChartSelected == '' || _sizeChartSelected == undefined || _sizeChartSelected == null) {
     		return;
@@ -1353,18 +1352,20 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 
     var listPriceView = Ti.UI.createView(Utils._.extend({},_commonStyle.priceTxtView));
 
-    var rupeeLabel = Ti.UI.createLabel({
-        text: '\u20B9',
-        color: '#757575',
-        left: '40%',
-        font: {
-            fontSize: UI.fontSize(14),
-            fontFamily: constant.FONT.DEFAULT_FONT
-        }
-    });
+    // var rupeeLabel = Ti.UI.createLabel({
+    //     text: '\u20B9',
+    //     color: '#757575',
+    //     left: '40%',
+    //     font: {
+    //         fontSize: UI.fontSize(14),
+    //         fontFamily: constant.FONT.DEFAULT_FONT
+    //     }
+    // });
 
     var displayPrice = Ti.UI.createTextField(Utils._.extend({}, _commonStyle.priceTxt,{
-        hintText: '0',
+        hintText: 'Listing Price',
+        width: Ti.UI.FILL,
+        textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
         maxLength: 6,
         editable: false,
         touchEnabled: false,
@@ -1375,12 +1376,12 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     }));
 
     if(osname === 'iphone' || osname === 'ipad'){
-        rupeeLabel.top = 10;
+        // rupeeLabel.top = 10;
         displayPrice.top = 10;
     }
 
 
-    listPriceView.add(rupeeLabel);
+    // listPriceView.add(rupeeLabel);
     listPriceView.add(displayPrice);
 
     
@@ -1577,8 +1578,8 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     	var alertDialog = UI.createAlertDialog({
     		title: 'Price Break-up',
             titleColor: '#ef4e6d',
-    		// message: 'Listing is always free on Stylflip. If the amount you get (asking price) is less than \u20B9 2000, we mark-up this price by 20% and charge an additional \u20B9 120 for shipping.\n\nDisplay Price: '+(displayPrice.value === '' || displayPrice.value === '0' ? 0 : displayPrice.value) + '\nSF Comm.: \u20B9 '+Math.ceil((askingPrice.value * Utils.getCommisionPercentage()) / 100)+'\nS & H: '+_getShippingAndHandlingFees(askingPrice.value)+'\nAmount you get: \u20B9 '+(askingPrice.value == '' || askingPrice.value == '0' ? 0 : askingPrice.value),
-    		message: 'Listing is always free on Stylflip. If the amount you get (asking price) is less than \u20B9 2000, we mark-up this price by 20% and charge an additional \u20B9 120 for shipping.\n\nDisplay Price: '+(displayPrice.value === '' || displayPrice.value === '0' ? 0 : displayPrice.value) + '\nSF Comm.: \u20B9 '+ Math.ceil((askingPrice.value * Utils.getCommisionPercentage()) / 100) +'\nS & H: '+_getShippingAndHandlingFees(askingPrice.value)+'\nAmount you get: \u20B9 '+(askingPrice.value == '' || askingPrice.value == '0' ? 0 : askingPrice.value),
+    		// message: 'Listing is always free on Stylflip. If the amount you get (asking price) is less than \u20B9 2000, we mark-up this price by 20% and charge an additional \u20B9 120 for shipping.\n\nDisplay Price: '+(displayPrice.value === '' || displayPrice.value === '0' ? 0 : displayPrice.value) + '\nSF Comm.: \u20B9 '+ Math.ceil((askingPrice.value * Utils.getCommisionPercentage()) / 100) +'\nS & H: '+_getShippingAndHandlingFees(askingPrice.value)+'\nAmount you get: \u20B9 '+(askingPrice.value == '' || askingPrice.value == '0' ? 0 : askingPrice.value),
+            message: 'Listing is always free on Stylflip. We markup the amount you get (asking price) by 20%, and charge an additional \u20B9 120 for shipping if asking price is less than \u20B9 2000.\n\nDisplay Price: '+(displayPrice.value === '' || displayPrice.value === '0' ? 0 : displayPrice.value) + '\nSF Comm.: \u20B9 '+ Math.ceil((askingPrice.value * Utils.getCommisionPercentage()) / 100) +'\nS & H: \u20B9 '+_getShippingAndHandlingFees(askingPrice.value)+'\nAmount you get: \u20B9 '+(askingPrice.value == '' || askingPrice.value == '0' ? 0 : askingPrice.value),
             buttonNames: ['GOT IT']
     	});
 
@@ -1600,23 +1601,23 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
         alertDialog = null;
     }); //end btnViewDetails click callback    
     
-    var askPriceChange = false, dispPriceChange = false;
+    // var askPriceChange = false, dispPriceChange = false;
     
     askingPrice.addEventListener('change', function() {
     	// Ti.API.info(constant.APP + " ############## askingPrice changed #############");
-        if(dispPriceChange){
-            dispPriceChange = false;
-            if(displayPrice.value !== ''){
-                askingPrice.editable = false;
-                askingPrice.touchEnabled = false;
-            }
-            else{
-                askingPrice.editable = true;
-                askingPrice.touchEnabled = true;
-            }
-            return;
-        }
-        askPriceChange = true;
+        // if(dispPriceChange){
+        //     dispPriceChange = false;
+        //     if(displayPrice.value !== ''){
+        //         askingPrice.editable = false;
+        //         askingPrice.touchEnabled = false;
+        //     }
+        //     else{
+        //         askingPrice.editable = true;
+        //         askingPrice.touchEnabled = true;
+        //     }
+        //     return;
+        // }
+        // askPriceChange = true;
         displayPrice.value = _getCalculatedPrice(askingPrice.value.trim(), txtOriginalPrice.value.trim());
         
     });
@@ -1626,24 +1627,24 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     //     // displayPrice.value = _getCalculatedPrice(askingPrice.value.trim(), txtOriginalPrice.value.trim());
     // });
     
-    displayPrice.addEventListener('change',function(){
-        // Ti.API.info(constant.APP + " ############## txtOriginalPrice changed #############");
-        if(askPriceChange){
-            askPriceChange = false;
-            if(askingPrice.value !== ''){
-                displayPrice.editable = false;
-                displayPrice.touchEnabled = false;
-            }
-            else{
-                displayPrice.editable = true;
-                displayPrice.touchEnabled = true;
-            }
-            return;
-        }
-        dispPriceChange = true;
-        askingPrice.value = _getSellingPrice(displayPrice.value.trim());
+    // displayPrice.addEventListener('change',function(){
+    //     // Ti.API.info(constant.APP + " ############## txtOriginalPrice changed #############");
+    //     if(askPriceChange){
+    //         askPriceChange = false;
+    //         if(askingPrice.value !== ''){
+    //             displayPrice.editable = false;
+    //             displayPrice.touchEnabled = false;
+    //         }
+    //         else{
+    //             displayPrice.editable = true;
+    //             displayPrice.touchEnabled = true;
+    //         }
+    //         return;
+    //     }
+    //     dispPriceChange = true;
+    //     askingPrice.value = _getSellingPrice(displayPrice.value.trim());
 
-    });
+    // });
 
     /*
      * Condition view
@@ -1704,7 +1705,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     
 
     selectAddressView.addEventListener('click', function() {
-    	Ti.API.info(constant.APP + " ############## selectAddressView CLICKED #############");
+    	// Ti.API.info(constant.APP + " ############## selectAddressView CLICKED #############");
     	var sourceView = this;
     	if(!_userAddresses) {
     		var _requestArgs = {
@@ -1830,7 +1831,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     
     //debug
    	var _buttonBarClickCallback = function(e) {
-        Ti.API.info(constant.APP + " ############################ _buttonBarClickCallback [" + e.title + "] #############################");
+        // Ti.API.info(constant.APP + " ############################ _buttonBarClickCallback [" + e.title + "] #############################");
 
         // if(_prevButtonIndex < _currentButtonIndex){
         //     Ti.API.info(constant.APP + " @@@@@@@@@@@@@@@@ going forward @@@@@@@@@@@@@@@@@@@@");
@@ -1890,7 +1891,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     		break;
     		
     		case 'SUB-CATEGORY':if(_categorySelected){
-    			Ti.API.info(constant.APP + " ###################### loading subcategores from previous screen....");
+    			// Ti.API.info(constant.APP + " ###################### loading subcategores from previous screen....");
     			_loadSubCategories(_categorySelected);
     		};
     		case 'SIZE':
@@ -1912,7 +1913,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     	}
     	
     	if(e.title == 'SELECT SIZE') {
-    		Ti.API.info(constant.APP + " ################ FIRING SIZE VIEW ################");
+    		// Ti.API.info(constant.APP + " ################ FIRING SIZE VIEW ################");
 
             // if(_prevButtonIndex < _currentButtonIndex){
                 // Ti.API.info(constant.APP + " @@@@@@@@@@@@@@@@ going forward @@@@@@@@@@@@@@@@@@@@");
@@ -1995,7 +1996,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	
 	//debug
 	buttonBar.addEventListener('click', function(e) {
-		Ti.API.info(constant.APP + " ############## buttonBar CLICKED #############");
+		// Ti.API.info(constant.APP + " ############## buttonBar CLICKED #############");
 		
 		Analytics.trackEvent({
 	  		category: Utils.toFirstUppercase(e.title) + " (Sell)",
@@ -2054,7 +2055,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     	askingPrice.value = _productSellingPrice;
     	// txtdisplayPrice.text = '\u20B9 ' + _productDiscount;
         if(_productDiscount){
-            displayPrice.value = _productDiscount;
+            displayPrice.value = '\u20B9 ' + _productDiscount;
         }
     }
     
