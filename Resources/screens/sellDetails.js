@@ -1593,7 +1593,11 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
             title: 'Pricing Guide',
             titleColor: '#ef4e6d',
             message: 'The percentage value below is the discount we recommend off the original retail price for your item',
-            secMessages: ['New with tags - <font color="#ef4e6d">20-25%</font>','New without tags - <font color="#ef4e6d">25-40%</font>','Barely used (once or twice) - <font color="#ef4e6d">40-60%</font>','Gently used - <font color="#ef4e6d">70-90%</font>'],
+            // secMessages: ['New with tags - <font color="#ef4e6d">20-25%</font>','New without tags - <font color="#ef4e6d">25-40%</font>','Barely used (once or twice) - <font color="#ef4e6d">40-60%</font>','Gently used - <font color="#ef4e6d">70-90%</font>'],
+            secMessages: [{tag1: 'New with tags', tag2: ' - ', tag3: '20-25%'},
+            {tag1: 'New without tags', tag2: ' - ', tag3: '25-40%'},
+            {tag1: 'Barely used (once or twice)', tag2: ' - ', tag3: '40-60%'},
+            {tag1: 'Gently used', tag2: ' - ', tag3: '70-90%'}],
             buttonNames: ['GOT IT']
         });
 
