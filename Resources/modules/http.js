@@ -4,6 +4,93 @@ var _responseObject = {};
 
 var HttpClient = {};
 
+var Cloud = require("ti.cloud"), CloudPush = null;
+Cloud.debug = true;
+
+var TiDeviceToken = "";
+
+var subscribeCloudCb = function(){
+	if(e.success){
+		Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$$$$$ cloud subscription success");
+	}
+	else{
+		Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$$$$$ cloud subscription failed error: " + (e.error && e.message) ? e.message : JSON.stringify(e) );
+	}
+};
+
+var subscribeCloudChannel = function(){
+	Cloud.PushNotifications.subscribe({
+		channel: 'alert',
+		device_token: TiDeviceToken,
+		type: osname
+	},subscribeCloudCb);
+};
+
+var cloudLoginCb = function(e){
+	if(e.success){
+		subscribeCloudChannel();
+	}
+	else{
+		Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$ message: " + ( e.error && e.message ) ? e.message : JSON.stringify(e) );
+	}
+};
+
+var loginCloudUser = function(){
+	Cloud.Users.login({
+		login: "appc_app_user_dev",
+		password: "W83yrPwA8YyvjehWOx"
+	}, cloudLoginCb);
+};
+
+var TiDeviceTokenSuccess = function(e){
+	Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$ retreived device token successfully ");
+	TiDeviceToken = e.deviceToken;
+	loginCloudUser();
+};
+
+var TiDeviceTokenError = function(e){
+	Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$$$ device token retreive faled error: [" + e.error + "]");
+};
+
+var registerForTiNotifications = function(){
+	if(osname === 'android'){
+
+		CloudPush = require("ti.cloudPush");
+		CloudPush.debug = true;
+		CloudPush.enabled = true;
+		CloudPush.showTrayNotificationsWhenFocused = true;
+		CloudPush.focusAppOnPush = false;
+
+		CloudPush.retrieveDeviceToken({
+			success: TiDeviceTokenSuccess
+			error: TiDeviceTokenError
+		});
+
+
+		CloudPush.addEventListener('callback', function (evt) {
+			Ti.API.info(constant.APP + " ############ message recieved payload: " + evt.payload);
+		    //alert(evt);
+		    //alert(evt.payload);
+		});
+
+		CloudPush.addEventListener('trayClickLaunchedApp', function (evt) {
+		    Ti.API.info('Tray Click Launched App (app was not running)');
+		    //alert('Tray Click Launched App (app was not running');
+		});
+
+		CloudPush.addEventListener('trayClickFocusedApp', function (evt) {
+		    Ti.API.info('Tray Click Focused App (app was already running)');
+		    //alert('Tray Click Focused App (app was already running)');
+		});
+
+	}
+	else{
+		Ti.API.info(constant.APP + " os: [" + osname + "] not currently supported");
+	}
+};
+
+HttpClient.prototype.registerForTiNotifications = registerForTiNotifications;
+
 HttpClient.apiCall = function(params, method, api, successCallback, errorCallback) {
 	// if(Ti.Network.online) {
 	if(!Ti.Network.online) {	
@@ -140,7 +227,6 @@ HttpClient.apiCall = function(params, method, api, successCallback, errorCallbac
 		};
 	}	
 };
-
 
 HttpClient.getResponse = function(config) {
 	//	Blur currently focused text field

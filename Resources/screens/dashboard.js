@@ -628,6 +628,8 @@ exports.get = function(tabToLoad) {
 	    		}
 	    	}
 	    });
+
+	    HttpClient.registerForTiNotifications();
 	}; //end _registerForPushNotification
 	
 	_registerForPushNotification();
