@@ -13,7 +13,7 @@
     <navbar-hidden>true</navbar-hidden>
     <analytics>false</analytics>
     <!-- <guid>da925ab3-b2da-4297-9111-c615478777de</guid> -->
-    <guid>000a1f07-c448-4b38-9111-abfe97c6311c</guid>
+    <guid>91d2bad1-571c-4ec8-9888-8e6c566f490e</guid>
     <property name="ti.ui.defaultunit">system</property>
     <ios>
         <plist>
@@ -87,6 +87,8 @@
         <module platform="iphone">facebook</module>
         <module platform="iphone">com.omorandi</module>
         <module platform="iphone">analytics.google</module>
+        <module platform="commonjs">ti.cloud</module>
+        <module platform="android">ti.cloudpush</module>
     </modules>
     <property name="ti.android.bug2373.finishfalseroot" type="bool">true</property>
     <property name="ti.android.bug2373.skipAlert">true</property>

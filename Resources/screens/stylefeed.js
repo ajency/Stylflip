@@ -391,13 +391,13 @@ exports.get = function(header) {
 	 * Create a single feed row
 	 */
 	var _createFeedRow = function(feedData, separator) {
-		Titanium.API.info(constant.APP + " creating feed row...");
+		// Titanium.API.info(constant.APP + " creating feed row...");
 
-		for(var ix in feedData){
-			if(feedData.propertyIsEnumerable(ix)){
-				Ti.API.info(constant.APP + " key: [" + ix + "] value: [" + feedData[ix] + "]");
-			}
-		}
+		// for(var ix in feedData){
+		// 	if(feedData.propertyIsEnumerable(ix)){
+		// 		Ti.API.info(constant.APP + " key: [" + ix + "] value: [" + feedData[ix] + "]");
+		// 	}
+		// }
 
 		var feedRow = Ti.UI.createView(_style.feedRow);
 		

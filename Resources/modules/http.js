@@ -9,7 +9,7 @@ Cloud.debug = true;
 
 var TiDeviceToken = "";
 
-var subscribeCloudCb = function(){
+var subscribeCloudCb = function(e){
 	if(e.success){
 		Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$$$$$ cloud subscription success");
 	}
@@ -43,8 +43,8 @@ var loginCloudUser = function(){
 };
 
 var TiDeviceTokenSuccess = function(e){
-	Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$ retreived device token successfully ");
 	TiDeviceToken = e.deviceToken;
+	Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$ retreived device token successfully deviceToken: [ " + TiDeviceToken + " ]");
 	loginCloudUser();
 };
 
@@ -55,14 +55,14 @@ var TiDeviceTokenError = function(e){
 var registerForTiNotifications = function(){
 	if(osname === 'android'){
 
-		CloudPush = require("ti.cloudPush");
+		CloudPush = require("ti.cloudpush");
 		CloudPush.debug = true;
 		CloudPush.enabled = true;
 		CloudPush.showTrayNotificationsWhenFocused = true;
 		CloudPush.focusAppOnPush = false;
 
 		CloudPush.retrieveDeviceToken({
-			success: TiDeviceTokenSuccess
+			success: TiDeviceTokenSuccess,
 			error: TiDeviceTokenError
 		});
 
@@ -89,7 +89,7 @@ var registerForTiNotifications = function(){
 	}
 };
 
-HttpClient.prototype.registerForTiNotifications = registerForTiNotifications;
+HttpClient.registerForTiNotifications = registerForTiNotifications;
 
 HttpClient.apiCall = function(params, method, api, successCallback, errorCallback) {
 	// if(Ti.Network.online) {
