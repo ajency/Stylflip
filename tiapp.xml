@@ -101,6 +101,7 @@
     <property name="appc-app-id" type="string">57c9185e5089369b3ebbe3c2</property>
     <property name="acs-authbase-url-development" type="string">https://secure-identity.cloud.appcelerator.com</property>
     <property name="acs-base-url-development" type="string">https://api.cloud.appcelerator.com</property>
+    <!-- <property name="acs-base-url-development" type="string">https://new.api.cloud.appcelerator.com</property> -->
     <property name="acs-oauth-secret-development" type="string">VOeUMu99qB27QllgIQXkoG4MlTYjIWtG</property>
     <property name="acs-oauth-key-development" type="string">YLP3o1uGb2efy7Jl39A3KVrqR8ieZHzQ</property>
     <property name="acs-api-key-development" type="string">L2x2VyapQHvpNpqrASklmLH7eeY3ylzr</property>

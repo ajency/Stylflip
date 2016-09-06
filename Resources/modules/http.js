@@ -26,6 +26,33 @@ var subscribeCloudChannel = function(){
 	},subscribeCloudCb);
 };
 
+var unsubScribeCloudCb = function(e){
+	if (e.success) {
+        Ti.API.info(constant.APP + " unsubscribed from notifications");
+    } else {
+        Ti.API.info(constant.APP + ' unsubscribe Error:\n' + ((e.error && e.message) || JSON.stringify(e)));
+    }
+};
+
+var deregisterForTiNotifications = function(){
+	if(TiDeviceToken){
+
+		Cloud.PushNotifications.unsubscribe({
+		    channel: 'alert',
+		    device_token: TiDeviceToken
+		}, unsubScribeCloudCb);
+
+		Cloud.Users.logout(function (e) {
+		    if (e.success) {
+		        Ti.API.info(constant.APP + ' Success: Logged out');
+		    } else {
+		        Ti.API.info(constant.APP + ' Error:\n' + ((e.error && e.message) || JSON.stringify(e)));
+		    }
+		});
+
+	}
+};
+
 var cloudLoginCb = function(e){
 	if(e.success){
 		subscribeCloudChannel();
@@ -35,21 +62,48 @@ var cloudLoginCb = function(e){
 	}
 };
 
-var loginCloudUser = function(){
+
+var createCloudUser = function(creds){
+	Cloud.Users.create({
+	    email: creds.email,
+	    first_name: creds.firstname,
+	    last_name: creds.lastname,
+	    password: creds.password,
+	    password_confirmation: creds.password
+	}, function (e) {
+	    if (e.success) {
+	        var user = e.users[0];
+	        Ti.API.info(constant.APP + ' Success:\n' +
+	            'id: ' + user.id + '\n' +
+	            'sessionId: ' + Cloud.sessionId + '\n' +
+	            'first name: ' + user.first_name + '\n' +
+	            'last name: ' + user.last_name);
+	        loginCloudUser({user: creds.email, pass: creds.password});
+	    } else {
+	        Ti.API.info(constant.APP + ' Error:\n' +
+	            ((e.error && e.message) || JSON.stringify(e)));
+	    }
+	});
+};
+
+var loginCloudUser = function(creds){
 	Cloud.Users.login({
-		login: "appc_app_user_dev",
-		password: "W83yrPwA8YyvjehWOx"
+		// login: "appc_app_user_dev",
+		// password: "W83yrPwA8YyvjehWOx"
+		login: creds.user,
+		password: creds.pass
 	}, cloudLoginCb);
 };
 
 var TiDeviceTokenSuccess = function(e){
 	TiDeviceToken = e.deviceToken;
 	Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$ retreived device token successfully deviceToken: [ " + TiDeviceToken + " ]");
-	loginCloudUser();
+	// loginCloudUser();
+	createCloudUser({firstname: "test_ashika2", lastname: "test_pednekar2", password: "#Ashika123", email: "ashika2@ajency.in"});
 };
 
 var TiDeviceTokenError = function(e){
-	Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$$$ device token retreive faled error: [" + e.error + "]");
+	Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$$$ device token retrieve faled error: [" + e.error + "]");
 };
 
 var registerForTiNotifications = function(){
@@ -89,7 +143,9 @@ var registerForTiNotifications = function(){
 	}
 };
 
+
 HttpClient.registerForTiNotifications = registerForTiNotifications;
+HttpClient.deregisterForTiNotifications = deregisterForTiNotifications;
 
 HttpClient.apiCall = function(params, method, api, successCallback, errorCallback) {
 	// if(Ti.Network.online) {

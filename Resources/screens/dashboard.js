@@ -639,6 +639,7 @@ exports.get = function(tabToLoad) {
 	
 	var _deRegisterForPushNotification = function() {
 		HttpClient.deregisterForPushNotification(Utils.loggedInUserId());
+		HttpClient.deregisterForTiNotifications();
 	};
 	
 	Ti.App.addEventListener('deRegisterForPushNotification', _deRegisterForPushNotification);
