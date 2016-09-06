@@ -362,7 +362,7 @@ UI.alertDialog = function(props) {
 	    });
 	    contentView.add(lblMessage);
 
-        if(props && props.secMessages && props.secMessages.length){
+        if(props && props.secMessages && props.secMessages.length){ // only for Pricing Guide popup
             //Ti.API.info(constant.APP + " ############ constructing secondary message ################");
             var x = 0, secMessages = props.secMessages;
             for(x = 0, Length = secMessages.length; x < Length; x++){
@@ -377,10 +377,10 @@ UI.alertDialog = function(props) {
 
                 var leftPadding = 0;
                 switch(x){
-                    case 0: leftPadding = '25%';break;
-                    case 1: leftPadding = '20%';break;
-                    case 2: leftPadding = '10%';break;
-                    case 3: leftPadding = '26%';break;
+                    case 0: leftPadding = '26%';break;
+                    case 1: leftPadding = '21%';break;
+                    case 2: leftPadding = '11%';break;
+                    case 3: leftPadding = '27%';break;
                 }
 
                 for(var y in lineRef){
@@ -391,7 +391,8 @@ UI.alertDialog = function(props) {
                         height: Ti.UI.SIZE,
                         width: Ti.UI.SIZE,
                         font: {
-                            fontSize: UI.fontSize(15),
+                            // fontSize: UI.fontSize(15),
+                            fontSize: UI.fontSize(14),
                             fontFamily: UI.fonts.DEFAULT_FONT
                         }
                     });

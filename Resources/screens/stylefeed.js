@@ -625,7 +625,7 @@ exports.get = function(header) {
 	    	_loadUserProfile(this.userId);
 	    });
 	    
-	    
+	    var lblStatusColor = '#3333cc';
 		var lblStatus = Ti.UI.createLabel(Utils._.extend({}, _style.lblStatus, {
 			text: feedData.feedTitle // 'Status message goes here...'
 	    }));
@@ -639,6 +639,7 @@ exports.get = function(header) {
 
 			if(matchFound){
 				// Ti.API.info(constant.APP + " ###################### FOUND HTTP MATCH ######################");
+				lblStatus.color = lblStatusColor;
 				Ti.Platform.openURL(matches[0]);
 			}
 			else{
@@ -649,6 +650,7 @@ exports.get = function(header) {
 				if(matchFound){
 					// Ti.API.info(constant.APP + " ###################### FOUND NON HTTP MATCH ######################");
 					matches[0] = 'http://' + matches[0];
+					lblStatus.color = lblStatusColor;
 					Ti.Platform.openURL(matches[0]);
 				}
 				// else{
