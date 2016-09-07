@@ -590,6 +590,8 @@ exports.get = function(tabToLoad) {
 		
 	
 	var _registerForPushNotification = function() {
+		Ti.API.info(constant.APP + " ########################### _registerForPushNotification call ############################");
+
 		if(!Utils.isUserLoggedIn()) {
 			return;
 		}

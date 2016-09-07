@@ -8,6 +8,7 @@ var Cloud = require("ti.cloud"), CloudPush = null;
 Cloud.debug = true;
 
 var TiDeviceToken = "";
+var loginCreds = {};
 
 var subscribeCloudCb = function(e){
 	if(e.success){
@@ -29,6 +30,22 @@ var subscribeCloudChannel = function(){
 var unsubScribeCloudCb = function(e){
 	if (e.success) {
         Ti.API.info(constant.APP + " unsubscribed from notifications");
+
+        Cloud.Users.logout(function (e) {
+		    if (e.success) {
+		        Ti.API.info(constant.APP + ' Success: Logged out');
+
+		        if(osname === 'android'){
+		        	CloudPush.removeEventListener('callback', CloudPushCb);
+					CloudPush.removeEventListener('trayClickLaunchedApp', trayClickLaunchCb);
+					CloudPush.removeEventListener('trayClickFocusedApp', trayClickFocusCb);
+		        }
+
+		    } else {
+		        Ti.API.info(constant.APP + ' Error:\n' + ((e.error && e.message) || JSON.stringify(e)));
+		    }
+		});
+
     } else {
         Ti.API.info(constant.APP + ' unsubscribe Error:\n' + ((e.error && e.message) || JSON.stringify(e)));
     }
@@ -36,20 +53,10 @@ var unsubScribeCloudCb = function(e){
 
 var deregisterForTiNotifications = function(){
 	if(TiDeviceToken){
-
 		Cloud.PushNotifications.unsubscribe({
 		    channel: 'alert',
 		    device_token: TiDeviceToken
 		}, unsubScribeCloudCb);
-
-		Cloud.Users.logout(function (e) {
-		    if (e.success) {
-		        Ti.API.info(constant.APP + ' Success: Logged out');
-		    } else {
-		        Ti.API.info(constant.APP + ' Error:\n' + ((e.error && e.message) || JSON.stringify(e)));
-		    }
-		});
-
 	}
 };
 
@@ -78,35 +85,80 @@ var createCloudUser = function(creds){
 	            'sessionId: ' + Cloud.sessionId + '\n' +
 	            'first name: ' + user.first_name + '\n' +
 	            'last name: ' + user.last_name);
-	        loginCloudUser({user: creds.email, pass: creds.password});
+	        
 	    } else {
 	        Ti.API.info(constant.APP + ' Error:\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
 	    }
+	    loginCloudUser({email: creds.email, password: creds.password});
 	});
 };
+
+// var _checkCloudUser = function(){
+// 	Cloud.Users.show({
+// 	    user_id: loginCreds.email
+// 	}, function (e) {
+// 	    if (e.success) {
+// 	        var user = e.users[0];
+// 	        alert('Success:\n' +
+// 	            'id: ' + user.id + '\n' +
+// 	            'first name: ' + user.first_name + '\n' +
+// 	            'last name: ' + user.last_name);
+// 	    } else {
+// 	        alert('Error:\n' +
+// 	            ((e.error && e.message) || JSON.stringify(e)));
+// 	    }
+// 	});
+// };
 
 var loginCloudUser = function(creds){
 	Cloud.Users.login({
 		// login: "appc_app_user_dev",
 		// password: "W83yrPwA8YyvjehWOx"
-		login: creds.user,
-		password: creds.pass
+		login: creds.email,
+		password: creds.password
 	}, cloudLoginCb);
 };
 
 var TiDeviceTokenSuccess = function(e){
 	TiDeviceToken = e.deviceToken;
 	Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$ retreived device token successfully deviceToken: [ " + TiDeviceToken + " ]");
-	// loginCloudUser();
-	createCloudUser({firstname: "test_ashika2", lastname: "test_pednekar2", password: "#Ashika123", email: "ashika2@ajency.in"});
+	// loginCloudUser({email: "ashika2@ajency.in", password: "#Ashika123"});
+	var accountName = loginCreds.email.split('@');
+	accountName = accountName[0];
+
+	createCloudUser({firstname: accountName, lastname: accountName, password: loginCreds.password, email: loginCreds.email});
+	// _checkCloudUser();
 };
 
 var TiDeviceTokenError = function(e){
 	Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$$$ device token retrieve faled error: [" + e.error + "]");
 };
 
+var CloudPushCb = function(evt) {
+	Ti.API.info(constant.APP + " ############ message recieved payload: " + evt.payload);
+    //alert(evt);
+    //alert(evt.payload);
+};
+
+var trayClickLaunchCb = function (evt) {
+    Ti.API.info('Tray Click Launched App (app was not running)');
+    //alert('Tray Click Launched App (app was not running');
+};
+
+var trayClickFocusCb = function (evt) {
+    Ti.API.info('Tray Click Focused App (app was already running)');
+    //alert('Tray Click Focused App (app was already running)');
+};
+
 var registerForTiNotifications = function(){
+	loginCreds = Utils.getLoginCreds();
+
+	if(!loginCreds.email){
+		Ti.API.info(constant.APP + " ############# NO VALID EMAIL FOUND TO REGISTER FOR TI NOTIFICATIONS #################");
+		return;
+	}
+
 	if(osname === 'android'){
 
 		CloudPush = require("ti.cloudpush");
@@ -120,22 +172,9 @@ var registerForTiNotifications = function(){
 			error: TiDeviceTokenError
 		});
 
-
-		CloudPush.addEventListener('callback', function (evt) {
-			Ti.API.info(constant.APP + " ############ message recieved payload: " + evt.payload);
-		    //alert(evt);
-		    //alert(evt.payload);
-		});
-
-		CloudPush.addEventListener('trayClickLaunchedApp', function (evt) {
-		    Ti.API.info('Tray Click Launched App (app was not running)');
-		    //alert('Tray Click Launched App (app was not running');
-		});
-
-		CloudPush.addEventListener('trayClickFocusedApp', function (evt) {
-		    Ti.API.info('Tray Click Focused App (app was already running)');
-		    //alert('Tray Click Focused App (app was already running)');
-		});
+		CloudPush.addEventListener('callback', CloudPushCb);
+		CloudPush.addEventListener('trayClickLaunchedApp', trayClickLaunchCb);
+		CloudPush.addEventListener('trayClickFocusedApp', trayClickFocusCb);
 
 	}
 	else{

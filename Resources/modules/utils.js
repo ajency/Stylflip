@@ -2,6 +2,21 @@ var Utils = {};
 
 Utils._ = require('/libs/UnderscoreUtils')._;
 
+var _loginEmail = "", _loginPass = "";
+
+Utils.setLoginCreds = function(email,password){
+	_loginEmail = email,
+	_loginPass = password;
+	Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$$$$$$ LOGIN CREDENTIALS SET #########################");
+};
+
+Utils.getLoginCreds = function(){
+	return {
+		email: _loginEmail,
+		password: _loginPass
+	}
+};
+
 Utils.formatPhoneNumber = function(phoneNumber) {
     var _formattedPhoneNumber = '';
     var _numbers = phoneNumber.replace(/\D/g, '');
@@ -356,9 +371,11 @@ Utils.toggleNotification = function() {
 	if(Ti.App.Properties.hasProperty('notifications')) {
 		Ti.App.Properties.setBool('notifications', !Ti.App.Properties.getBool('notifications'));
 		if(Ti.App.Properties.getBool('notifications')) {
+			Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ REGISTERING PUSHNOTIFICATIONS ###############################");
 			Ti.App.fireEvent('registerForPushNotification');
 		}
 		else {
+			Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ DEREGISTERING PUSHNOTIFICATIONS ###############################");
 			Ti.App.fireEvent('deRegisterForPushNotification');
 		}
 	}
