@@ -124,6 +124,11 @@ var TiDeviceTokenSuccess = function(e){
 	TiDeviceToken = e.deviceToken;
 	Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$ retreived device token successfully deviceToken: [ " + TiDeviceToken + " ]");
 	// loginCloudUser({email: "ashika2@ajency.in", password: "#Ashika123"});
+
+	CloudPush.enabled = true;
+	var cEnabled = CloudPush.enabled;
+	Ti.API.info(constant.APP + " #################### cloudpush enabled: " + cEnabled + " #####################");
+
 	var accountName = loginCreds.email.split('@');
 	accountName = accountName[0];
 
@@ -163,7 +168,7 @@ var registerForTiNotifications = function(){
 
 		CloudPush = require("ti.cloudpush");
 		CloudPush.debug = true;
-		CloudPush.enabled = true;
+		// CloudPush.enabled = true;
 		CloudPush.showTrayNotificationsWhenFocused = true;
 		CloudPush.focusAppOnPush = false;
 
