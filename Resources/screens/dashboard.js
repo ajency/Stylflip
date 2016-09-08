@@ -527,6 +527,7 @@ exports.get = function(tabToLoad) {
 	
 	if(osname == 'android') {
 		var _checkAndLoadNotificationView = function(e, loadDefaultTab) {
+			Ti.API.info(constant.APP + " ###################### _checkAndLoadNotificationView called #######################");
 			setTimeout(function() {
 				var _pendingData = Utils.getPendingData();
 				
@@ -598,11 +599,20 @@ exports.get = function(tabToLoad) {
 		//	Register user for push notification
 	    HttpClient.registerForPushNotification({
 	    	onNotificationReceived: function(e) {
+	    		Ti.API.info(constant.APP + " ####################### PUSH NOTIFICATION RECEIVED ######################");
+
+	    		for(var ix in e){
+	    			if(e.propertyIsEnumerable(ix)){
+	    				Ti.API.info(" key: [" + ix + "] value: [" + e[ix] + "]");
+	    			}
+	    		}
+
 	    		if(osname == 'android') {
 	    			if(e.inBackground) {
 	    			}
 	    			else {
 	    				//	Increase notification count
+	    				Ti.API.info(constant.APP + " ####################### INCREASING PUSH COUNT ######################");
 	    				footer.increaseNotificationCount();
 	    			}
 	    		}
