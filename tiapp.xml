@@ -13,7 +13,7 @@
     <navbar-hidden>true</navbar-hidden>
     <analytics>false</analytics>
     <!-- <guid>da925ab3-b2da-4297-9111-c615478777de</guid> -->
-    <guid>000a1f07-c448-4b38-9111-abfe97c6311c</guid>
+    <guid>91d2bad1-571c-4ec8-9888-8e6c566f490e</guid>
     <property name="ti.ui.defaultunit">system</property>
     <ios>
         <plist>
@@ -87,6 +87,8 @@
         <module platform="iphone">facebook</module>
         <module platform="iphone">com.omorandi</module>
         <module platform="iphone">analytics.google</module>
+        <module platform="commonjs">ti.cloud</module>
+        <module platform="android">ti.cloudpush</module>
     </modules>
     <property name="ti.android.bug2373.finishfalseroot" type="bool">true</property>
     <property name="ti.android.bug2373.skipAlert">true</property>
@@ -95,6 +97,25 @@
     <property name="acs-push-type-production" type="string">gcm</property>
     <property name="acs-push-type" type="string">gcm</property>
     <property name="GCM_sender_id" type="string">138376640387</property>
+    <!-- stylflip-cloud push notification properties -->
+    <property name="appc-app-id" type="string">57c9185e5089369b3ebbe3c2</property>
+    <property name="acs-authbase-url-development" type="string">https://secure-identity.cloud.appcelerator.com</property>
+    <property name="acs-base-url-development" type="string">https://api.cloud.appcelerator.com</property>
+    <!-- <property name="acs-base-url-development" type="string">https://new.api.cloud.appcelerator.com</property> -->
+    <property name="acs-oauth-secret-development" type="string">VOeUMu99qB27QllgIQXkoG4MlTYjIWtG</property>
+    <property name="acs-oauth-key-development" type="string">YLP3o1uGb2efy7Jl39A3KVrqR8ieZHzQ</property>
+    <property name="acs-api-key-development" type="string">L2x2VyapQHvpNpqrASklmLH7eeY3ylzr</property>
+    <property name="acs-username-development" type="string">appc_app_user_dev</property>
+    <property name="acs-password-development" type="string">W83yrPwA8YyvjehWOx</property>
+    <property name="acs-authbase-url-production" type="string">https://secure-identity.cloud.appcelerator.com</property>
+    <property name="acs-base-url-production" type="string">https://api.cloud.appcelerator.com</property>
+    <property name="acs-oauth-secret-production" type="string">3yJVT6FjgUSPKITUqdq7DpvMPdWOhArH</property>
+    <property name="acs-oauth-key-production" type="string">AWxX2SOZGMvpZaQVgWx6dKJKvWJhepyZ</property>
+    <property name="acs-api-key-production" type="string">Xx8lJOCmQ0tZHAmzBf2g2h1CaDspvywJ</property>
+    <property name="acs-username-production" type="string">appc_app_user</property>
+    <property name="acs-password-production" type="string">RJAnNsYJTbhycGMWRf</property>
+    <property name="appc-org-id" type="string">100136649</property>
+    <property name="appc-creator-user-id" type="string">e1da0bb0-b557-4a66-a790-bc1ca4b1ad4a</property>
     <deployment-targets>
         <target device="android">true</target>
         <!--<target device="blackberry">false</target>-->

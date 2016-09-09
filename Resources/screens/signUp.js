@@ -223,12 +223,12 @@ exports.get = function(signUpCallback) {
 	            switch(response.data.status) {
 	                //  Registration successful
 	                case "1":
+                        Utils.setLoginCreds(txtSignUpEmail.value.trim(),'#Stylflip123');
 	                	// Utils.hasUserVerifiedTheCode(false, response.data.userId, response.data.verificationCode);
 	                	txtSignUpEmail.value = '';
 		                // txtSignUpUsername.value = '';
 		                txtSignUpPassword.value = '';
 		                // txtSignUpMobileNumber.value = '';
-	                	
                 	 	var verificationView = require('/screens/verificationPopUp').get(response.data.userId, response.data.verificationCode, signUpCallback).getView();
 						Window.getCurrentWindow().add(verificationView);
 	                break;

@@ -338,3 +338,16 @@
 [INFO] :   STYLFLIP getting response data from server
 
 [INFO] :   STYLFLIP getting response data from server
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ PUSH NOTIFICATION PAYLOAD FORMAT FOR ACS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+{
+  "alert": "An amazingly stylish chair for sale",
+  "title": "Stylish furniture",
+  "appPayload": {
+    "screen": "shopDetails", //stylFile, shopDetails, feedDetails
+    "itemId": "2688"
+  }
+}
+

@@ -1,11 +1,51 @@
 /*global Ti: true, require: true */
 
 (function (service) {
+	// Ti.API.info(" ############################### GCM SERVICE START ##############################");
 
 	var serviceIntent = service.getIntent(),
 	title = serviceIntent.hasExtra('title') ? serviceIntent.getStringExtra('title') : '',
 	statusBarMessage = serviceIntent.hasExtra('message') ? serviceIntent.getStringExtra('message') : '',
-	message = serviceIntent.hasExtra('message') ? serviceIntent.getStringExtra('message') : '',
+	payloadStr = serviceIntent.hasExtra('payload') ? serviceIntent.getStringExtra('payload') : '',
+	message = serviceIntent.hasExtra('message') ? serviceIntent.getStringExtra('message') : '';
+	
+	var payload = {};
+	var pendingDataObj = {};
+	if(title === '' && statusBarMessage === '' && message === '' && payloadStr !== ''){ //if notification comes from acs
+		payload = JSON.parse(payloadStr);
+		var androidPayload = payload.android;
+		if(androidPayload){
+			// Ti.API.info(" ############################### androidPayload found ##############################");
+			title = androidPayload.title ? androidPayload.title : '';
+			statusBarMessage = title;
+			message = androidPayload.alert ? androidPayload.alert : '';
+
+			var appPayload = payload.appPayload;
+
+			if(appPayload) {
+				// Ti.API.info(" ############################### appPayload found ##############################");
+				pendingDataObj.screen = appPayload.screen ? appPayload.screen : 'na';
+				pendingDataObj.itemId = appPayload.itemId ? appPayload.itemId : 'na';
+
+				// Ti.API.info(" ################## logging out pendingDataObj from gcm service ##################")
+				for(var ic in pendingDataObj){
+					Ti.API.info(" key: [" + ic + "] value: [" + pendingDataObj[ic] + "]");
+				}
+			}
+		}
+	}
+	else{
+			/*
+	 * Code to determine if the particular screen to be opened
+	 */
+		if(serviceIntent.hasExtra('itemId')) {
+			pendingDataObj.itemId = serviceIntent.getStringExtra('itemId');
+		}
+		if(serviceIntent.hasExtra('screen')) {
+			pendingDataObj.screen = serviceIntent.getStringExtra('screen');
+		}
+	}
+
 	notificationId = (function () {
 		// android notifications ids are int32
 		// java int32 max value is 2.147.483.647, so we cannot use javascript millis timpestamp
@@ -37,18 +77,7 @@
 
 		return str | 0;
 	})();
-	
-	/*
-	 * Code to determine if the particular screen to be opened
-	 */
-	var pendingDataObj = {};
-	if(serviceIntent.hasExtra('itemId')) {
-		pendingDataObj.itemId = serviceIntent.getStringExtra('itemId');
-	}
-	if(serviceIntent.hasExtra('screen')) {
-		pendingDataObj.screen = serviceIntent.getStringExtra('screen');
-	}
-		
+			
 	// create launcher intent
 	var ntfId = Ti.App.Properties.getInt('ntfId', 0),
 	// launcherIntent = Ti.Android.createIntent({
@@ -77,6 +106,7 @@
 	var pintent = Ti.Android.createPendingIntent({
 		intent: launcherIntent
 	}),
+	
 	notification = Ti.Android.createNotification({
 		contentIntent: pintent,
 		contentTitle: title,
@@ -86,8 +116,10 @@
 		// icon: Ti.App.Android.R.drawable.notificationicon,
 		flags: Ti.Android.FLAG_AUTO_CANCEL | Ti.Android.FLAG_SHOW_LIGHTS
 	});
+
 	Ti.Android.NotificationManager.notify(notificationId, notification);
 
 	service.stop();
+	// Ti.API.info(" ############################### GCM SERVICE STOP ##############################");
 
 })(Ti.Android.currentService);
