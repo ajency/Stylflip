@@ -225,7 +225,9 @@ exports.get = function(tabToLoad) {
 			
 			if(e.key == 'logout') {
 				//	Deregister user for push notification
+				Ti.API.info(constant.APP + " ################# LOGGING OUT ##################")
         		HttpClient.deregisterForPushNotification(Utils.loggedInUserId());
+        		HttpClient.deregisterForTiNotifications();
         		
 				Ti.App.Properties.removeProperty('userId');
 				Ti.App.Properties.removeProperty('loginType');

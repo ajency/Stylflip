@@ -368,7 +368,9 @@ Utils.getPushItemId = function() {
 
 
 Utils.toggleNotification = function() {
+	Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ TOGGLING PUSHNOTIFICATIONS ###############################");
 	if(Ti.App.Properties.hasProperty('notifications')) {
+		Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$$$$$$ FOUND NOTIFICATION BOOL $$$$$$$$$$$$$$$$$$$$$$$$$$");
 		Ti.App.Properties.setBool('notifications', !Ti.App.Properties.getBool('notifications'));
 		if(Ti.App.Properties.getBool('notifications')) {
 			Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ REGISTERING PUSHNOTIFICATIONS ###############################");

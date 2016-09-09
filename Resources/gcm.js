@@ -1,7 +1,7 @@
 /*global Ti: true, require: true */
 
 (function (service) {
-	Ti.API.info(" ############################### GCM SERVICE START ##############################");
+	// Ti.API.info(" ############################### GCM SERVICE START ##############################");
 
 	var serviceIntent = service.getIntent(),
 	title = serviceIntent.hasExtra('title') ? serviceIntent.getStringExtra('title') : '',
@@ -15,7 +15,7 @@
 		payload = JSON.parse(payloadStr);
 		var androidPayload = payload.android;
 		if(androidPayload){
-			Ti.API.info(" ############################### androidPayload found ##############################");
+			// Ti.API.info(" ############################### androidPayload found ##############################");
 			title = androidPayload.title ? androidPayload.title : '';
 			statusBarMessage = title;
 			message = androidPayload.alert ? androidPayload.alert : '';
@@ -23,11 +23,11 @@
 			var appPayload = payload.appPayload;
 
 			if(appPayload) {
-				Ti.API.info(" ############################### appPayload found ##############################");
+				// Ti.API.info(" ############################### appPayload found ##############################");
 				pendingDataObj.screen = appPayload.screen ? appPayload.screen : 'na';
 				pendingDataObj.itemId = appPayload.itemId ? appPayload.itemId : 'na';
 
-				Ti.API.info(" ################## logging out pendingDataObj from gcm service ##################")
+				// Ti.API.info(" ################## logging out pendingDataObj from gcm service ##################")
 				for(var ic in pendingDataObj){
 					Ti.API.info(" key: [" + ic + "] value: [" + pendingDataObj[ic] + "]");
 				}
@@ -120,6 +120,6 @@
 	Ti.Android.NotificationManager.notify(notificationId, notification);
 
 	service.stop();
-	Ti.API.info(" ############################### GCM SERVICE STOP ##############################");
+	// Ti.API.info(" ############################### GCM SERVICE STOP ##############################");
 
 })(Ti.Android.currentService);
