@@ -526,17 +526,26 @@ exports.get = function(tabToLoad) {
 		});
 	}; //end _onFooterTabSelect
 	
-	
+	var logNotificationPayload = function(payload){
+		for(var ix in payload){
+			Ti.API.info(constant.APP + " key: [" + ix + "] value: [" + payload[ix] + "]");
+			if(ix === 'data'){
+				var _data = payload[ix];
+				for(var iz in _data){
+					Ti.API.info(constant.APP + " data key: [" + iz + "] value: [" + _data[iz] + "]");
+				}
+			}
+		}
+	};
+
 	if(osname == 'android') {
-		var _checkAndLoadNotificationView = function(e, loadDefaultTab) {
-			//Ti.API..info(constant.APP + " ###################### _checkAndLoadNotificationView called #######################");
+		var _checkAndLoadNotificationView = function(e, loadDefaultTab) { //only for android
+			// Ti.API.info(constant.APP + " ###################### _checkAndLoadNotificationView called #######################");
 			setTimeout(function() {
 				var _pendingData = Utils.getPendingData();
 				
-				//Ti.API..info(constant.APP + " ##################### READING NOTIFICATION PAYLOAD " + typeof _pendingData + " ####################");
-				// for(var ix in _pendingData){
-					//Ti.API.info(constant.APP + " key: [" + ix + "] value: [" + _pendingData[ix] + "]");
-				// }
+				// Ti.API.info(constant.APP + " ##################### READING NOTIFICATION PAYLOAD " + typeof _pendingData + " ####################");
+				// logNotificationPayload(_pendingData);
 
 				if(_pendingData) {
 					_notificationCountToBeDecreased = true;
@@ -598,7 +607,7 @@ exports.get = function(tabToLoad) {
 		
 	
 	var _registerForPushNotification = function() {
-		//Ti.API..info(constant.APP + " ########################### _registerForPushNotification call ############################");
+		//Ti.API.info(constant.APP + " ########################### _registerForPushNotification call ############################");
 
 		if(!Utils.isUserLoggedIn()) {
 			return;
@@ -606,6 +615,8 @@ exports.get = function(tabToLoad) {
 		//	Register user for push notification
 	    HttpClient.registerForPushNotification({
 	    	onNotificationReceived: function(e) { // when app is focused in foreground
+	    		// Ti.API.info(constant.APP + " ########################### onNotificationReceived call ############################");
+	    		// logNotificationPayload(e);
 
 	    		if(osname == 'android') {
 	    			if(e.inBackground) {
@@ -617,8 +628,21 @@ exports.get = function(tabToLoad) {
 	    		}
 	    		else {
 	    			if(e.inBackground) {
-						Utils.setPushItemId(e.data.itemId);
-						switch(e.data.screen) {
+	    				var nItem = '', nScreen = '';
+	    				// Ti.API.info(constant.APP + " ##################### APP IN BACKGROUND ###################");
+	    				if(e.data.appPayload){
+	    					// Ti.API.info(constant.APP + " ###################### FOUND APPPAYLOAD ####################");
+	    					nItem = e.data.appPayload.itemId;
+	    					nScreen = e.data.appPayload.screen;
+	    				}
+	    				else{
+	    					// Ti.API.info(constant.APP + " ###################### APPPAYLOAD NOT FOUND ####################");
+	    					nItem = e.data.itemId;
+	    					nScreen = e.data.screen;
+	    				}
+
+						Utils.setPushItemId(nItem);
+						switch(nScreen) {
 							case 'stylFile':
 								_onFooterTabSelect({key: 'stylefile_push'}, true);
 							break;

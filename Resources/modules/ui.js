@@ -346,20 +346,40 @@ UI.alertDialog = function(props) {
     
     if(props && props.message) {
         //Ti.API.info(constant.APP + " ############ constructing message ################");
-    	var lblMessage = Ti.UI.createLabel({
-	        text: props.message,
-	        left: UI.left(20),
-	        right: UI.right(20),
-	        top: UI.top(20),
-	        bottom: UI.bottom(20),
-	        height: Ti.UI.SIZE,
-	        font: {
-	            fontSize: UI.fontSize(14),
-	            fontFamily: UI.fonts.DEFAULT_FONT
-	        },
-	        color: '#fff',
-	        textAlign: props.textAlign ? props.textAlign : 'center'
-	    });
+        var lblMessage = null;
+        if(osname === 'iphone'){
+            lblMessage = Ti.UI.createLabel({
+                text: props.message,
+                left: UI.left(20),
+                right: UI.right(20),
+                top: UI.top(20),
+                bottom: UI.bottom(20),
+                height: Ti.UI.SIZE,
+                font: {
+                    fontSize: UI.fontSize(12),
+                    fontFamily: UI.fonts.DEFAULT_FONT
+                },
+                color: '#fff',
+                textAlign: props.textAlign ? props.textAlign : 'center'
+            });
+        }
+        else{
+            lblMessage = Ti.UI.createLabel({
+                text: props.message,
+                left: UI.left(20),
+                right: UI.right(20),
+                top: UI.top(20),
+                bottom: UI.bottom(20),
+                height: Ti.UI.SIZE,
+                font: {
+                    fontSize: UI.fontSize(14),
+                    fontFamily: UI.fonts.DEFAULT_FONT
+                },
+                color: '#fff',
+                textAlign: props.textAlign ? props.textAlign : 'center'
+            });
+        }
+    	
 	    contentView.add(lblMessage);
 
         if(props && props.secMessages && props.secMessages.length){ // only for Pricing Guide popup
@@ -384,18 +404,35 @@ UI.alertDialog = function(props) {
                 }
 
                 for(var y in lineRef){
-                    var secLabel = Ti.UI.createLabel({
-                        left: UI.left(0),
-                        color: '#fff',
-                        text: lineRef[y],
-                        height: Ti.UI.SIZE,
-                        width: Ti.UI.SIZE,
-                        font: {
-                            // fontSize: UI.fontSize(15),
-                            fontSize: UI.fontSize(14),
-                            fontFamily: UI.fonts.DEFAULT_FONT
-                        }
-                    });
+                     var secLabel = null;
+                    if(osname === 'iphone'){
+                        secLabel = Ti.UI.createLabel({
+                            left: UI.left(0),
+                            color: '#fff',
+                            text: lineRef[y],
+                            height: Ti.UI.SIZE,
+                            width: Ti.UI.SIZE,
+                            font: {
+                                // fontSize: UI.fontSize(15),
+                                fontSize: UI.fontSize(12),
+                                fontFamily: UI.fonts.DEFAULT_FONT
+                            }
+                        });
+                    }
+                    else{
+                        secLabel = Ti.UI.createLabel({
+                            left: UI.left(0),
+                            color: '#fff',
+                            text: lineRef[y],
+                            height: Ti.UI.SIZE,
+                            width: Ti.UI.SIZE,
+                            font: {
+                                // fontSize: UI.fontSize(15),
+                                fontSize: UI.fontSize(14),
+                                fontFamily: UI.fonts.DEFAULT_FONT
+                            }
+                        });
+                    }
 
                     if(y === 'tag1'){
                         secLabel.left = leftPadding;

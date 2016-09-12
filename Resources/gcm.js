@@ -28,9 +28,9 @@
 				pendingDataObj.itemId = appPayload.itemId ? appPayload.itemId : 'na';
 
 				// Ti.API.info(" ################## logging out pendingDataObj from gcm service ##################")
-				for(var ic in pendingDataObj){
-					Ti.API.info(" key: [" + ic + "] value: [" + pendingDataObj[ic] + "]");
-				}
+				// for(var ic in pendingDataObj){
+				// 	Ti.API.info(" key: [" + ic + "] value: [" + pendingDataObj[ic] + "]");
+				// }
 			}
 		}
 	}

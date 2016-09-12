@@ -116,12 +116,12 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 		//Ti.API.info(constant.APP + " ############## _getShippingAndHandlingFees CALLED #############");
 		sellingPrice = isNaN(parseFloat(sellingPrice)) ? 0 : parseFloat(sellingPrice);
 		if(sellingPrice == 0) {
-			return '\u20B9 0';
+			return '0';
 		}
 		if(sellingPrice < 2000) {
-			return '\u20B9 120';
+			return '120';
 		}
-		return '\u20B9 0';
+		return '0';
 	};
 	
 	

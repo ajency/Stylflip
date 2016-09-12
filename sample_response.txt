@@ -351,3 +351,13 @@
   }
 }
 
+{
+  "alert": "content message",
+  "title": "notification title",
+  "category": "sampleCategory", 
+  "appPayload": {
+    "screen": "shopDetails",
+    "itemId": "2688"
+  }
+}
+
