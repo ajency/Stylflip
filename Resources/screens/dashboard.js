@@ -534,9 +534,9 @@ exports.get = function(tabToLoad) {
 				var _pendingData = Utils.getPendingData();
 				
 				//Ti.API..info(constant.APP + " ##################### READING NOTIFICATION PAYLOAD " + typeof _pendingData + " ####################");
-				for(var ix in _pendingData){
-					//Ti.API..info(constant.APP + " key: [" + ix + "] value: [" + _pendingData[ix] + "]");
-				}
+				// for(var ix in _pendingData){
+					//Ti.API.info(constant.APP + " key: [" + ix + "] value: [" + _pendingData[ix] + "]");
+				// }
 
 				if(_pendingData) {
 					_notificationCountToBeDecreased = true;
@@ -605,21 +605,13 @@ exports.get = function(tabToLoad) {
 		}
 		//	Register user for push notification
 	    HttpClient.registerForPushNotification({
-	    	onNotificationReceived: function(e) {
-	    		//Ti.API..info(constant.APP + " ####################### PUSH NOTIFICATION RECEIVED ######################");
-
-	    		for(var ix in e){
-	    			if(e.propertyIsEnumerable(ix)){
-	    				//Ti.API..info(" key: [" + ix + "] value: [" + e[ix] + "]");
-	    			}
-	    		}
+	    	onNotificationReceived: function(e) { // when app is focused in foreground
 
 	    		if(osname == 'android') {
 	    			if(e.inBackground) {
 	    			}
 	    			else {
 	    				//	Increase notification count
-	    				//Ti.API..info(constant.APP + " ####################### INCREASING PUSH COUNT ######################");
 	    				footer.increaseNotificationCount();
 	    			}
 	    		}

@@ -29,10 +29,11 @@ var subscribeCloudCb = function(e){
 // };
 
 var subScribeCloudToken = function(){
+	Ti.API.info(constant.APP + " ########################### SUBSCRIBING FOR CLOUD TOKEN ( OSNAME: [" + osname + "] ) #########################");
 	Cloud.PushNotifications.subscribeToken({
 		channel: 'alert',
 		device_token: TiDeviceToken,
-		type: osname
+		type: osname === 'android' ? osname : 'ios'
 	},subscribeCloudCb);
 };
 
@@ -498,10 +499,15 @@ function receivePush(e) {
  * On device token success
  */
 function deviceTokenSuccess(e) {
+	Ti.API.info(constant.APP + " #################################### DEVICE TOKEN RETRIEVED [" + e.deviceToken + "] ################################## ");
 	if(Utils.isUserRegisteredForPushNotifications()) {
 		return;
 	}
-
+	Ti.API.info(constant.APP + " #################################### TIDEVICE TOKEN SET ################################## ");
+	if(osname !== 'android'){
+		TiDeviceTokenSuccess(e);
+	}
+	
     var _requestArgs = {
         url: 'user.php',
         method: 'post',
