@@ -529,13 +529,13 @@ exports.get = function(tabToLoad) {
 	
 	if(osname == 'android') {
 		var _checkAndLoadNotificationView = function(e, loadDefaultTab) {
-			//Ti.API..info(constant.APP + " ###################### _checkAndLoadNotificationView called #######################");
+			Ti.API.info(constant.APP + " ###################### _checkAndLoadNotificationView called #######################");
 			setTimeout(function() {
 				var _pendingData = Utils.getPendingData();
 				
-				//Ti.API..info(constant.APP + " ##################### READING NOTIFICATION PAYLOAD " + typeof _pendingData + " ####################");
+				Ti.API.info(constant.APP + " ##################### READING NOTIFICATION PAYLOAD " + typeof _pendingData + " ####################");
 				for(var ix in _pendingData){
-					//Ti.API..info(constant.APP + " key: [" + ix + "] value: [" + _pendingData[ix] + "]");
+					Ti.API.info(constant.APP + " key: [" + ix + "] value: [" + _pendingData[ix] + "]");
 				}
 
 				if(_pendingData) {
@@ -606,11 +606,11 @@ exports.get = function(tabToLoad) {
 		//	Register user for push notification
 	    HttpClient.registerForPushNotification({
 	    	onNotificationReceived: function(e) {
-	    		//Ti.API..info(constant.APP + " ####################### PUSH NOTIFICATION RECEIVED ######################");
+	    		Ti.API.info(constant.APP + " ####################### PUSH NOTIFICATION RECEIVED ######################");
 
 	    		for(var ix in e){
 	    			if(e.propertyIsEnumerable(ix)){
-	    				//Ti.API..info(" key: [" + ix + "] value: [" + e[ix] + "]");
+	    				Ti.API.info(" key: [" + ix + "] value: [" + e[ix] + "]");
 	    			}
 	    		}
 
@@ -619,7 +619,7 @@ exports.get = function(tabToLoad) {
 	    			}
 	    			else {
 	    				//	Increase notification count
-	    				//Ti.API..info(constant.APP + " ####################### INCREASING PUSH COUNT ######################");
+	    				Ti.API.info(constant.APP + " ####################### INCREASING PUSH COUNT ######################");
 	    				footer.increaseNotificationCount();
 	    			}
 	    		}
