@@ -1,7 +1,12 @@
 /*global Ti: true, require: true */
 
 (function (service) {
-	// Ti.API.info(" ############################### GCM SERVICE START ##############################");
+	Ti.API.info(" ############################### GCM SERVICE START ##############################");
+
+	/*fail safe in case notification comes in on subscription*/
+	var notificationsEnabled = Ti.App.Properties.getBool('notifications', true);
+	if(!notificationsEnabled) return;
+
 
 	var serviceIntent = service.getIntent(),
 	title = serviceIntent.hasExtra('title') ? serviceIntent.getStringExtra('title') : '',
@@ -9,13 +14,19 @@
 	payloadStr = serviceIntent.hasExtra('payload') ? serviceIntent.getStringExtra('payload') : '',
 	message = serviceIntent.hasExtra('message') ? serviceIntent.getStringExtra('message') : '';
 	
+	Ti.API.info(" title: " + title);
+	Ti.API.info(" statusBarMessage: " + statusBarMessage);
+	Ti.API.info(" payloadStr: " + payloadStr);
+	Ti.API.info(" message: " + message);
+
 	var payload = {};
 	var pendingDataObj = {};
 	if(title === '' && statusBarMessage === '' && message === '' && payloadStr !== ''){ //if notification comes from acs
+		Ti.API.info(" ######################## ACS PAYLOAD ########################");
 		payload = JSON.parse(payloadStr);
 		var androidPayload = payload.android;
 		if(androidPayload){
-			// Ti.API.info(" ############################### androidPayload found ##############################");
+			Ti.API.info(" ############################### androidPayload found ##############################");
 			title = androidPayload.title ? androidPayload.title : '';
 			statusBarMessage = title;
 			message = androidPayload.alert ? androidPayload.alert : '';
@@ -23,14 +34,14 @@
 			var appPayload = payload.appPayload;
 
 			if(appPayload) {
-				// Ti.API.info(" ############################### appPayload found ##############################");
+				Ti.API.info(" ############################### appPayload found ##############################");
 				pendingDataObj.screen = appPayload.screen ? appPayload.screen : 'na';
 				pendingDataObj.itemId = appPayload.itemId ? appPayload.itemId : 'na';
 
-				// Ti.API.info(" ################## logging out pendingDataObj from gcm service ##################")
-				// for(var ic in pendingDataObj){
-				// 	Ti.API.info(" key: [" + ic + "] value: [" + pendingDataObj[ic] + "]");
-				// }
+				Ti.API.info(" ################## logging out pendingDataObj from gcm service ##################")
+				for(var ic in pendingDataObj){
+					Ti.API.info(" key: [" + ic + "] value: [" + pendingDataObj[ic] + "]");
+				}
 			}
 		}
 	}
@@ -38,6 +49,7 @@
 			/*
 	 * Code to determine if the particular screen to be opened
 	 */
+	 	Ti.API.info(" ####################### STYLFLIP BACKEND PAYLOAD #########################");
 		if(serviceIntent.hasExtra('itemId')) {
 			pendingDataObj.itemId = serviceIntent.getStringExtra('itemId');
 		}
@@ -120,6 +132,6 @@
 	Ti.Android.NotificationManager.notify(notificationId, notification);
 
 	service.stop();
-	// Ti.API.info(" ############################### GCM SERVICE STOP ##############################");
+	Ti.API.info(" ############################### GCM SERVICE STOP ##############################");
 
 })(Ti.Android.currentService);

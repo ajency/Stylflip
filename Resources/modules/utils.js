@@ -172,6 +172,21 @@ Utils.isUserRegisteredForPushNotifications = function() {
 	return false;
 };
 
+Utils.setTiDeviceToken = function(token){
+	if(token){
+		Ti.App.Properties.setString('TiDeviceToken',token);
+	}
+	else{
+		Ti.App.Properties.removeProperty('TiDeviceToken');
+	}
+};
+
+Utils.getTiDeviceToken = function(){
+	 var token = Ti.App.Properties.getString('TiDeviceToken','');
+	 // Ti.API.info(constant.APP + " retrieved TiDeviceToken: [" + token + "]");
+	 return token;
+};
+
 Utils.hasUserVerifiedTheCode = function(bool, userId, verificationCode) {
 	if(bool == undefined) {
 		return Ti.App.Properties.hasProperty('hasUserVerifiedTheCode');

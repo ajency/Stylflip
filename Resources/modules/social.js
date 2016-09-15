@@ -148,8 +148,6 @@ social.facebook = function(event) {
     }
 };
 
-
-
 /*
  * Google+ config
  */

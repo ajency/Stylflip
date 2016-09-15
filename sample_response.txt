@@ -1,3 +1,5 @@
+For titanium sdk >3.5.0.GA we require node >v4.0.0 otherwise node v0.12.1 will suffice.
+
 [INFO] :   STYLFLIP getting response data from server
 [INFO] :   Timeline: Timeline: Activity_launch_request id:com.placard.StylFlip time:14224135
 [INFO] :   Timeline: Timeline: Activity_idle id: android.os.BinderProxy@3108438a time:14224354
@@ -361,3 +363,16 @@
   }
 }
 
+@Override
+public void onResume(Activity activity) {
+    super.onResume(activity);
+    Log.d(TAG, "Calling activateApp");
+    AppEventsLogger.activateApp(activity);
+}
+
+@Override
+public void onPause(Activity activity) {
+    super.onPause(activity);
+    Log.d(TAG, "Calling deactivateApp");
+    AppEventsLogger.deactivateApp(activity);
+}

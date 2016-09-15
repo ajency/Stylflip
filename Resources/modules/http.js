@@ -12,7 +12,7 @@ var TiDeviceToken = "";
 
 var subscribeCloudCb = function(e){
 	if(e.success){
-		Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$$$$$ cloud subscription success");
+		Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$$$$$ ACS NOTIFICATION SUBSCRIPTION SUCCESS $$$$$$$$$$$$$$$$$$$$$");
 		Ti.App.Properties.setBool('notifications', true);
 	}
 	else{
@@ -29,7 +29,7 @@ var subscribeCloudCb = function(e){
 // };
 
 var subScribeCloudToken = function(){
-	Ti.API.info(constant.APP + " ########################### SUBSCRIBING FOR CLOUD TOKEN ( OSNAME: [" + osname + "] ) #########################");
+	// Ti.API.info(constant.APP + " ########################### SUBSCRIBING FOR CLOUD TOKEN ( OSNAME: [" + osname + "] ) #########################");
 	Cloud.PushNotifications.subscribeToken({
 		channel: 'alert',
 		device_token: TiDeviceToken,
@@ -39,9 +39,9 @@ var subScribeCloudToken = function(){
 
 var unsubScribeCloudCb = function(e){
 	if (e.success) {
-        Ti.API.info(constant.APP + " unsubscribed from notifications");
+        Ti.API.info(constant.APP + " ########################## ACS NOTIFICATION UNSUBSCRIPTION SUCCESS #########################");
         Ti.App.Properties.setBool('notifications', false);
-        Ti.App.Properties.removeProperty('devicetoken');
+        // Utils.setTiDeviceToken();
   //       Cloud.Users.logout(function (e) {
 		//     if (e.success) {
 		//         Ti.API.info(constant.APP + ' Success: Logged out');
@@ -63,9 +63,10 @@ var unsubScribeCloudCb = function(e){
 };
 
 var deregisterForTiNotifications = function(){
-	TiDeviceToken = Ti.App.Properties.getString('devicetoken','');
-	Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$ retrived device token [" + TiDeviceToken + "]");
+	TiDeviceToken = Utils.getTiDeviceToken();
+	// Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$ retrived device token [" + TiDeviceToken + "]");
 	if(TiDeviceToken){
+		Utils.setTiDeviceToken();
 		// Cloud.PushNotifications.unsubscribe({
 		//     channel: 'alert',
 		//     device_token: TiDeviceToken
@@ -124,7 +125,7 @@ var deregisterForTiNotifications = function(){
 var TiDeviceTokenSuccess = function(e){
 	TiDeviceToken = e.deviceToken;
 	Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$ retreived device token successfully deviceToken: [ " + TiDeviceToken + " ]");
-	Ti.App.Properties.setString('devicetoken',TiDeviceToken);
+	Utils.setTiDeviceToken(TiDeviceToken);
 
 	// var accountName = loginCreds.email.split('@');
 	// accountName = accountName[0];
@@ -152,7 +153,11 @@ var trayClickFocusCb = function (evt) {
     //alert('Tray Click Focused App (app was already running)');
 };
 
+/*register using cloudpush api for android (optional)*/
 var registerForTiNotifications = function(){
+	Ti.API.info(constant.APP + " ############################# REGISTERING FOR CLOUD SERVICES ############################");
+	if(Utils.getTiDeviceToken() !== '') return;
+	
 	// loginCreds = Utils.getLoginCreds();
 
 	// if(!loginCreds.email){
@@ -184,8 +189,8 @@ var registerForTiNotifications = function(){
 };
 
 
-HttpClient.registerForTiNotifications = registerForTiNotifications;
-HttpClient.deregisterForTiNotifications = deregisterForTiNotifications;
+// HttpClient.registerForTiNotifications = registerForTiNotifications;
+// HttpClient.deregisterForTiNotifications = deregisterForTiNotifications;
 
 HttpClient.apiCall = function(params, method, api, successCallback, errorCallback) {
 	// if(Ti.Network.online) {
@@ -403,38 +408,44 @@ HttpClient.getCurrentLocation = function(callback) {
 
 
 HttpClient.registerForPushNotification = function(data) {
+	if(Utils.isUserRegisteredForPushNotifications() && Utils.getTiDeviceToken()) return;
 	if(osname == 'android') {
-		var gcm = require('net.iamyellow.gcmjs');
-		gcm.registerForPushNotifications({
-			success: function(e) {
-				if(Utils.isUserRegisteredForPushNotifications()) {
-					// if(Ti.App.Properties.hasProperty('pendingData')) {
-						// var _pendingData = Ti.App.Properties.getObject('pendingData');
-						// if(_pendingData.hasOwnProperty('itemId') && _pendingData.hasOwnProperty('screen')) {
-							// Utils._.isFunction(data.onNotificationReceived) && data.onNotificationReceived({
-								// inBackground: true,
-								// data: _pendingData
-							// });
-							// Ti.App.Properties.removeProperty('pendingData');
+		if(!Utils.isUserRegisteredForPushNotifications()){
+			var gcm = require('net.iamyellow.gcmjs');
+			gcm.registerForPushNotifications({
+				success: function(e) {
+					if(Utils.isUserRegisteredForPushNotifications()) {
+						// if(Ti.App.Properties.hasProperty('pendingData')) {
+							// var _pendingData = Ti.App.Properties.getObject('pendingData');
+							// if(_pendingData.hasOwnProperty('itemId') && _pendingData.hasOwnProperty('screen')) {
+								// Utils._.isFunction(data.onNotificationReceived) && data.onNotificationReceived({
+									// inBackground: true,
+									// data: _pendingData
+								// });
+								// Ti.App.Properties.removeProperty('pendingData');
+							// }
 						// }
-					// }
-					return;
+						return;
+					}
+					deviceTokenSuccess(e);
+				},
+				error: deviceTokenError,
+				callback: function(e) { 
+					// when a gcm notification is received WHEN the app IS IN FOREGROUND
+					e.inBackground = false;
+					Utils._.isFunction(data.onNotificationReceived) && data.onNotificationReceived(e);
+				},
+				unregister: function (e) {
+					// Ti.API.info('******* unregister, ' + e.deviceToken);
+				},
+				data: function(e) {
+					// Ti.API.info('DATA => ' + JSON.stringify(e));
 				}
-				deviceTokenSuccess(e);
-			},
-			error: deviceTokenError,
-			callback: function(e) { 
-				// when a gcm notification is received WHEN the app IS IN FOREGROUND
-				e.inBackground = false;
-				Utils._.isFunction(data.onNotificationReceived) && data.onNotificationReceived(e);
-			},
-			unregister: function (e) {
-				// Ti.API.info('******* unregister, ' + e.deviceToken);
-			},
-			data: function(e) {
-				// Ti.API.info('DATA => ' + JSON.stringify(e));
-			}
-		});
+			});
+		}
+
+		registerForTiNotifications();
+
 	}
 	else {
 		// Check if the device is running iOS 8 or later
@@ -500,14 +511,16 @@ function receivePush(e) {
  */
 function deviceTokenSuccess(e) {
 	Ti.API.info(constant.APP + " #################################### DEVICE TOKEN RETRIEVED [" + e.deviceToken + "] ################################## ");
-	if(Utils.isUserRegisteredForPushNotifications()) {
-		return;
-	}
-	Ti.API.info(constant.APP + " #################################### TIDEVICE TOKEN SET ################################## ");
-	if(osname !== 'android'){
+	
+	if(osname !== 'android' && Utils.getTiDeviceToken() === ''){
 		TiDeviceTokenSuccess(e);
 	}
 	
+
+	if(Utils.isUserRegisteredForPushNotifications()) {
+		return;
+	}
+
     var _requestArgs = {
         url: 'user.php',
         method: 'post',
@@ -525,7 +538,7 @@ function deviceTokenSuccess(e) {
     HttpClient.getResponse({
     	requestArgs: _requestArgs,
     	success: function(response) {
-    		// Ti.API.info('SUCCESSFULLY REGISTERED');
+    		Ti.API.info(constant.APP + ' ################## SUCCESSFULLY REGISTERED FOR STYLFLIP NOTIFICATION ###################');
     		Ti.App.Properties.setBool('isUserRegisteredForPushNotifications', true);
     		Ti.App.Properties.setBool('notifications', true);
     	},
@@ -567,7 +580,7 @@ HttpClient.deregisterForPushNotification = function(userId) {
     HttpClient.getResponse({
     	requestArgs: _requestArgs,
     	success: function(response) {
-    		// Ti.API.info('SUCCESSFULLY DEREGISTERED');
+    		Ti.API.info(' #################### SUCCESSFULLY DEREGISTERED FOR STYLFLIP NOTIFICATIONS #####################');
     		Ti.App.Properties.removeProperty('isUserRegisteredForPushNotifications');
     		Ti.App.Properties.setBool('notifications', false);
     	},
@@ -575,6 +588,8 @@ HttpClient.deregisterForPushNotification = function(userId) {
     		// Ti.API.info('FAILED TO DEREGISTER');
     	}
     });
+
+    deregisterForTiNotifications();
 };
 
 

@@ -227,7 +227,7 @@ exports.get = function(tabToLoad) {
 				//	Deregister user for push notification
 				Ti.API.info(constant.APP + " ################# LOGGING OUT ##################")
         		HttpClient.deregisterForPushNotification(Utils.loggedInUserId());
-        		HttpClient.deregisterForTiNotifications();
+        		// HttpClient.deregisterForTiNotifications();
         		
 				Ti.App.Properties.removeProperty('userId');
 				Ti.App.Properties.removeProperty('loginType');
@@ -618,6 +618,9 @@ exports.get = function(tabToLoad) {
 	    		// Ti.API.info(constant.APP + " ########################### onNotificationReceived call ############################");
 	    		// logNotificationPayload(e);
 
+	    		var enNotification = Ti.App.Properties.getBool('notifications', true);	
+	    		if(!enNotification) return;
+
 	    		if(osname == 'android') {
 	    			if(e.inBackground) {
 	    			}
@@ -664,7 +667,7 @@ exports.get = function(tabToLoad) {
 	    	}
 	    });
 
-	    HttpClient.registerForTiNotifications();
+	    // HttpClient.registerForTiNotifications();
 	}; //end _registerForPushNotification
 	
 	_registerForPushNotification();
@@ -674,7 +677,7 @@ exports.get = function(tabToLoad) {
 	
 	var _deRegisterForPushNotification = function() {
 		HttpClient.deregisterForPushNotification(Utils.loggedInUserId());
-		HttpClient.deregisterForTiNotifications();
+		// HttpClient.deregisterForTiNotifications();
 	};
 	
 	Ti.App.addEventListener('deRegisterForPushNotification', _deRegisterForPushNotification);
