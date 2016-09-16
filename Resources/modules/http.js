@@ -124,7 +124,7 @@ var deregisterForTiNotifications = function(){
 
 var TiDeviceTokenSuccess = function(e){
 	TiDeviceToken = e.deviceToken;
-	Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$ retreived device token successfully deviceToken: [ " + TiDeviceToken + " ]");
+	Ti.API.info(constant.APP + " ################## ACS DEVICE TOKEN RETRIEVED: [ " + TiDeviceToken + " ]");
 	Utils.setTiDeviceToken(TiDeviceToken);
 
 	// var accountName = loginCreds.email.split('@');
