@@ -538,6 +538,28 @@ exports.get = function(tabToLoad) {
 		}
 	};
 
+	var _trackNotification = function(nPayload){
+		var itemId = '', screen = '', trackStr = 'notification', userId = Utils.loggedInUserId();
+
+		if(userId){
+			trackStr += ('.' + userId);
+		}
+
+		if(nPayload.screen){
+			screen = nPayload.screen.toString();
+			trackStr += ('.' + screen);
+		}
+
+		if(nPayload.itemId){
+			itemId = nPayload.itemId.toString();
+			trackStr += ('.' + itemId);
+		}
+
+		Titanium.Analytics.featureEvent(trackStr);
+
+	};
+
+
 	if(osname == 'android') {
 		var _checkAndLoadNotificationView = function(e, loadDefaultTab) { //only for android
 			// Ti.API.info(constant.APP + " ###################### _checkAndLoadNotificationView called #######################");
@@ -548,6 +570,7 @@ exports.get = function(tabToLoad) {
 				// logNotificationPayload(_pendingData);
 
 				if(_pendingData) {
+					_trackNotification(_pendingData);
 					_notificationCountToBeDecreased = true;
 					
 					Utils.setPushItemId(_pendingData.itemId);
@@ -644,6 +667,11 @@ exports.get = function(tabToLoad) {
 	    					nScreen = e.data.screen;
 	    				}
 
+	    				_trackNotification({
+	    					itemId: nItem,
+	    					screen: nScreen
+	    				});
+	    				
 						Utils.setPushItemId(nItem);
 						switch(nScreen) {
 							case 'stylFile':
