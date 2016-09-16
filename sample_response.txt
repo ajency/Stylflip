@@ -363,6 +363,9 @@ For titanium sdk >3.5.0.GA we require node >v4.0.0 otherwise node v0.12.1 will s
   }
 }
 
+09-16 15:25:28.011 878-1806/? W/ActivityManager: Unable to start service Intent { cmp=com.under1r.StylFlip/com.appcelerator.analytics.APSAnalyticsService } U=0: not found
+[WARN]  APSAnalyticsHelper: Analytics service not found.
+
 @Override
 public void onResume(Activity activity) {
     super.onResume(activity);

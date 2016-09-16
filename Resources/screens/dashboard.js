@@ -555,6 +555,7 @@ exports.get = function(tabToLoad) {
 			trackStr += ('.' + itemId);
 		}
 
+		Ti.API.info(constant.APP + " #################### trackStr: [" + trackStr + "] #########################");
 		Titanium.Analytics.featureEvent(trackStr);
 
 	};
