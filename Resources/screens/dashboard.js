@@ -563,7 +563,7 @@ exports.get = function(tabToLoad) {
 
 	if(osname == 'android') {
 		var _checkAndLoadNotificationView = function(e, loadDefaultTab) { //only for android
-			// Ti.API.info(constant.APP + " ###################### _checkAndLoadNotificationView called #######################");
+			Ti.API.info(constant.APP + " ###################### _checkAndLoadNotificationView called #######################");
 			setTimeout(function() {
 				var _pendingData = Utils.getPendingData();
 				
@@ -639,7 +639,7 @@ exports.get = function(tabToLoad) {
 		//	Register user for push notification
 	    HttpClient.registerForPushNotification({
 	    	onNotificationReceived: function(e) { // when app is focused in foreground
-	    		// Ti.API.info(constant.APP + " ########################### onNotificationReceived call ############################");
+	    		Ti.API.info(constant.APP + " ########################### onNotificationReceived call ############################");
 	    		// logNotificationPayload(e);
 
 	    		var enNotification = Ti.App.Properties.getBool('notifications', true);	

@@ -52,7 +52,7 @@ var deregisterForTiNotifications = function(){
 
 var TiDeviceTokenSuccess = function(e){
 	TiDeviceToken = e.deviceToken;
-	Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$ ACS DEVICE TOKEN RETRIEVED: [ " + TiDeviceToken + " ]");
+	Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$ ACS DEVICE-TOKEN RETRIEVED: [ " + TiDeviceToken + " ]");
 	Utils.setTiDeviceToken(TiDeviceToken);
 
 	subScribeCloudToken();
@@ -105,7 +105,46 @@ var _registerForTiNotifications = function(){
 
 	}
 	else{
-		Ti.API.info(constant.APP + " os: [" + osname + "] not currently supported");
+				// Check if the device is running iOS 8 or later
+		if (Ti.Platform.name == "iPhone OS" && parseInt(Ti.Platform.version.split(".")[0]) >= 8) {
+			// Wait for user settings to be registered before registering for push notifications
+		    Ti.App.iOS.addEventListener('usernotificationsettings', function registerForPush() {
+		        // Remove event listener once registered for push notifications
+		        Ti.App.iOS.removeEventListener('usernotificationsettings', registerForPush); 
+		        Ti.Network.registerForPushNotifications({
+		            success: TiDeviceTokenSuccess,
+		            error: TiDeviceTokenError,
+		            callback: function(e) {
+						//	On notification clicked
+						Utils._.isFunction(data.onNotificationReceived) && data.onNotificationReceived(e);
+					}
+		        });
+		    });
+		    Ti.App.iOS.registerUserNotificationSettings({
+			    types: [
+		            Ti.App.iOS.USER_NOTIFICATION_TYPE_ALERT,
+		            Ti.App.iOS.USER_NOTIFICATION_TYPE_SOUND,
+		            Ti.App.iOS.USER_NOTIFICATION_TYPE_BADGE
+		        ]
+		    });
+		}
+		// For iOS 7 and earlier
+		else {
+		    Ti.Network.registerForPushNotifications({
+		        // Specifies which notifications to receive
+		        types: [
+		            Ti.Network.NOTIFICATION_TYPE_BADGE,
+		            Ti.Network.NOTIFICATION_TYPE_ALERT,
+		            Ti.Network.NOTIFICATION_TYPE_SOUND
+		        ],
+		        success: TiDeviceTokenSuccess,
+		        error: TiDeviceTokenError,
+		        callback: function(e) {
+					//	On notification clicked
+					Utils._.isFunction(data.onNotificationReceived) && data.onNotificationReceived(e);
+				}
+		    });
+		}
 	}
 };
 
@@ -252,7 +291,6 @@ HttpClient.apiCall = function(params, method, api, successCallback, errorCallbac
 
 HttpClient.getResponse = function(config) {
 	//	Blur currently focused text field
-	Ti.API.info(constant.APP + " ##################### BLURRING FOCUSED TEXTFIELD ##################");
 	UI.focusedTextField && UI.focusedTextField.blur();
 	
 	var params = config.requestArgs;
@@ -348,7 +386,7 @@ var _registerForPushNotification = function(data) {
 var _registerNotification = function(){
 	_regStart = new Date().getTime();
 	var data = _registerDictionary;
-	if(Utils.isUserRegisteredForPushNotifications() && Utils.getTiDeviceToken()) return;
+	// if(Utils.isUserRegisteredForPushNotifications() && Utils.getTiDeviceToken()) return;
 	if(osname == 'android') {
 		if(!Utils.isUserRegisteredForPushNotifications()){
 			var gcm = require('net.iamyellow.gcmjs');
@@ -449,17 +487,12 @@ function receivePush(e) {
  * On device token success
  */
 function deviceTokenSuccess(e) {
-	Ti.API.info(constant.APP + " #################################### DEVICE TOKEN RETRIEVED [" + e.deviceToken + "] ################################## ");
+	Ti.API.info(constant.APP + " #################################### STYLFLIP DEVICE-TOKEN RETRIEVED [" + e.deviceToken + "] ################################## ");
 	
-	if(osname !== 'android'){
-		TiDeviceTokenSuccess(e);
-	}
+	// if(osname !== 'android'){
+	// 	TiDeviceTokenSuccess(e);
+	// }
 	
-
-	if(Utils.isUserRegisteredForPushNotifications()) {
-		return;
-	}
-
     var _requestArgs = {
         url: 'user.php',
         method: 'post',
@@ -480,6 +513,10 @@ function deviceTokenSuccess(e) {
     		Ti.API.info(constant.APP + ' ################## SUCCESSFULLY REGISTERED FOR STYLFLIP NOTIFICATION ###################');
     		Ti.App.Properties.setBool('isUserRegisteredForPushNotifications', true);
     		Ti.App.Properties.setBool('notifications', true);
+
+   //  		if(osname !== 'android'){
+			// 	TiDeviceTokenSuccess(e);
+			// }
     	},
     	error: function(error) {
     		// Ti.API.info('FAILED TO REGISTER');
