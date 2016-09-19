@@ -20,14 +20,6 @@ var subscribeCloudCb = function(e){
 	}
 };
 
-// var subscribeCloudChannel = function(){
-// 	Cloud.PushNotifications.subscribe({
-// 		channel: 'alert',
-// 		device_token: TiDeviceToken,
-// 		type: osname
-// 	},subscribeCloudCb);
-// };
-
 var subScribeCloudToken = function(){
 	// Ti.API.info(constant.APP + " ########################### SUBSCRIBING FOR CLOUD TOKEN ( OSNAME: [" + osname + "] ) #########################");
 	Cloud.PushNotifications.subscribeToken({
@@ -41,21 +33,6 @@ var unsubScribeCloudCb = function(e){
 	if (e.success) {
         Ti.API.info(constant.APP + " ########################## ACS NOTIFICATION UNSUBSCRIPTION SUCCESS #########################");
         Ti.App.Properties.setBool('notifications', false);
-        // Utils.setTiDeviceToken();
-  //       Cloud.Users.logout(function (e) {
-		//     if (e.success) {
-		//         Ti.API.info(constant.APP + ' Success: Logged out');
-
-		//         if(osname === 'android'){
-		//         	CloudPush.removeEventListener('callback', CloudPushCb);
-		// 			CloudPush.removeEventListener('trayClickLaunchedApp', trayClickLaunchCb);
-		// 			CloudPush.removeEventListener('trayClickFocusedApp', trayClickFocusCb);
-		//         }
-
-		//     } else {
-		//         Ti.API.info(constant.APP + ' Error:\n' + ((e.error && e.message) || JSON.stringify(e)));
-		//     }
-		// });
 
     } else {
         Ti.API.info(constant.APP + ' unsubscribe Error:\n' + ((e.error && e.message) || JSON.stringify(e)));
@@ -64,14 +41,8 @@ var unsubScribeCloudCb = function(e){
 
 var deregisterForTiNotifications = function(){
 	TiDeviceToken = Utils.getTiDeviceToken();
-	// Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$ retrived device token [" + TiDeviceToken + "]");
 	if(TiDeviceToken){
 		Utils.setTiDeviceToken();
-		// Cloud.PushNotifications.unsubscribe({
-		//     channel: 'alert',
-		//     device_token: TiDeviceToken
-		// }, unsubScribeCloudCb);
-
 		Cloud.PushNotifications.unsubscribeToken({
 		    channel: 'alert',
 		    device_token: TiDeviceToken
@@ -79,57 +50,11 @@ var deregisterForTiNotifications = function(){
 	}
 };
 
-// var cloudLoginCb = function(e){
-// 	if(e.success){
-// 		subscribeCloudChannel();
-// 	}
-// 	else{
-// 		Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$ message: " + ( e.error && e.message ) ? e.message : JSON.stringify(e) );
-// 	}
-// };
-
-
-// var createCloudUser = function(creds){
-// 	Cloud.Users.create({
-// 	    email: creds.email,
-// 	    first_name: creds.firstname,
-// 	    last_name: creds.lastname,
-// 	    password: creds.password,
-// 	    password_confirmation: creds.password
-// 	}, function (e) {
-// 	    if (e.success) {
-// 	        var user = e.users[0];
-// 	        Ti.API.info(constant.APP + ' Success:\n' +
-// 	            'id: ' + user.id + '\n' +
-// 	            'sessionId: ' + Cloud.sessionId + '\n' +
-// 	            'first name: ' + user.first_name + '\n' +
-// 	            'last name: ' + user.last_name);
-	        
-// 	    } else {
-// 	        Ti.API.info(constant.APP + ' Error:\n' +
-// 	            ((e.error && e.message) || JSON.stringify(e)));
-// 	    }
-// 	    loginCloudUser({email: creds.email, password: creds.password});
-// 	});
-// };
-
-// var loginCloudUser = function(creds){
-// 	Cloud.Users.login({
-// 		// login: "appc_app_user_dev",
-// 		// password: "W83yrPwA8YyvjehWOx"
-// 		login: creds.email,
-// 		password: creds.password
-// 	}, cloudLoginCb);
-// };
-
 var TiDeviceTokenSuccess = function(e){
 	TiDeviceToken = e.deviceToken;
 	Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$ ACS DEVICE TOKEN RETRIEVED: [ " + TiDeviceToken + " ]");
 	Utils.setTiDeviceToken(TiDeviceToken);
 
-	// var accountName = loginCreds.email.split('@');
-	// accountName = accountName[0];
-	// createCloudUser({firstname: accountName, lastname: accountName, password: loginCreds.password, email: loginCreds.email});
 	subScribeCloudToken();
 };
 
@@ -139,8 +64,6 @@ var TiDeviceTokenError = function(e){
 
 var CloudPushCb = function(evt) {
 	Ti.API.info(constant.APP + " ############ message recieved payload: " + evt.payload);
-    //alert(evt);
-    //alert(evt.payload);
 };
 
 var trayClickLaunchCb = function (evt) {
@@ -156,14 +79,6 @@ var trayClickFocusCb = function (evt) {
 /*register using cloudpush api for android (optional)*/
 var registerForTiNotifications = function(){
 	Ti.API.info(constant.APP + " ############################# REGISTERING FOR CLOUD SERVICES ############################");
-	if(Utils.getTiDeviceToken() !== '') return;
-	
-	// loginCreds = Utils.getLoginCreds();
-
-	// if(!loginCreds.email){
-	// 	Ti.API.info(constant.APP + " ############# NO VALID EMAIL FOUND TO REGISTER FOR TI NOTIFICATIONS #################");
-	// 	return;
-	// }
 
 	if(osname === 'android'){
 
@@ -512,7 +427,7 @@ function receivePush(e) {
 function deviceTokenSuccess(e) {
 	Ti.API.info(constant.APP + " #################################### DEVICE TOKEN RETRIEVED [" + e.deviceToken + "] ################################## ");
 	
-	if(osname !== 'android' && Utils.getTiDeviceToken() === ''){
+	if(osname !== 'android'){
 		TiDeviceTokenSuccess(e);
 	}
 	

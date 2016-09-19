@@ -1,3 +1,9 @@
+GCM API key: AIzaSyA3tTCiZwBu_1Kq3AC_iXwfYfjfkpGrz7s
+GCM sender ID: 470182479535
+
+IOS dev push certificate: styleflip-acs-dev-push.p12, password: ajency#123
+IOS dist push certificate: styleflip-acs-dist-push.p12, password: ajency#123
+
 For titanium sdk >3.5.0.GA we require node >v4.0.0 otherwise node v0.12.1 will suffice.
 
 [INFO] :   STYLFLIP getting response data from server
