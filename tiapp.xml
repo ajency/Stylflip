@@ -13,8 +13,8 @@
     <navbar-hidden>true</navbar-hidden>
     <analytics>true</analytics>
     <!-- <guid>da925ab3-b2da-4297-9111-c615478777de</guid> -->
-    <!-- <guid>91d2bad1-571c-4ec8-9888-8e6c566f490e</guid> -->
-    <guid>D3485580-139A-4D1F-B48C-8BDF0380BCD9</guid>
+    <guid>91d2bad1-571c-4ec8-9888-8e6c566f490e</guid>
+    <!-- <guid>D3485580-139A-4D1F-B48C-8BDF0380BCD9</guid> -->
     <property name="ti.ui.defaultunit">system</property>
     <ios>
         <plist>

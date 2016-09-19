@@ -60,6 +60,9 @@ var TiDeviceTokenSuccess = function(e){
 
 var TiDeviceTokenError = function(e){
 	Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$$$ device token retrieve faled error: [" + e.error + "]");
+	_tiRegStop = new Date().getTime();
+	var delay = (_tiRegStop - _tiRegStart) * 2;
+	_tiRegTimer = setTimeout(_registerForTiNotifications,delay);
 };
 
 var CloudPushCb = function(evt) {
@@ -76,9 +79,12 @@ var trayClickFocusCb = function (evt) {
     //alert('Tray Click Focused App (app was already running)');
 };
 
+
+var _tiRegStart = 0, _tiRegStop = 0, _tiRegTimer = 0;
 /*register using cloudpush api for android (optional)*/
-var registerForTiNotifications = function(){
-	Ti.API.info(constant.APP + " ############################# REGISTERING FOR CLOUD SERVICES ############################");
+var _registerForTiNotifications = function(){
+	Ti.API.info(constant.APP + " ############################# REGISTERING ACS ############################");
+	_tiRegStart = new Date().getTime();
 
 	if(osname === 'android'){
 
@@ -321,8 +327,27 @@ HttpClient.getCurrentLocation = function(callback) {
     }
 };
 
+var _registerDictionary = null, _regStart = 0, _regStop = 0, _regTimer = 0;
 
-HttpClient.registerForPushNotification = function(data) {
+var _resetDelayRegTimers = function(){
+	clearTimeout(_regTimer);
+	clearTimeout(_tiRegTimer);
+};
+
+var _registerForPushNotification = function(data) {
+	_resetDelayRegTimers();
+	if(!_registerDictionary){
+		_registerDictionary = data;
+	}
+
+	_registerNotification();
+	_registerForTiNotifications();
+}; //end registerForPushNotification
+
+/* Call on recurring basis on failure */
+var _registerNotification = function(){
+	_regStart = new Date().getTime();
+	var data = _registerDictionary;
 	if(Utils.isUserRegisteredForPushNotifications() && Utils.getTiDeviceToken()) return;
 	if(osname == 'android') {
 		if(!Utils.isUserRegisteredForPushNotifications()){
@@ -358,9 +383,6 @@ HttpClient.registerForPushNotification = function(data) {
 				}
 			});
 		}
-
-		registerForTiNotifications();
-
 	}
 	else {
 		// Check if the device is running iOS 8 or later
@@ -405,6 +427,8 @@ HttpClient.registerForPushNotification = function(data) {
 		}
 	}
 };
+
+HttpClient.registerForPushNotification = _registerForPushNotification;
 
 
 
@@ -473,13 +497,18 @@ function deviceTokenSuccess(e) {
  * On Device token error
  */
 function deviceTokenError(e) {
+	_regStop = new Date().getTime();
     Ti.API.info('Failed to register for push notifications! ' + e.error);
+    var reRegDelay = (_regStop - _regStart) * 2;
+    setTimeout(_registerNotification,reRegDelay);
 }
 
 /*
  * Deregister user from push notifications
  */
 HttpClient.deregisterForPushNotification = function(userId) {
+	_resetDelayRegTimers();
+	
 	var _requestArgs = {
         url: 'user.php',
         method: 'post',
