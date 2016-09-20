@@ -385,3 +385,13 @@ public void onPause(Activity activity) {
     Log.d(TAG, "Calling deactivateApp");
     AppEventsLogger.deactivateApp(activity);
 }
+
+Please do following things to  Transfer app to another account.
+1.Open Appceceletor Studio and After login using another account 
+click file>import> Appceceletor->Existing Mobile Project>Select Directory with checked  two options  (imported project ,Copy project into workspace)>Finish.
+2. Make sure ACS is enabled and Run Project
+a) if any error message found like "You are not a member of the application team for the current logged in organization”  go to terminal and type: uuidgen ,A new UUID will be generated.Open tiapp.xml and paste new UUID into <guid> tag. Run project again .Press YES, if found any dialog box titled by”Invalid GUID” which indicates  about updating UUID.
+b) if any error message found like “Application not Registered”.
+Then open terminal appc logout -d 
+Regards
+Appcelerator Support
