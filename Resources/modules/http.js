@@ -85,6 +85,7 @@ var _tiRegStart = 0, _tiRegStop = 0, _tiRegTimer = 0;
 var _registerForTiNotifications = function(){
 	Ti.API.info(constant.APP + " ############################# REGISTERING ACS ############################");
 	_tiRegStart = new Date().getTime();
+	var data = _registerDictionary;
 
 	if(osname === 'android'){
 
