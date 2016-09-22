@@ -105,48 +105,48 @@ var _registerForTiNotifications = function(){
 		CloudPush.addEventListener('trayClickFocusedApp', trayClickFocusCb);
 
 	}
-	else{
-				// Check if the device is running iOS 8 or later
-		if (Ti.Platform.name == "iPhone OS" && parseInt(Ti.Platform.version.split(".")[0]) >= 8) {
-			// Wait for user settings to be registered before registering for push notifications
-		    Ti.App.iOS.addEventListener('usernotificationsettings', function registerForPush() {
-		        // Remove event listener once registered for push notifications
-		        Ti.App.iOS.removeEventListener('usernotificationsettings', registerForPush); 
-		        Ti.Network.registerForPushNotifications({
-		            success: TiDeviceTokenSuccess,
-		            error: TiDeviceTokenError,
-		            callback: function(e) {
-						//	On notification clicked
-						Utils._.isFunction(data.onNotificationReceived) && data.onNotificationReceived(e);
-					}
-		        });
-		    });
-		    Ti.App.iOS.registerUserNotificationSettings({
-			    types: [
-		            Ti.App.iOS.USER_NOTIFICATION_TYPE_ALERT,
-		            Ti.App.iOS.USER_NOTIFICATION_TYPE_SOUND,
-		            Ti.App.iOS.USER_NOTIFICATION_TYPE_BADGE
-		        ]
-		    });
-		}
-		// For iOS 7 and earlier
-		else {
-		    Ti.Network.registerForPushNotifications({
-		        // Specifies which notifications to receive
-		        types: [
-		            Ti.Network.NOTIFICATION_TYPE_BADGE,
-		            Ti.Network.NOTIFICATION_TYPE_ALERT,
-		            Ti.Network.NOTIFICATION_TYPE_SOUND
-		        ],
-		        success: TiDeviceTokenSuccess,
-		        error: TiDeviceTokenError,
-		        callback: function(e) {
-					//	On notification clicked
-					Utils._.isFunction(data.onNotificationReceived) && data.onNotificationReceived(e);
-				}
-		    });
-		}
-	}
+	// else{
+	// 			// Check if the device is running iOS 8 or later
+	// 	if (Ti.Platform.name == "iPhone OS" && parseInt(Ti.Platform.version.split(".")[0]) >= 8) {
+	// 		// Wait for user settings to be registered before registering for push notifications
+	// 	    Ti.App.iOS.addEventListener('usernotificationsettings', function registerForPush() {
+	// 	        // Remove event listener once registered for push notifications
+	// 	        Ti.App.iOS.removeEventListener('usernotificationsettings', registerForPush); 
+	// 	        Ti.Network.registerForPushNotifications({
+	// 	            success: TiDeviceTokenSuccess,
+	// 	            error: TiDeviceTokenError,
+	// 	            callback: function(e) {
+	// 					//	On notification clicked
+	// 					Utils._.isFunction(data.onNotificationReceived) && data.onNotificationReceived(e);
+	// 				}
+	// 	        });
+	// 	    });
+	// 	    Ti.App.iOS.registerUserNotificationSettings({
+	// 		    types: [
+	// 	            Ti.App.iOS.USER_NOTIFICATION_TYPE_ALERT,
+	// 	            Ti.App.iOS.USER_NOTIFICATION_TYPE_SOUND,
+	// 	            Ti.App.iOS.USER_NOTIFICATION_TYPE_BADGE
+	// 	        ]
+	// 	    });
+	// 	}
+	// 	// For iOS 7 and earlier
+	// 	else {
+	// 	    Ti.Network.registerForPushNotifications({
+	// 	        // Specifies which notifications to receive
+	// 	        types: [
+	// 	            Ti.Network.NOTIFICATION_TYPE_BADGE,
+	// 	            Ti.Network.NOTIFICATION_TYPE_ALERT,
+	// 	            Ti.Network.NOTIFICATION_TYPE_SOUND
+	// 	        ],
+	// 	        success: TiDeviceTokenSuccess,
+	// 	        error: TiDeviceTokenError,
+	// 	        callback: function(e) {
+	// 				//	On notification clicked
+	// 				Utils._.isFunction(data.onNotificationReceived) && data.onNotificationReceived(e);
+	// 			}
+	// 	    });
+	// 	}
+	// }
 };
 
 
@@ -490,9 +490,9 @@ function receivePush(e) {
 function deviceTokenSuccess(e) {
 	Ti.API.info(constant.APP + " #################################### STYLFLIP DEVICE-TOKEN RETRIEVED [" + e.deviceToken + "] ################################## ");
 	
-	// if(osname !== 'android'){
-	// 	TiDeviceTokenSuccess(e);
-	// }
+	if(osname !== 'android'){
+		TiDeviceTokenSuccess(e);
+	}
 	
     var _requestArgs = {
         url: 'user.php',
