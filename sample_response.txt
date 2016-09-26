@@ -360,6 +360,16 @@ For titanium sdk >3.5.0.GA we require node >v4.0.0 otherwise node v0.12.1 will s
 }
 
 {
+  "alert": "You need to see Robbies Profile",
+  "title": "Robbies update",
+  "appPayload": {
+    "screen": "stylFile",
+    "itemId": "11803"
+  }
+}
+
+
+{
   "alert": "content message",
   "title": "notification title",
   "category": "sampleCategory", 

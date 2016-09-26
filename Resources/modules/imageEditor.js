@@ -379,6 +379,7 @@ var openImageEditor = function(image, callback) {
 			Ti.API.info(constant.APP + " ######################## attaching image #######################");
 			// Ti.API.info(rotateImageViewContainer.toImage());
 			callback({success: true, image: osname=='android'?rotateImageViewContainer.toImage().media:rotateImageViewContainer.toImage()});
+			Utils.trackScreen('imageupload');	
 			_removeFromMemory();
 		}
 

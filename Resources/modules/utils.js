@@ -4,6 +4,25 @@ Utils._ = require('/libs/UnderscoreUtils')._;
 
 var _loginEmail = "", _loginPass = "";
 
+Utils.trackScreen = function(screen){
+	var userid = Ti.App.Properties.getString('userId','');
+	var trkStr = 'navigation', data = {};
+
+	if(screen && typeof screen === 'string'){
+		trkStr += '.' + screen.toLowerCase();
+	}
+
+	data.userid = userid ? userid : 'na';
+	
+	Ti.API.info(constant.APP + " @@@@@@@@@@@@@@@@@@@@@@@@@@ trackscreen: [" + trkStr + "] @@@@@@@@@@@@@@@@@@@@@@@@");
+	for(var iz in data){
+		Ti.API.info(constant.APP + " key: [" + iz + "] value: [" + data[iz] + "]");
+	}
+
+	Titanium.Analytics.featureEvent(trkStr,data);
+
+};
+
 Utils.setLoginCreds = function(email,password){
 	_loginEmail = email,
 	_loginPass = password;
@@ -465,6 +484,31 @@ Utils.shortenUrl = function() {
 	};
 };
 
+Utils.trackNotification = function(nPayload){
+
+	if(nPayload.source !== 'acs') return;
+	
+	var itemId = '', screen = '', trackStr = 'notification.tap', userId = Utils.loggedInUserId();
+
+	if(nPayload.screen){
+		screen = nPayload.screen.toString().toLowerCase();
+		trackStr += ('.' + screen);
+	}
+
+	var data = {};
+
+	if(userId){
+		data.userid = userId;
+	}
+
+	if(nPayload.itemId){
+		data.itemid = nPayload.itemId;
+	}
+
+	Ti.API.info(constant.APP + " #################### trackStr: [" + trackStr + "] #########################");
+	Titanium.Analytics.featureEvent(trackStr,data);
+
+};
 
 
 module.exports = Utils;

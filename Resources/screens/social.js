@@ -496,6 +496,7 @@ exports.get = function(footerInstance) {
     
     
     var _getView = function() {
+		Utils.trackScreen('social');
         return mainView;
     };
     

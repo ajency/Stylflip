@@ -1248,6 +1248,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
     };
 	
     var _getView = function() {
+		Utils.trackScreen('productdetails');
         return mainView;
     };
     

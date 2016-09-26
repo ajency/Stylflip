@@ -1006,6 +1006,7 @@ exports.get = function(tabSelected, userId, followCallback) {
 	_loadUserProfile();
 	
     var _getView = function() {
+		Utils.trackScreen('stylefile');
         return mainView;
     };
     

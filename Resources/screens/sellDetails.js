@@ -516,7 +516,8 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 		        	toBeDonated: _toBeDonated
 	        	});
 
-	        // Ti.API.info(constant.APP + " ###### closing window");	
+	        // Ti.API.info(constant.APP + " ###### closing window");
+			Utils.trackScreen('price');	
 	        _win.close();
 	        // });
     	}
@@ -1914,6 +1915,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     		case 'PICK-UP FROM':
     			selectAddressView.fireEvent('click');
     		break;
+			// case 'PRICE': Utils.trackScreen('price');break;
     	}
     	
     	if(e.title == 'SELECT SIZE') {
@@ -2087,6 +2089,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 
     
     var _getView = function() {
+		Utils.trackScreen('selldetails');
         return mainView;
     };
     

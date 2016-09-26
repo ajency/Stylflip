@@ -409,6 +409,7 @@ exports.get = function(tabSelected, wardrobeData, productData) {
 		        HttpClient.getResponse({
 		        	requestArgs: _requestArgs,
 		        	success: function(response) {
+						Utils.trackScreen('submit');
 		        		if(wardrobeData == undefined && productData == undefined) {
 		        			var _title, _message;
 		        			if(response.data.KYC == true) {
@@ -665,6 +666,7 @@ exports.get = function(tabSelected, wardrobeData, productData) {
 	
 	
     var _getView = function() {
+		Utils.trackScreen('sell');
         return mainView;
     };
     

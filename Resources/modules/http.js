@@ -58,11 +58,18 @@ var TiDeviceTokenSuccess = function(e){
 	subScribeCloudToken();
 };
 
+var _tiReRegDelay = 0;
 var TiDeviceTokenError = function(e){
 	Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$$$ device token retrieve faled error: [" + e.error + "]");
 	_tiRegStop = new Date().getTime();
-	var delay = (_tiRegStop - _tiRegStart) * 2;
-	_tiRegTimer = setTimeout(_registerForTiNotifications,delay);
+	if(_tiReRegDelay){
+		_tiReRegDelay = _tiReRegDelay * 2;
+	}
+	else{
+		_tiReRegDelay = (_tiRegStop - _tiRegStart) * 2;
+	}
+	
+	_tiRegTimer = setTimeout(_registerForTiNotifications,_tiReRegDelay);
 };
 
 var CloudPushCb = function(evt) {
@@ -106,7 +113,7 @@ var _registerForTiNotifications = function(){
 
 	}
 	else{
-				// Check if the device is running iOS 8 or later
+		// Check if the device is running iOS 8 or later
 		if (Ti.Platform.name == "iPhone OS" && parseInt(Ti.Platform.version.split(".")[0]) >= 8) {
 			// Wait for user settings to be registered before registering for push notifications
 		    Ti.App.iOS.addEventListener('usernotificationsettings', function registerForPush() {
@@ -534,11 +541,18 @@ function deviceTokenSuccess(e) {
 /*
  * On Device token error
  */
+var _reRegDelay = 0; 
 function deviceTokenError(e) {
 	_regStop = new Date().getTime();
     Ti.API.info('Failed to register for push notifications! ' + e.error);
-    var reRegDelay = (_regStop - _regStart) * 2;
-    setTimeout(_registerNotification,reRegDelay);
+    if(_reRegDelay){
+    	_reRegDelay = _reRegDelay * 2;
+    }
+    else{
+    	_reRegDelay = (_regStop - _regStart) * 2;
+    }
+    
+    setTimeout(_registerNotification,_reRegDelay);
 }
 
 /*
