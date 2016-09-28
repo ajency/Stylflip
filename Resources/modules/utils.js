@@ -4,6 +4,46 @@ Utils._ = require('/libs/UnderscoreUtils')._;
 
 var _loginEmail = "", _loginPass = "";
 
+var _rateAppCalled = false;
+Utils.rateApp = function(){
+	if(_rateAppCalled) return;
+	// var now = ( new Date().getTime() ) / 1000;
+	var rateApp = Ti.App.Properties.getString('rateApp','');
+	// if(!timeToRate){
+	// 	timeToRate = now + ( 24 * 60 * 60 );
+	// 	Ti.App.Properties.setString('timeToRate',timeToRate);
+	// }
+	// else 
+		if(rateApp === '' && launchCount > constant.RATEAPPLIMIT ){
+			var alertDialog = UI.createAlertDialog({
+				title: 'rate app',
+				titleColor: '#ef4e6d',
+				message: 'Please take some time to rate our app',
+				buttonNames: ['Ok', 'Cancel']
+			});
+
+			alertDialog.addEventListener('click', function(e){
+				if(e.status === 'accept'){
+					if(osname === 'android'){
+						Ti.Platform.openURL('https://play.google.com/store/apps/details?id=com.under1r.StylFlip&hl=en#details-reviews');
+					}
+					else{
+						Ti.Platform.openURL('https://itunes.apple.com/in/app/stylflip/id1072334629?mt=8');
+					}
+
+					Ti.App.Properties.setString('rateApp','rate_complete');
+				}
+				// else{
+					
+				// }
+		});
+
+		alertDialog.show();
+		alertDialog = null;
+	}
+	_rateAppCalled = true;
+}; //end rateApp
+
 Utils.trackScreen = function(screen){
 	var userid = Ti.App.Properties.getString('userId','');
 	var trkStr = 'navigation', data = {};

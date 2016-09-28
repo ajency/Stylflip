@@ -395,3 +395,7 @@ public void onPause(Activity activity) {
     Log.d(TAG, "Calling deactivateApp");
     AppEventsLogger.deactivateApp(activity);
 }
+
+Rate app link android: https://play.google.com/store/apps/details?id=com.under1r.StylFlip&hl=en#details-reviews
+
+

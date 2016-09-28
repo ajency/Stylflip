@@ -378,17 +378,19 @@ exports.get = function(tabToLoad) {
 		else{
 			btnSearch.backgroundImage = '/images/header/search.png';
 		}
+		Utils.rateApp();
 	}
 
 	// Ti.App.fireEvent('app:apicallSuccess',{params});
 	Ti.App.addEventListener('app:apicallSuccess',_apiSuccessCb);
+
 
 	/*
 	 * Tab select listener
 	 */
 	var _onFooterTabSelect = function(e, allowDuplicate) {
 		apiSearchText = "";
-		console.log(constant.APP + " _onFooterTabSelect entered");
+		// console.log(constant.APP + " _onFooterTabSelect entered");
 		if(_isSearchBarVisible) {
 			searchBar.setHidden(true);
 			_isSearchBarVisible = false;
