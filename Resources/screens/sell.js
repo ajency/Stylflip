@@ -235,6 +235,7 @@ exports.get = function(tabSelected, wardrobeData, productData) {
         var window = Window.create();
         // var window = Window.create(null,null,null,Window.sellDetailsSlugs);
 
+        // Utils.trackEvent('sell.add.details');
         var sellDetails = require('/screens/sellDetails').get(tabSelected!=undefined?tabSelected:'sell', _productDetails, function(e) {
         	//	DONE button click handler
         	if(e.saveAddresses) {
@@ -249,8 +250,11 @@ exports.get = function(tabSelected, wardrobeData, productData) {
         	UI.enableButton(btnView);
         	UI.enableButton(btnSubmit);
         	UI.enableButton(btnRemove, {color: '#828282'});
+
+        	Utils.trackEvent('sell.details.complete');
         },_updateProductDetails);
 
+        
         window.add(sellDetails.getView());
         Window.open(window);  
     });
@@ -341,6 +345,7 @@ exports.get = function(tabSelected, wardrobeData, productData) {
             return;
 		}
 		
+		// Utils.trackEvent('sell.submit');
 		var alertDialog = UI.createAlertDialog({
             title: 'Alert!', 
             // message: 'I agree to StylFlip’s Terms and Conditions',
@@ -409,7 +414,7 @@ exports.get = function(tabSelected, wardrobeData, productData) {
 		        HttpClient.getResponse({
 		        	requestArgs: _requestArgs,
 		        	success: function(response) {
-						Utils.trackScreen('submit');
+						// Utils.trackScreen('submit');
 		        		if(wardrobeData == undefined && productData == undefined) {
 		        			var _title, _message;
 		        			if(response.data.KYC == true) {
@@ -456,6 +461,7 @@ exports.get = function(tabSelected, wardrobeData, productData) {
 			        	UI.disableButton(btnSubmit);
 			        	UI.disableButton(btnRemove);
 			        	
+			        	Utils.trackEvent('sell.submit.complete');
 			        	/*
 			        	 * Disable all secondary image views
 			        	 */
@@ -585,6 +591,8 @@ exports.get = function(tabSelected, wardrobeData, productData) {
 	    			}
     			break;
     		}
+
+    		Utils.trackEvent('sell.imageupload');
     	});
 	};
 
@@ -666,7 +674,7 @@ exports.get = function(tabSelected, wardrobeData, productData) {
 	
 	
     var _getView = function() {
-		Utils.trackScreen('sell');
+		Utils.trackScreen('sell.tab');
         return mainView;
     };
     

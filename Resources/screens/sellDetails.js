@@ -517,7 +517,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	        	});
 
 	        // Ti.API.info(constant.APP + " ###### closing window");
-			Utils.trackScreen('price');	
+			// Utils.trackEvent('sell.product.details.flow');	
 	        _win.close();
 	        // });
     	}
@@ -2089,7 +2089,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 
     
     var _getView = function() {
-		Utils.trackScreen('selldetails');
+		Utils.trackScreen('selldetails.tab');
         return mainView;
     };
     

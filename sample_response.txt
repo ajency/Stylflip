@@ -399,3 +399,23 @@ public void onPause(Activity activity) {
 Rate app link android: https://play.google.com/store/apps/details?id=com.under1r.StylFlip&hl=en#details-reviews
 
 
+http://54.69.190.92/stylflip/api/stylfile.php
+
+serverArgs: {
+	action: 'myWardrobe',
+   	userId: '<user-id>',
+   	loggedInUserId: '<logged-in-userid>',
+   	pageIndex: 1
+}
+
+http://54.69.190.92/stylflip/api/stylfeed.php
+
+serverArgs: {
+	action: 'listing',
+    location: {
+    	lat: 'x',
+    	lon: 'y'
+    },
+    pageIndex: 1
+}
+

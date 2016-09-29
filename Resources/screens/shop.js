@@ -776,7 +776,7 @@ exports.get = function() {
 	
 	
     var _getView = function() {
-		Utils.trackScreen('shop');
+		Utils.trackScreen('shop.page');
         return mainView;
     };
     

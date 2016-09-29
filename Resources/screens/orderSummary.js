@@ -620,7 +620,7 @@ exports.get = function(checkOutDetails, paymentCallback) {
 
 	
     var _getView = function() {
-        Utils.trackScreen('ordersummary');
+        Utils.trackScreen('ordersummary.page');
     	return mainView;
     };
     

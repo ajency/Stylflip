@@ -46,22 +46,52 @@ Utils.rateApp = function(){
 
 Utils.trackScreen = function(screen){
 	var userid = Ti.App.Properties.getString('userId','');
-	var trkStr = 'navigation', data = {};
+	var trkStr = 'viewed', data = {};
 
 	if(screen && typeof screen === 'string'){
-		trkStr += '.' + screen.toLowerCase();
+		if(screen.indexOf('sell') !== -1 || screen.indexOf('stylefile') !== -1){
+			trkStr = 'clicked'
+		}
+
+		trkStr = trkStr + '.' + screen.toLowerCase();
 	}
 
 	data.userid = userid ? userid : 'na';
 	
-	Ti.API.info(constant.APP + " @@@@@@@@@@@@@@@@@@@@@@@@@@ trackscreen: [" + trkStr + "] @@@@@@@@@@@@@@@@@@@@@@@@");
-	for(var iz in data){
-		Ti.API.info(constant.APP + " key: [" + iz + "] value: [" + data[iz] + "]");
+	// Ti.API.info(constant.APP + " @@@@@@@@@@@@@@@@@@@@@@@@@@ trackscreen: [" + trkStr + "] @@@@@@@@@@@@@@@@@@@@@@@@");
+	// for(var iz in data){
+	// 	Ti.API.info(constant.APP + " key: [" + iz + "] value: [" + data[iz] + "]");
+	// }
+
+	if(osname === 'android'){
+		trkStr = osname + '.' + trkStr;
+	}
+	else{
+		trkStr = 'ios.' + trkStr;
 	}
 
 	Titanium.Analytics.featureEvent(trkStr,data);
 
 };
+
+Utils.trackEvent = function(event){
+	var userid = Ti.App.Properties.getString('userId',''), data = {}, trkStr = 'event.';
+
+	data.userid = userid ? userid : 'na';
+
+	if(event && typeof event === 'string'){
+		trkStr = trkStr + event;
+
+		if(osname === 'android'){
+			trkStr = 'android.' + trkStr;
+		}
+		else{
+			trkStr = 'ios.' + trkStr;
+		}
+
+		Titanium.Analytics.featureEvent(trkStr,data);
+	} 
+}
 
 Utils.setLoginCreds = function(email,password){
 	_loginEmail = email,
@@ -543,6 +573,13 @@ Utils.trackNotification = function(nPayload){
 
 	if(nPayload.itemId){
 		data.itemid = nPayload.itemId;
+	}
+
+	if(osname === 'android'){
+		trackStr = 'android.' + trackStr;
+	}
+	else{
+		trackStr = 'ios.' + trackStr;
 	}
 
 	Ti.API.info(constant.APP + " #################### trackStr: [" + trackStr + "] #########################");

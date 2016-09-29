@@ -509,7 +509,7 @@ exports.get = function(tabSelected, checkOutDetails, paymentCallback) {
 	
 	
     var _getView = function() {
-    	Utils.trackScreen('shippinginfo');
+    	Utils.trackScreen('shippinginfo.page');
     	return mainView;
     };
     
