@@ -401,6 +401,13 @@ exports.get = function(header) {
 	 */
 	var _createFeedRow = function(feedData, separator) {
 		// Titanium.API.info(constant.APP + " creating feed row...");
+
+		// for(var ix in feedData){
+		// 	if(feedData.propertyIsEnumerable(ix)){
+		// 		Ti.API.info(constant.APP + " key: [" + ix + "] value: [" + feedData[ix] + "]");
+		// 	}
+		// }
+
 		var feedRow = Ti.UI.createView(_style.feedRow);
 		
 		var profileView = Ti.UI.createView(_style.profileView);
@@ -627,11 +634,44 @@ exports.get = function(header) {
 	    	_loadUserProfile(this.userId);
 	    });
 	    
-	    
+	    var lblStatusColor = '#3333cc';
 		var lblStatus = Ti.UI.createLabel(Utils._.extend({}, _style.lblStatus, {
 			text: feedData.feedTitle // 'Status message goes here...'
 	    }));
 	    
+		var _lblStatusCb = function(){
+			Ti.API.info(constant.APP + " ######################## FEED TITLE LABEL CLICKED #######################");
+			var text = lblStatus.text;
+			var matches = text.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+			
+			var matchFound = matches && matches.length;
+
+			if(matchFound){
+				// Ti.API.info(constant.APP + " ###################### FOUND HTTP MATCH ######################");
+				lblStatus.color = lblStatusColor;
+				Ti.Platform.openURL(matches[0]);
+			}
+			else{
+				// Ti.API.info(constant.APP + " ###################### NO HTTP MATCH ######################");
+				matches = text.match(/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+				matchFound = matches && matches.length;
+
+				if(matchFound){
+					// Ti.API.info(constant.APP + " ###################### FOUND NON HTTP MATCH ######################");
+					matches[0] = 'http://' + matches[0];
+					lblStatus.color = lblStatusColor;
+					Ti.Platform.openURL(matches[0]);
+				}
+				// else{
+				// 	Ti.API.info(constant.APP + " ###################### NO MATCH FOUND ######################");
+				// }
+			}
+
+			// Ti.Platform.openURL("https://www.mozilla.org/en-US/firefox/new/?gclid=CIuwjui3684CFdUSaAod078OgQ");
+		};
+
+		lblStatus.addEventListener('click',_lblStatusCb);
+
 	    if(feedData.photo != '') {
 	    	var imgProductView = Ti.UI.createView(Utils._.extend({}, _style.imgProduct, {
 		    	top: UI.top(5),
@@ -967,6 +1007,7 @@ exports.get = function(header) {
 	
 	
     var _getView = function() {
+		Utils.trackScreen('stylefeed.page');
         return mainView;
     };
     

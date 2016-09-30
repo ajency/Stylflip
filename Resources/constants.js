@@ -35,6 +35,7 @@ exports.get = function() {
 		// BASE_URL: 'http://stylflip.com/stylflip/api/',
 		
 		APP: 'STYLFLIP',
+		RATEAPPLIMIT: 5,
 		HEADER_HEIGHT: headerHeight,
 		FOOTER_HEIGHT: footerHeight,
 		FOOTER_TOP: (pheight - footerHeight) - windowTopPos,

@@ -585,6 +585,9 @@ exports.get = function(tabSelected, isPostLogin, saveCallback) {
 	
 	
     var _getView = function() {
+    	if(isPostLogin){
+    		Utils.trackEvent('signup');
+    	}
     	return mainView;
     };
     

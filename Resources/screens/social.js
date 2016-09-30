@@ -223,6 +223,7 @@ exports.get = function(footerInstance) {
 				else {
 					listView.hideLazyLoadingRow();
 				}
+				Utils.trackScreen('social.notificationtab');
         	},
         	error: function(error) {
                 if(isRefresh) {
@@ -467,6 +468,7 @@ exports.get = function(footerInstance) {
 				else {
 					listView.hideLazyLoadingRow();
 				}
+				Utils.trackScreen('social.peopletab');
         	},
         	error: function(error) {
                 if(isRefresh) {
@@ -496,6 +498,7 @@ exports.get = function(footerInstance) {
     
     
     var _getView = function() {
+		// Utils.trackScreen('social');
         return mainView;
     };
     

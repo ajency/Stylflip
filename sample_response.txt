@@ -1,3 +1,11 @@
+GCM API key: AIzaSyA3tTCiZwBu_1Kq3AC_iXwfYfjfkpGrz7s
+GCM sender ID: 470182479535
+
+IOS dev push certificate: styleflip-acs-dev-push.p12, password: ajency#123
+IOS dist push certificate: styleflip-acs-dist-push.p12, password: ajency#123
+
+For titanium sdk >3.5.0.GA we require node >v4.0.0 otherwise node v0.12.1 will suffice.
+
 [INFO] :   STYLFLIP getting response data from server
 [INFO] :   Timeline: Timeline: Activity_launch_request id:com.placard.StylFlip time:14224135
 [INFO] :   Timeline: Timeline: Activity_idle id: android.os.BinderProxy@3108438a time:14224354
@@ -338,3 +346,76 @@
 [INFO] :   STYLFLIP getting response data from server
 
 [INFO] :   STYLFLIP getting response data from server
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ PUSH NOTIFICATION PAYLOAD FORMAT FOR ACS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+{
+  "alert": "An amazingly stylish chair for sale",
+  "title": "Stylish furniture",
+  "appPayload": {
+    "screen": "shopDetails", //stylFile, shopDetails, feedDetails
+    "itemId": "2688"
+  }
+}
+
+{
+  "alert": "You need to see Robbies Profile",
+  "title": "Robbies update",
+  "appPayload": {
+    "screen": "stylFile",
+    "itemId": "11803"
+  }
+}
+
+
+{
+  "alert": "content message",
+  "title": "notification title",
+  "category": "sampleCategory", 
+  "appPayload": {
+    "screen": "shopDetails",
+    "itemId": "2688"
+  }
+}
+
+09-16 15:25:28.011 878-1806/? W/ActivityManager: Unable to start service Intent { cmp=com.under1r.StylFlip/com.appcelerator.analytics.APSAnalyticsService } U=0: not found
+[WARN]  APSAnalyticsHelper: Analytics service not found.
+
+@Override
+public void onResume(Activity activity) {
+    super.onResume(activity);
+    Log.d(TAG, "Calling activateApp");
+    AppEventsLogger.activateApp(activity);
+}
+
+@Override
+public void onPause(Activity activity) {
+    super.onPause(activity);
+    Log.d(TAG, "Calling deactivateApp");
+    AppEventsLogger.deactivateApp(activity);
+}
+
+Rate app link android: https://play.google.com/store/apps/details?id=com.under1r.StylFlip&hl=en#details-reviews
+
+
+http://54.69.190.92/stylflip/api/stylfile.php
+
+serverArgs: {
+	action: 'myWardrobe',
+   	userId: '<user-id>',
+   	loggedInUserId: '<logged-in-userid>',
+   	pageIndex: 1
+}
+
+http://54.69.190.92/stylflip/api/stylfeed.php
+
+serverArgs: {
+	action: 'listing',
+    location: {
+    	lat: 'x',
+    	lon: 'y'
+    },
+    pageIndex: 1
+}
+

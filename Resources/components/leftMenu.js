@@ -81,6 +81,7 @@ exports.get = function(rightView) {
 	    		return;
 	    	}
 	    	if(this.key == 'notifications') {
+	    		Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ LEFTMENU OPTIONS CLICKED ###############################");
 	    		Utils.toggleNotification();
 	    		if(this.children[0].image == '/images/leftMenu/toggle-on.png') {
 	    			this.children[0].image = '/images/leftMenu/toggle-off.png';

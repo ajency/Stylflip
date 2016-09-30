@@ -36,6 +36,7 @@ exports.get = function() {
     var txtUsername = UI.createTextField(Utils._.extend({}, _commonStyle.txtField, {
     	// left: UI.left(10),
     	// right: UI.right(50),
+        value: '',
     	width: UI.width(200),
         hintText: constant.TEXT.HINT_EMAIL,
         keyboardType: Ti.UI.KEYBOARD_EMAIL,
@@ -58,6 +59,7 @@ exports.get = function() {
     var txtPassword = UI.createTextField(Utils._.extend({}, _commonStyle.txtField, {
     	// left: UI.left(10),
     	// right: UI.right(10),
+        value: '',
     	width: UI.width(195),
         hintText: constant.TEXT.HINT_PASSWORD,
         passwordMask: true,
@@ -174,9 +176,14 @@ exports.get = function() {
     	}
         	
     	if(loginType && userId) {
+            Ti.API.info(constant.APP + " ######################## SETTING USERID ##########################");
     		Ti.App.Properties.setString('userId', userId);
         	Ti.App.Properties.setString('loginType', loginType);
         	Utils.hasUserVerifiedTheCode(true);
+            // Ti.API.info(constant.APP + " ###################### retrieved userId: " + userId);
+            if(!isLoggedInForTheFirstTime && loginType === 'email'){ //only email for now on subsequent logins
+                Utils.setLoginCreds(txtUsername.value.trim(),'#Stylflip123');
+            }
     	}
     	
     	// var currentWindow = Window.getCurrentWindow();
@@ -832,6 +839,7 @@ exports.get = function() {
     
     
     var _getView = function() {
+        // Utils.trackScreen('login');
         return mainView;
     };
     

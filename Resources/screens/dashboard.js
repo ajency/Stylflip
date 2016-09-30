@@ -1,5 +1,5 @@
 exports.get = function(tabToLoad) {
-	Ti.API.info(constant.APP + " ################################## LOADING DASHBOARD ##############################");
+	//Ti.API..info(constant.APP + " ################################## LOADING DASHBOARD ##############################");
 	Analytics.trackUser({
 	  userId: Utils.isUserLoggedIn() ? Utils.loggedInUserId() : "0",
 	  category: osname,
@@ -16,7 +16,7 @@ exports.get = function(tabToLoad) {
     		UI.currentTextFieldFocused.addEventListener('change',_searchBarChangeCallback);
     	}
     	else{
-    		Ti.API.info(constant.APP + " ############ ADD NO CURRENT SEARCH TEXT FIELD FOCUSED ################");
+    		//Ti.API..info(constant.APP + " ############ ADD NO CURRENT SEARCH TEXT FIELD FOCUSED ################");
     	}
     };
 
@@ -26,35 +26,35 @@ exports.get = function(tabToLoad) {
     		UI.currentTextFieldFocused = null;
     	}
     	else{
-    		Ti.API.info(constant.APP + " ############ REM NO CURRENT SEARCH TEXT FIELD FOCUSED ################");
+    		//Ti.API..info(constant.APP + " ############ REM NO CURRENT SEARCH TEXT FIELD FOCUSED ################");
     	}
     };
     
     var _searchBarFocus = function(e){
-		Ti.API.info(constant.APP + " ###################### adding search event here ######################");
+		//Ti.API..info(constant.APP + " ###################### adding search event here ######################");
 		_addSearchChange();
     };
 
     Ti.App.addEventListener('app:searchbarFocus',_searchBarFocus);
 
     var _searchBarBlur = function(e){
-    	Ti.API.info(constant.APP + " ###################### removing search event here ######################");
+    	//Ti.API..info(constant.APP + " ###################### removing search event here ######################");
     	_remSearchChange();
     };
 
     Ti.App.addEventListener('app:searchbarBlur',_searchBarBlur);
     
     var _searchBarChangeCallback = function(){
-		Ti.API.info(constant.APP + " #################### SEARCH BAR KEYPRESSED ###################");
+		//Ti.API..info(constant.APP + " #################### SEARCH BAR KEYPRESSED ###################");
 		if(UI.currentTextFieldFocused){
-			// Ti.API.info(" searchBarVisiblbe: " + searchBar.visible + " headerVisible: " + headerView.visible + " UI.currentTextFieldFocused.value: " + UI.currentTextFieldFocused.value);
+			// //Ti.API..info(" searchBarVisiblbe: " + searchBar.visible + " headerVisible: " + headerView.visible + " UI.currentTextFieldFocused.value: " + UI.currentTextFieldFocused.value);
 			if(headerView.visible){
 				if((UI.currentTextFieldFocused.value).trim() !== '') {
-					// Ti.API.info(constant.APP + " #################### CLOSE ICON VISIBLE ###################");
+					// //Ti.API..info(constant.APP + " #################### CLOSE ICON VISIBLE ###################");
 					btnSearch.backgroundImage = '/images/header/closeicon.png';
 				}
 				else{
-					Ti.API.info(constant.APP + " #################### SEARCH-ACTIVE ICON VISIBLE ###################");
+					//Ti.API..info(constant.APP + " #################### SEARCH-ACTIVE ICON VISIBLE ###################");
 					btnSearch.backgroundImage = '/images/header/search-active.png';
 				}
 			}
@@ -62,9 +62,9 @@ exports.get = function(tabToLoad) {
 	};
 
 	var _searchIconClickCallback = function(e) {
-		// Ti.API.info(constant.APP + " <<<<<<<<<<<<<<<<<<< SEARCH BAR PROCEDURE >>>>>>>>>>>>>>>>>>>");	    
+		// //Ti.API..info(constant.APP + " <<<<<<<<<<<<<<<<<<< SEARCH BAR PROCEDURE >>>>>>>>>>>>>>>>>>>");	    
 		if(e.show) {
-			Ti.API.info(constant.APP + " ################## SEARCH BAR SHOW PROCEDURE ##################");
+			//Ti.API..info(constant.APP + " ################## SEARCH BAR SHOW PROCEDURE ##################");
 			searchBar.setHidden(false);
 			searchTextArea.focus();
 			_isSearchBarVisible = true;
@@ -73,7 +73,7 @@ exports.get = function(tabToLoad) {
 			// addSearchChange();
 		}
 		else {
-			Ti.API.info(constant.APP + " ################# SEARCH BAR CLEAR PROCEDURE ###################")
+			//Ti.API..info(constant.APP + " ################# SEARCH BAR CLEAR PROCEDURE ###################")
 			switch(_currentKey) {
 				case 'stylefeed':
 						searchBar.setText('');
@@ -144,9 +144,8 @@ exports.get = function(tabToLoad) {
     var btnSearch = header.getbtnSearch();
 
     var _clearSearchField = function(){
-    	Ti.API.info(constant.APP + " ################# CLEARING SEARCH FIELD ####################");
+    	//Ti.API..info(constant.APP + " ################# CLEARING SEARCH FIELD ####################");
 
-    	// _showSearchBar();
     	searchBar.setText('');
 	    searchBar.setHidden(true);	   
 	    header.setSearchActive(false);
@@ -226,7 +225,9 @@ exports.get = function(tabToLoad) {
 			
 			if(e.key == 'logout') {
 				//	Deregister user for push notification
+				Ti.API.info(constant.APP + " ################# LOGGING OUT ##################")
         		HttpClient.deregisterForPushNotification(Utils.loggedInUserId());
+        		// HttpClient.deregisterForTiNotifications();
         		
 				Ti.App.Properties.removeProperty('userId');
 				Ti.App.Properties.removeProperty('loginType');
@@ -368,26 +369,28 @@ exports.get = function(tabToLoad) {
 
 	var apiSearchText = '';
 	var _apiSuccessCb = function(e){
-		Ti.API.info(constant.APP + " ################### API SUCCESS CALLBACK ###################");
+		//Ti.API..info(constant.APP + " ################### API SUCCESS CALLBACK ###################");
 		apiSearchText = e.params && e.params.serverArgs && e.params.serverArgs.searchText ? e.params.serverArgs.searchText : '';
 		if(apiSearchText){
-			Ti.API.info(constant.APP + " ################### SEARCH TEXT FOUND ###################");
+			//Ti.API..info(constant.APP + " ################### SEARCH TEXT FOUND ###################");
 			_showSearchBar(apiSearchText,true);
 		}
 		else{
 			btnSearch.backgroundImage = '/images/header/search.png';
 		}
+		Utils.rateApp();
 	}
 
 	// Ti.App.fireEvent('app:apicallSuccess',{params});
 	Ti.App.addEventListener('app:apicallSuccess',_apiSuccessCb);
+
 
 	/*
 	 * Tab select listener
 	 */
 	var _onFooterTabSelect = function(e, allowDuplicate) {
 		apiSearchText = "";
-		console.log(constant.APP + " _onFooterTabSelect entered");
+		// console.log(constant.APP + " _onFooterTabSelect entered");
 		if(_isSearchBarVisible) {
 			searchBar.setHidden(true);
 			_isSearchBarVisible = false;
@@ -509,7 +512,6 @@ exports.get = function(tabToLoad) {
 						currentView = require('/screens/feedDetails').get(tabSelected='stylefeed', Utils.getPushItemId());
 					break;
 					default:
-						Ti.API.info(constant.APP + " loading route [" + e.key + "] ...");
 						currentView = require('/screens/'+(e.key)).get(e.key == 'social' ? footer : undefined);
 					break;
 				}
@@ -525,13 +527,29 @@ exports.get = function(tabToLoad) {
 		});
 	}; //end _onFooterTabSelect
 	
-	
+	var logNotificationPayload = function(payload){
+		for(var ix in payload){
+			Ti.API.info(constant.APP + " key: [" + ix + "] value: [" + payload[ix] + "]");
+			if(ix === 'data'){
+				var _data = payload[ix];
+				for(var iz in _data){
+					Ti.API.info(constant.APP + " data key: [" + iz + "] value: [" + _data[iz] + "]");
+				}
+			}
+		}
+	};
+
 	if(osname == 'android') {
-		var _checkAndLoadNotificationView = function(e, loadDefaultTab) {
+		var _checkAndLoadNotificationView = function(e, loadDefaultTab) { //only for android
+			Ti.API.info(constant.APP + " ###################### _checkAndLoadNotificationView called #######################");
 			setTimeout(function() {
 				var _pendingData = Utils.getPendingData();
 				
+				// Ti.API.info(constant.APP + " ##################### READING NOTIFICATION PAYLOAD " + typeof _pendingData + " ####################");
+				// logNotificationPayload(_pendingData);
+
 				if(_pendingData) {
+					Utils.trackNotification(_pendingData);
 					_notificationCountToBeDecreased = true;
 					
 					Utils.setPushItemId(_pendingData.itemId);
@@ -591,12 +609,20 @@ exports.get = function(tabToLoad) {
 		
 	
 	var _registerForPushNotification = function() {
+		//Ti.API.info(constant.APP + " ########################### _registerForPushNotification call ############################");
+
 		if(!Utils.isUserLoggedIn()) {
 			return;
 		}
 		//	Register user for push notification
 	    HttpClient.registerForPushNotification({
-	    	onNotificationReceived: function(e) {
+	    	onNotificationReceived: function(e) { // when app is focused in foreground
+	    		Ti.API.info(constant.APP + " ########################### onNotificationReceived call ############################");
+	    		// logNotificationPayload(e);
+
+	    		var enNotification = Ti.App.Properties.getBool('notifications', true);	
+	    		if(!enNotification) return;
+
 	    		if(osname == 'android') {
 	    			if(e.inBackground) {
 	    			}
@@ -607,8 +633,28 @@ exports.get = function(tabToLoad) {
 	    		}
 	    		else {
 	    			if(e.inBackground) {
-						Utils.setPushItemId(e.data.itemId);
-						switch(e.data.screen) {
+	    				var nItem = '', nScreen = '', nSource = '';
+	    				// Ti.API.info(constant.APP + " ##################### APP IN BACKGROUND ###################");
+	    				if(e.data.appPayload){
+	    					// Ti.API.info(constant.APP + " ###################### FOUND APPPAYLOAD ####################");
+	    					nItem = e.data.appPayload.itemId;
+	    					nScreen = e.data.appPayload.screen;
+	    					nSource = 'acs';
+	    				}
+	    				else{
+	    					// Ti.API.info(constant.APP + " ###################### APPPAYLOAD NOT FOUND ####################");
+	    					nItem = e.data.itemId;
+	    					nScreen = e.data.screen;
+	    				}
+
+	    				Utils.trackNotification({
+	    					itemId: nItem,
+	    					screen: nScreen,
+	    					source: nSource
+	    				});
+	    				
+						Utils.setPushItemId(nItem);
+						switch(nScreen) {
 							case 'stylFile':
 								_onFooterTabSelect({key: 'stylefile_push'}, true);
 							break;
@@ -629,6 +675,8 @@ exports.get = function(tabToLoad) {
 	    		}
 	    	}
 	    });
+
+	    // HttpClient.registerForTiNotifications();
 	}; //end _registerForPushNotification
 	
 	_registerForPushNotification();
@@ -638,6 +686,7 @@ exports.get = function(tabToLoad) {
 	
 	var _deRegisterForPushNotification = function() {
 		HttpClient.deregisterForPushNotification(Utils.loggedInUserId());
+		// HttpClient.deregisterForTiNotifications();
 	};
 	
 	Ti.App.addEventListener('deRegisterForPushNotification', _deRegisterForPushNotification);
@@ -686,7 +735,7 @@ exports.get = function(tabToLoad) {
 	Ti.App.addEventListener('webViewStyleFeed:click',_webViewSFClick);
 
 	var _removeFromMemory = function() {
-		Ti.API.info(constant.APP + " ###################### REMOVING DASHBOARD FROM MEMORY ####################");
+		//Ti.API..info(constant.APP + " ###################### REMOVING DASHBOARD FROM MEMORY ####################");
 		Ti.App.removeEventListener('onOptionSelect', _onOptionSelect);
 		_onOptionSelect = null;
 		Ti.App.removeEventListener('onFooterTabSelect', _onFooterTabEventListener);

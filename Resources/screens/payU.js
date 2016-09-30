@@ -48,6 +48,7 @@ exports.get = function(checkOutDetails, paymentCallback) {
 		
 		webView.addEventListener('load', function(e) {
 			Loader.hide();
+			Utils.trackScreen('payu.page');
 		});
 		
 		webView.addEventListener('beforeload', function(e) {
@@ -93,6 +94,7 @@ exports.get = function(checkOutDetails, paymentCallback) {
 	
 	
 	var _addThankYouView = function() {
+		Utils.trackScreen('thankyou.tab');
 		header.hideBackButton();
 		header.setTitle('Thank You');
 		

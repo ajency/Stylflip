@@ -7,7 +7,7 @@ exports.get = function() {
 	var txtSearch = UI.createTextField(_style.txtSearch);
 
 	if(osname === 'android'){
-		Ti.API.info(constant.APP + " ############# attaching keyboard focus event for android ##########");
+		// Ti.API.info(constant.APP + " ############# attaching keyboard focus event for android ##########");
 		txtSearch.softKeyboardOnFocus = Titanium.UI.Android.SOFT_KEYBOARD_SHOW_ON_FOCUS;
 	}
 

@@ -11,7 +11,8 @@ exports.get = function() {
 		
 		buttonView: {
 			left: 0,
-            width: (Ti.Platform.displayCaps.platformWidth / 5) - 0.1, //UI.width(64),
+            // width: (Ti.Platform.displayCaps.platformWidth / 5) - 0.1, //UI.width(64),
+            width: (Ti.Platform.displayCaps.platformWidth / 5) - 0.5, //UI.width(64),
             height: UI.height(50)
         },
         

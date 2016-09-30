@@ -291,11 +291,11 @@ UI.createOverlayView = function(view, bgTransparent) {
 };
 
 
-UI.alertDialog = function(props) {
+UI.alertDialog = function(props,callback) {
     var $ = this;
     var overlayView;
     var events = {};
-    var clickCallback, hideCallback;
+    var clickCallback = callback, hideCallback;
     var optionsType = props.type ? props.type : 'radio';
     var dismissOnPositive = true;
     var dismissable = true;
@@ -346,42 +346,107 @@ UI.alertDialog = function(props) {
     
     if(props && props.message) {
         //Ti.API.info(constant.APP + " ############ constructing message ################");
-    	var lblMessage = Ti.UI.createLabel({
-	        text: props.message,
-	        left: UI.left(20),
-	        right: UI.right(20),
-	        top: UI.top(20),
-	        bottom: UI.bottom(20),
-	        height: Ti.UI.SIZE,
-	        font: {
-	            fontSize: UI.fontSize(14),
-	            fontFamily: UI.fonts.DEFAULT_FONT
-	        },
-	        color: '#fff',
-	        textAlign: props.textAlign ? props.textAlign : 'center'
-	    });
+        var lblMessage = null;
+        if(osname === 'iphone'){
+            lblMessage = Ti.UI.createLabel({
+                text: props.message,
+                left: UI.left(20),
+                right: UI.right(20),
+                top: UI.top(20),
+                bottom: UI.bottom(20),
+                height: Ti.UI.SIZE,
+                font: {
+                    fontSize: UI.fontSize(12),
+                    fontFamily: UI.fonts.DEFAULT_FONT
+                },
+                color: '#fff',
+                textAlign: props.textAlign ? props.textAlign : 'center'
+            });
+        }
+        else{
+            lblMessage = Ti.UI.createLabel({
+                text: props.message,
+                left: UI.left(20),
+                right: UI.right(20),
+                top: UI.top(20),
+                bottom: UI.bottom(20),
+                height: Ti.UI.SIZE,
+                font: {
+                    fontSize: UI.fontSize(14),
+                    fontFamily: UI.fonts.DEFAULT_FONT
+                },
+                color: '#fff',
+                textAlign: props.textAlign ? props.textAlign : 'center'
+            });
+        }
+    	
 	    contentView.add(lblMessage);
 
-        if(props && props.secMessages && props.secMessages.length){
+        if(props && props.secMessages && props.secMessages.length){ // only for Pricing Guide popup
             //Ti.API.info(constant.APP + " ############ constructing secondary message ################");
             var x = 0, secMessages = props.secMessages;
             for(x = 0, Length = secMessages.length; x < Length; x++){
-                var secLabel = Ti.UI.createLabel({
+                var lineRef = secMessages[x];
+
+                var horView = Ti.UI.createView({
                     top: UI.top(5),
-                    color: '#fff',
-                    // text: secMessages[x],
-                    html: secMessages[x],
                     height: Ti.UI.SIZE,
                     width: Ti.UI.FILL,
-                    textAlign: props.textAlign ? props.textAlign : 'center',
-                    font: {
-                        fontSize: UI.fontSize(15),
-                        fontFamily: UI.fonts.DEFAULT_FONT
-                    }
+                    layout: 'horizontal'
                 });
 
+                var leftPadding = 0;
+                switch(x){
+                    case 0: leftPadding = '26%';break;
+                    case 1: leftPadding = '21%';break;
+                    case 2: leftPadding = '11%';break;
+                    case 3: leftPadding = '27%';break;
+                }
+
+                for(var y in lineRef){
+                     var secLabel = null;
+                    if(osname === 'iphone'){
+                        secLabel = Ti.UI.createLabel({
+                            left: UI.left(0),
+                            color: '#fff',
+                            text: lineRef[y],
+                            height: Ti.UI.SIZE,
+                            width: Ti.UI.SIZE,
+                            font: {
+                                // fontSize: UI.fontSize(15),
+                                fontSize: UI.fontSize(12),
+                                fontFamily: UI.fonts.DEFAULT_FONT
+                            }
+                        });
+                    }
+                    else{
+                        secLabel = Ti.UI.createLabel({
+                            left: UI.left(0),
+                            color: '#fff',
+                            text: lineRef[y],
+                            height: Ti.UI.SIZE,
+                            width: Ti.UI.SIZE,
+                            font: {
+                                // fontSize: UI.fontSize(15),
+                                fontSize: UI.fontSize(14),
+                                fontFamily: UI.fonts.DEFAULT_FONT
+                            }
+                        });
+                    }
+
+                    if(y === 'tag1'){
+                        secLabel.left = leftPadding;
+                    }
+
+                    if(y === 'tag3'){
+                        secLabel.color = '#ef4e6d';
+                    }
+
+                    horView.add(secLabel);
+                }
+
                 //Ti.API.info(constant.APP + " adding message: " + secMessages[x]);
-                contentView.add(secLabel);
+                contentView.add(horView);
             }
         }
     }
@@ -495,18 +560,25 @@ UI.alertDialog = function(props) {
 	                fontSize: UI.fontSize(16),
 	                fontFamily: constant.FONT.ABEATBYKAI
 	           	};
-	            btn.color = '#ef4e6d';
+
+                if(props.title === 'rate app' && props.buttonNames[i] === 'Ignore'){
+                    btn.color = '#fff';
+                }
+                else{
+                    btn.color = '#ef4e6d';
+                    btnContainer.positive = true;
+                }
     		}
     		btnContainer.add(btn);
     		btnContainer.addEventListener('click', function() {
     			if(this.positive) {
-    				Utils._.isFunction(clickCallback) && clickCallback({index: this.index, selectedOption: optionsType == 'radio' ? lastSelectedButtonIndex : selectedOptions});
+    				Utils._.isFunction(clickCallback) && clickCallback({index: this.index, selectedOption: optionsType == 'radio' ? lastSelectedButtonIndex : selectedOptions, status: 'accept'});
     				if(dismissOnPositive) {
     					$.hide();
     				}
     			}
     			else {
-    				Utils._.isFunction(clickCallback) && clickCallback({index: this.index});
+    				Utils._.isFunction(clickCallback) && clickCallback({index: this.index, status: 'reject'});
     				if(dismissable) {
     					$.hide();
     				}
@@ -584,10 +656,8 @@ UI.alertDialog = function(props) {
 }; //end alertDialog
 
 
-UI.createAlertDialog = function(props) {
-	var alertDialog = new UI.alertDialog(props, function() {
-	    alertDialog = null;
-	});
+UI.createAlertDialog = function(props,callback) {
+	var alertDialog = new UI.alertDialog(props, callback);
 	return alertDialog;
 };
 
@@ -1240,8 +1310,39 @@ UI.createImageWithTextView = function(style) {
 	    	label.transform = Ti.UI.create2DMatrix().rotate(-45);
 	    	square.add(label);
     	break;
+        case 'new':
+            label.font = {
+                fontSize: UI.fontSize(8),
+                fontFamily: constant.FONT.DEFAULT_FONT,
+                fontWeight: 'bold'
+            };
+            label.width = UI.width(25);
+            label.height = Ti.UI.SIZE;
+            label.text = 'NEW';
+            label.backgroundColor = '#ef4e6d';
+            label.left = UI.left(0);
+            label.top = UI.top(0);
+            // label.transform = Ti.UI.create2DMatrix().rotate(-45);
+            
+            // var iWidth = style.width ? Math.round(style.width / 4) : UI.width(10);
+            // var iWidth = style.width ? Math.round(style.width / 4) : UI.width(10);
+            // var iHeight = style.height ? (style.width / 4) : UI.width(10);
+
+            // var newTagView = Ti.UI.createImageView({
+            //     image: 'images/common/tag-active.png',
+            //     width: iWidth,
+            //     height: iWidth,
+            //     top: UI.top(5),
+            //     left: UI.left(5)
+            // });
+            // square.add(newTagView);
+            square.width = style.width;
+            square.height = style.height;
+
+            square.add(label);
+        ;break;
     	case 'pending kyc':
-    		overlayView.height = UI.height(50),
+    		overlayView.height = UI.height(50);
     		label.height = UI.height(50);
     		label.text = 'Pending Bank Details';
 	    	label.backgroundColor = 'transparent';
@@ -1258,16 +1359,19 @@ UI.createImageWithTextView = function(style) {
 	    	label.bottom = UI.bottom(20);
     	break;
     }
+
     if(style.image != undefined) {
     	containerView.add(imageView);
     }
-    if(style.type != 'sold') {
+
+    if(style.type === 'sold' || style.type === 'new'){
+        containerView.add(square);
+    }
+    else if(style.type != 'sold') {
     	containerView.add(overlayView);
     	containerView.add(label);
     }
-    else {
-    	containerView.add(square);
-    }
+    
     return containerView;
 };
 
@@ -1447,23 +1551,18 @@ UI.showModal = function(windowTitle,view){
         backDrop = null;
         modalWindow = null;
         containerView = null;
+        closeButton.removeEventListener('click',hideWindow);
         closeButton = null;
         closeButonView = null;
-
         UI.openingModal = false;
+        hideWindow = null;
     };
 
     closeButton.addEventListener('click', hideWindow);
 
-    // if(osname == 'android') {
-    //     rootContainer.addEventListener('android:back', hideWindow);
-    // }
-
     closeButonView.add(closeButton);
     
-    // containerView.add(headerView);
     containerView.add(view);
-    // containerView.add(closeButonView);
 
     modalWindow.add(headerView);
     modalWindow.add(containerView);
@@ -1473,14 +1572,6 @@ UI.showModal = function(windowTitle,view){
     rootContainer.add(modalWindow);
 
     Window.getCurrentWindow().add(rootContainer);
-
-    // if(osname === 'iphone' || osname === 'ipad'){
-    //     modalWindow.top = UI.top(40);
-    //     // modalWindow.open();
-    //     rootContainer.show();
-    // }
-    // else{
-        // rootContainer.show();
         
         rootContainer.animate({
             opacity: 1,
@@ -1489,11 +1580,7 @@ UI.showModal = function(windowTitle,view){
         }, function(e) {
             rootContainer.opacity = 1;
         });
-
-        //Ti.API.info(constant.APP + " opening the sizeChart view");
-
-    // }
-    
+  
     UI.modalWindowOpen = true;
 };
 

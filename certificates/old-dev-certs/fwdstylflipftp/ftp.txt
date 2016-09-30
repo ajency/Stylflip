@@ -1,0 +1,21 @@
+URL: 54.149.49.29
+username: bitnami
+password: [use keyfile atttached]
+
+PHPMYADMIN: you will have to tunnel into the server to access phpmyadmin. If you use a shell program, use the following command : ssh -N -L 8888:127.0.0.1:80 -i /Users/cutoverRooster/Dropbox/styleflip/stylflip-dev.pem bitnami@54.149.49.29
+
+I have attached both the ppk (for filezilla) and pem (for ssh) here.
+
+URL: http://127.0.0.1:8888/phpmyadmin/
+username: root
+password: rTa0Q5zUEbew
+
+Call me tomorrow and I'll explain how to access this.
+
+ssh - tunnels - port - 8888 
+		destination - localhost:80
+
+
+
+https://wiki.bitnami.com/howto/How_to_connect_to_your_server#How_to_connect_to_my_server
+https://wiki.bitnami.com/Components/phpMyAdmin_and_phpPgAdmin

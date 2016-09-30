@@ -3,6 +3,8 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 		screenName: 'Product Details'
 	});
 	
+	//Ti.API..info(constant.APP + " %%%%%%%%%%%%%%%%%%%%%%%%%% PRODUCTDETAILS productId: [" + productId + "] %%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+
 	var _style = require('/styles/productDetails').get();
 	
 	var _userId = canBeEdited && canBeEdited.userId;
@@ -54,8 +56,8 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 	var _sizeChart, _size, _productHeight, _productLength, _brand;
 
     var _loadProductDetails = function(productData) {
-    	//Ti.API.info(constant.APP + " productDetails _loadProductDetails init ");
-    	////Ti.API.info(constant.APP + " ########### _loadProductDetails productData.isLiked: " + productData.isLiked + " productData.likes: " + productData.likes);
+    	////Ti.API..info(constant.APP + " productDetails _loadProductDetails init ");
+    	//////Ti.API..info(constant.APP + " ########### _loadProductDetails productData.isLiked: " + productData.isLiked + " productData.likes: " + productData.likes);
 
     	_sizeChart = productData && productData.sizeChart ? productData.sizeChart : '';
 		_size = productData && productData.size ? productData.size : '';
@@ -63,13 +65,13 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 		_productLength = productData && productData.length ? productData.length : '';
 		_productBrand = productData && productData.brand ? productData.brand : '';
 
-		////Ti.API.info(constant.APP + " ############## _sizeChart: " + _sizeChart);
-		////Ti.API.info(constant.APP + " ############## _size: " + _size);
-		////Ti.API.info(constant.APP + " ############## _productBrand: " + _productBrand);
-		////Ti.API.info(constant.APP + " ############## _productHeight: " + _productHeight);
-		////Ti.API.info(constant.APP + " ############## _productLength: " + _productLength);
+		//////Ti.API..info(constant.APP + " ############## _sizeChart: " + _sizeChart);
+		//////Ti.API..info(constant.APP + " ############## _size: " + _size);
+		//////Ti.API..info(constant.APP + " ############## _productBrand: " + _productBrand);
+		//////Ti.API..info(constant.APP + " ############## _productHeight: " + _productHeight);
+		//////Ti.API..info(constant.APP + " ############## _productLength: " + _productLength);
 		
-		//Ti.API.info(constant.APP + " productDetails position 1 ");
+		////Ti.API..info(constant.APP + " productDetails position 1 ");
 
     	productData.isToBeDonated = productData.isToBeDonated==1||productData.isToBeDonated==true;
     	productData.isPurchased = productData.isPurchased==1||productData.isPurchased==true;
@@ -88,7 +90,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 			text: (productData.timestamp?productData.timestamp:'-') // + ' | ' + (productData.userLocation?productData.userLocation:'-')
 	    }));
 
-	    //Ti.API.info(constant.APP + " productDetails postion 2 ");
+	    ////Ti.API..info(constant.APP + " productDetails postion 2 ");
 
 	   //  if(canBeEdited && canBeEdited.editableDeletable && productData.userId == Utils.loggedInUserId() && !productData.isPurchased) {
     // 	    var btnEditDeleteProductDetails = UI.createClickableView({
@@ -122,7 +124,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 		  //   btnDonateView.add(btnDonate);
 	   //  }
 
-		// Ti.API.info(constant.APP + " productDetails postion 3 ");
+		// //Ti.API..info(constant.APP + " productDetails postion 3 ");
 
 	    profileView.add(imgProfilePic);
 	    profileView.add(lblUsername);
@@ -149,7 +151,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 		    	profileView.add(btnEditDeleteProductDetails);	    	
 		    	
 		    	btnEditDeleteProductDetails.addEventListener('click', function(e) {
-		    		Ti.API.info(constant.APP + " ##################################### entered click event listener");
+		    		//Ti.API..info(constant.APP + " ##################################### entered click event listener");
 		    		var _arrOptions;
 		    		productData.isPurchased = productData.isPurchased == 1 ? true : false;
 		    		// if(productData.isPurchased) {
@@ -172,11 +174,11 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 		    			borderWidth: 1
 			    	});
 
-					Ti.API.info(constant.APP + " ##################################### adding optionsView click listener");
+					//Ti.API..info(constant.APP + " ##################################### adding optionsView click listener");
 
 			    	optionsView.show();
 			    	optionsView.addEventListener('click', function(e) {
-			    		Ti.API.info(constant.APP +  " entered options view click");
+			    		//Ti.API..info(constant.APP +  " entered options view click");
 			    		optionsView.hide();
 			    		switch(e.index) {
 			    			case 0:
@@ -202,7 +204,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 					            alertDialog.show();
 					            alertDialog.addEventListener('click', function(e) {
 					            	if(e.index == 0) {
-					            		Ti.API.info(constant.APP + " ##################################### alertDialog event listener added #####################################");
+					            		//Ti.API..info(constant.APP + " ##################################### alertDialog event listener added #####################################");
 					            		var _requestArgs = {
 									        showLoader: true,
 									        url: 'product.php',
@@ -240,7 +242,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 					            });
 			    			break;
 			    		}
-			    		Ti.API.info(constant.APP + " ##################################### optionsView click handle done #####################################");
+			    		//Ti.API..info(constant.APP + " ##################################### optionsView click handle done #####################################");
 			    	});
 		    	});
 	    	} //end if
@@ -258,7 +260,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 	    	profileView.add(btnDonateView);
 	    }
 	    
-	    //Ti.API.info(constant.APP + " productDetails postion 4 ");
+	    ////Ti.API..info(constant.APP + " productDetails postion 4 ");
 
     	profileView.addEventListener('click', function() {
     		if(productId == undefined || productId == null) {
@@ -272,7 +274,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
     		}
 	    });
 	    
-    	//Ti.API.info(constant.APP + " productDetails postion 5 ");
+    	////Ti.API..info(constant.APP + " productDetails postion 5 ");
 
 	    var imgProductView = Ti.UI.createView(Utils._.extend({}, _style.imgProduct, {
 	    	top: UI.top(10),
@@ -283,7 +285,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 	    
 	    var _arrImageView = [];
 	    
-	    //Ti.API.info(constant.APP + " productDetails postion 6 ");
+	    ////Ti.API..info(constant.APP + " productDetails postion 6 ");
 
 	    if(productId == undefined) {
 	    	for(var _photo in productData.photos) {
@@ -299,6 +301,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 	    	productData.isPurchased = productData.isPurchased == 1 ? true : false;
 	    	
 	    	for(var _photo in productData.photos) {
+
 	    		if(productData.isPurchased) {
 		    		var imgProductPhoto = UI.createImageWithTextView({
 		    			defaultImage: '/images/common/default-shop-big.jpg',
@@ -306,6 +309,15 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 				    	width: UI.width(300),
 				    	height: UI.height(280),
 						type: 'sold'
+				    });
+		    	}
+		    	else if(productData.condition === 'Brand new with tags'){
+		    		var imgProductPhoto = UI.createImageWithTextView({
+		    			defaultImage: '/images/common/default-shop-big.jpg',
+				    	image: Utils.getFullURL(productData.photos[_photo]),
+						width: UI.width(300),
+						height: UI.height(280),
+						type: 'new'
 				    });
 		    	}
 		    	else {
@@ -320,7 +332,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 	    	}
 	    }
 	    
-	    //Ti.API.info(constant.APP + " productDetails postion 7 ");
+	    ////Ti.API..info(constant.APP + " productDetails postion 7 ");
 
 	    var scrollableView = Ti.UI.createView({
     		width: UI.width(300),
@@ -470,12 +482,12 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 	    // var sizeChartClick = UI.createClickableView();
 	    var sellDetails = null;
 
-	    //Ti.API.info(constant.APP + " productDetails postion 8 ");
+	    ////Ti.API..info(constant.APP + " productDetails postion 8 ");
 
 	    var _sizeChartLblClick = function(){
 	    	Titanium.API.info(constant.APP + " size chart label clicked");
 	    	// UI.showLoginAlert("chart info here");
-	    	////Ti.API.info(constant.APP + " sizeChart: " + _sizeChart);
+	    	//////Ti.API..info(constant.APP + " sizeChart: " + _sizeChart);
 	    	modalView = sellDetails.sizeChartView;
 
 	    	// UI.showModal("Size Chart",modalText);
@@ -487,8 +499,8 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 	   	 		brandView.add(lblLine2);
 		    
 		   	 	// console.log(productData);
-		   	 	////Ti.API.info(constant.APP + " ########################## brandView width: " + brandView.getWidth() + " platform width: " + UI.platformWidth + " platform height: " + UI.platformHeight);
-		    	// ////Ti.API.info(constant.APP + " ########################## platform width: " + Ti.UI.width + " platform height: " + Ti.UI.height);
+		   	 	//////Ti.API..info(constant.APP + " ########################## brandView width: " + brandView.getWidth() + " platform width: " + UI.platformWidth + " platform height: " + UI.platformHeight);
+		    	// //////Ti.API..info(constant.APP + " ########################## platform width: " + Ti.UI.width + " platform height: " + Ti.UI.height);
 
 		    	productData.productDetailsLaunch = true;
 
@@ -577,7 +589,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 			addSizeChartLabel();		
 		}
 		
-		//Ti.API.info(constant.APP + " productDetails postion 9 ");
+		////Ti.API..info(constant.APP + " productDetails postion 9 ");
 
 	    var conditionView = Ti.UI.createView(_style.pricingView);
 	    var lblCondition = Ti.UI.createLabel(Utils._.extend({}, _style.priceLabels, {
@@ -611,7 +623,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 			selectable: true
 		});
 		
-    	//Ti.API.info(constant.APP + " productDetails postion 10 ");
+    	////Ti.API..info(constant.APP + " productDetails postion 10 ");
 
 		if(productId != undefined) {
 			/*
@@ -723,6 +735,8 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 					  		value: 1
 						});
 				    	
+
+				    	Utils.trackEvent('productdetails.buy.clicked');
 				    	// var payU = require('/modules/payU');
 				    	// payU.makePayment({
 				    		// requestArgs: {
@@ -1171,7 +1185,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
     
     
     if(productId != undefined) {
-    	////Ti.API.info(constant.APP + " ############ FOUND VALID PRODUCTID ###############"); 
+    	//////Ti.API..info(constant.APP + " ############ FOUND VALID PRODUCTID ###############"); 
     	var _getProductDetails = function() {
     		contentView.removeAllChildren();
     		
@@ -1196,11 +1210,11 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 		    			var respData = response.data[0];
 
 		    			for(var ix in respData){
-		    				////Ti.API.info(respData[ix]);
+		    				//////Ti.API..info(respData[ix]);
 		    			}
 
 		    			_loadProductDetails(response.data[0]);
-		    			// ////Ti.API.info(constant.APP + " ################################### _loadProductDetails parsed #####################################");
+		    			// //////Ti.API..info(constant.APP + " ################################### _loadProductDetails parsed #####################################");
 		    		}
 		    		else {
 		    			var alertDialog = UI.createAlertDialog({
@@ -1236,11 +1250,12 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
     };
 	
     var _getView = function() {
+		Utils.trackScreen('productdetails.page');
         return mainView;
     };
     
     // var _clearSizeChartFlags = function(){
-    // 	////Ti.API.info(constant.APP + " ############### clearing size chart flags ###########"); 
+    // 	//////Ti.API..info(constant.APP + " ############### clearing size chart flags ###########"); 
     // 	UI.openingModal = false;
     // 	UI.modalWindowOpen = false;
     // };

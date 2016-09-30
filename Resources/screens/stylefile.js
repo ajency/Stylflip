@@ -43,12 +43,12 @@ exports.get = function(tabSelected, userId, followCallback) {
     var _isAddNewItemViewAdded = false;
     
     var _createItemColumn = function(itemData) {
-
-    	for(var ix in itemData){
-    		if(itemData.propertyIsEnumerable(itemData[ix])){
-    			Ti.API.info(constant.APP + " itemData key: " + ix + " value: " + itemData[ix]); 
-    		}
-    	}
+    	// Ti.API.info(constant.APP + " ############################ _createItemColumn ############################");
+    	// for(var ix in itemData){
+    	// 	if(itemData.propertyIsEnumerable(ix)){
+    	// 		Ti.API.info(constant.APP + " itemData key: " + ix + " value: " + itemData[ix]); 
+    	// 	}
+    	// }
 
 
     	var imgProductView = Ti.UI.createView(Utils._.extend({}, _style.itemView, {
@@ -409,6 +409,8 @@ exports.get = function(tabSelected, userId, followCallback) {
 	            var _data = response.data;
 	            var _gridData = [];
 	            
+	            Ti.API.info(constant.APP + " list of elements returned for [" + _currentViewSelected + "] [" + _data.length + "]");
+
 	            if(_data.length == 0 && _pageIndex == 0 && _currentViewSelected != 'MY FEED') {
         			var _noDataTextProps = {
     					// width: _columnWidth * 2,
@@ -1006,6 +1008,7 @@ exports.get = function(tabSelected, userId, followCallback) {
 	_loadUserProfile();
 	
     var _getView = function() {
+		Utils.trackScreen('stylefile.tab');
         return mainView;
     };
     

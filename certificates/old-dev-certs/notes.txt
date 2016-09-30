@@ -1,0 +1,40 @@
+
+android
+
+sdk - 4.0.3
+Key-store password - styl@123
+alias - StylFlip
+
+
+
+apns
+p12 password - stylflip123
+
+
+Command to generate pem
+openssl pkcs12 -in apns.p12 -out apns.pem -nodes -clcerts
+
+
+
+Generating iOS sim build
+
+https://developers.facebook.com/docs/ios/getting-started/advanced#sim_build
+
+
+
+Generating android key hash
+
+keytool -exportcert -alias androiddebugkey -keystore /Users/Sushant/Documents/Sushant/sf/builds/sf-appstore-keystore | openssl sha1 -binary | openssl base64
+
+password - stylflip@123
+
+
+
+tunneling on mac
+
+ssh -i /Users/Sushant/Documents/Sushant/sf/cers/prod-stylflip/fwdstylflipftp/stylflip-dev.pem bitnami@54.149.49.29
+
+ssh -v -N -L 8888:127.0.0.1:80 -i /Users/Sushant/Documents/Sushant/sf/cers/prod-stylflip/fwdstylflipftp/stylflip-dev.pem bitnami@54.149.49.29
+
+
+

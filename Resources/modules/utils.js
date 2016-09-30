@@ -2,6 +2,145 @@ var Utils = {};
 
 Utils._ = require('/libs/UnderscoreUtils')._;
 
+var _loginEmail = "", _loginPass = "";
+
+var _rateAppCalled = false;
+Utils.rateApp = function(){
+	if(_rateAppCalled) return;
+	// var now = ( new Date().getTime() ) / 1000;
+	var rateApp = Ti.App.Properties.getString('rateApp','');
+	// if(!timeToRate){
+	// 	timeToRate = now + ( 24 * 60 * 60 );
+	// 	Ti.App.Properties.setString('timeToRate',timeToRate);
+	// }
+	// else 
+		if(rateApp === '' && launchCount > constant.RATEAPPLIMIT ){
+			var alertDialog = UI.createAlertDialog({
+				title: 'rate app',
+				titleColor: '#ef4e6d',
+				message: 'Please take some time to rate our app',
+				buttonNames: ['Ignore', 'Rate Now']
+			});
+
+			alertDialog.addEventListener('click', function(e){
+				if(e.status === 'accept'){
+					if(osname === 'android'){
+						Ti.Platform.openURL('https://play.google.com/store/apps/details?id=com.under1r.StylFlip&hl=en#details-reviews');
+					}
+					else{
+						Ti.Platform.openURL('https://itunes.apple.com/in/app/stylflip/id1072334629?mt=8');
+					}
+
+					Ti.App.Properties.setString('rateApp','rate_complete');
+				}
+				// else{
+					
+				// }
+		});
+
+		alertDialog.show();
+		alertDialog = null;
+	}
+	_rateAppCalled = true;
+}; //end rateApp
+
+Utils.trackScreen = function(screen){
+	var userid = Ti.App.Properties.getString('userId','');
+	var trkStr = 'viewed', data = {};
+
+	if(screen && typeof screen === 'string'){
+		if(screen.indexOf('sell') !== -1 || screen.indexOf('stylefile') !== -1){
+			trkStr = 'clicked'
+		}
+
+		trkStr = trkStr + '.' + screen.toLowerCase();
+	}
+
+	data.userid = userid ? userid : 'na';
+	
+	
+	// for(var iz in data){
+	// 	Ti.API.info(constant.APP + " key: [" + iz + "] value: [" + data[iz] + "]");
+	// }
+
+	if(osname === 'android'){
+		trkStr = osname + '.' + trkStr;
+	}
+	else{
+		trkStr = 'ios.' + trkStr;
+	}
+
+	Ti.API.info(constant.APP + " @@@@@@@@@@@@@@@@@@@@@@@@@@ trackScreen: [" + trkStr + "] @@@@@@@@@@@@@@@@@@@@@@@@");
+	Titanium.Analytics.featureEvent(trkStr,data);
+
+};
+
+Utils.trackEvent = function(event){
+	var userid = Ti.App.Properties.getString('userId',''), data = {}, trkStr = 'event.';
+
+	data.userid = userid ? userid : 'na';
+
+	if(event && typeof event === 'string'){
+		trkStr = trkStr + event;
+
+		if(osname === 'android'){
+			trkStr = 'android.' + trkStr;
+		}
+		else{
+			trkStr = 'ios.' + trkStr;
+		}
+
+		Ti.API.info(constant.APP + " @@@@@@@@@@@@@@@@@@@@@@@@@@ trackEvent: [" + trkStr + "] @@@@@@@@@@@@@@@@@@@@@@@@");
+		Titanium.Analytics.featureEvent(trkStr,data);
+	} 
+}
+
+Utils.trackNotification = function(nPayload){
+
+	if(nPayload.source !== 'acs') return;
+	
+	var itemId = '', screen = '', trackStr = 'notification.tap', userId = Utils.loggedInUserId();
+
+	if(nPayload.screen){
+		screen = nPayload.screen.toString().toLowerCase();
+		trackStr += ('.' + screen);
+	}
+
+	var data = {};
+
+	if(userId){
+		data.userid = userId;
+	}
+
+	if(nPayload.itemId){
+		data.itemid = nPayload.itemId;
+	}
+
+	if(osname === 'android'){
+		trackStr = 'android.' + trackStr;
+	}
+	else{
+		trackStr = 'ios.' + trackStr;
+	}
+
+	Ti.API.info(constant.APP + " #################### trackNotification: [" + trackStr + "] #########################");
+	Titanium.Analytics.featureEvent(trackStr,data);
+
+};
+
+Utils.setLoginCreds = function(email,password){
+	_loginEmail = email,
+	_loginPass = password;
+	Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$$$$$$ LOGIN CREDENTIALS SET #########################");
+};
+
+Utils.getLoginCreds = function(){
+	return {
+		email: _loginEmail,
+		password: _loginPass
+	}
+};
+
 Utils.formatPhoneNumber = function(phoneNumber) {
     var _formattedPhoneNumber = '';
     var _numbers = phoneNumber.replace(/\D/g, '');
@@ -155,6 +294,21 @@ Utils.isUserRegisteredForPushNotifications = function() {
 		return Ti.App.Properties.getBool('isUserRegisteredForPushNotifications');
 	}
 	return false;
+};
+
+Utils.setTiDeviceToken = function(token){
+	if(token){
+		Ti.App.Properties.setString('TiDeviceToken',token);
+	}
+	else{
+		Ti.App.Properties.removeProperty('TiDeviceToken');
+	}
+};
+
+Utils.getTiDeviceToken = function(){
+	 var token = Ti.App.Properties.getString('TiDeviceToken','');
+	 // Ti.API.info(constant.APP + " retrieved TiDeviceToken: [" + token + "]");
+	 return token;
 };
 
 Utils.hasUserVerifiedTheCode = function(bool, userId, verificationCode) {
@@ -353,12 +507,16 @@ Utils.getPushItemId = function() {
 
 
 Utils.toggleNotification = function() {
+	Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ TOGGLING PUSHNOTIFICATIONS ###############################");
 	if(Ti.App.Properties.hasProperty('notifications')) {
+		Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$$$$$$ FOUND NOTIFICATION BOOL $$$$$$$$$$$$$$$$$$$$$$$$$$");
 		Ti.App.Properties.setBool('notifications', !Ti.App.Properties.getBool('notifications'));
 		if(Ti.App.Properties.getBool('notifications')) {
+			Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ REGISTERING PUSHNOTIFICATIONS ###############################");
 			Ti.App.fireEvent('registerForPushNotification');
 		}
 		else {
+			Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ DEREGISTERING PUSHNOTIFICATIONS ###############################");
 			Ti.App.fireEvent('deRegisterForPushNotification');
 		}
 	}
@@ -430,8 +588,6 @@ Utils.shortenUrl = function() {
 		this.httpClient = null;    
 	};
 };
-
-
 
 module.exports = Utils;
 
