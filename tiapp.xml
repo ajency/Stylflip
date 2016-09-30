@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ti:app xmlns:ti="http://ti.appcelerator.org">
-    <!--<id>com.placard.StylFlip</id>-->
+    <!-- <id>com.placard.StylFlip</id> -->
      <id>com.under1r.StylFlip</id> 
     <name>StylFlip</name>
     <version>1.0</version>
@@ -34,7 +34,7 @@
                 <false/>
                 <key>UIPrerenderedIcon</key>
                 <false/>
-                <key>UIStatusBarHidden</key>
+                <key>UIStatusBarHidden</key>pwd
                 <false/>
                 <key>UIStatusBarStyle</key>
                 <string>UIStatusBarStyleDefault</string>
@@ -42,7 +42,7 @@
                 <array>
                     <dict>
                         <key>CFBundleURLName</key>
-                        <!--<string>com.placard.StylFlip</string>-->
+                        <!-- <string>com.placard.StylFlip</string> -->
                          <string>com.under1r.StylFlip</string> 
                         <key>CFBundleURLSchemes</key>
                         <array>
@@ -125,7 +125,7 @@
         <target device="mobileweb">false</target>
     </deployment-targets>
     <!--use for ios build (facebook sdk dependency)-->
-    <!--<sdk-version>4.0.0.GA</sdk-version>-->
+    <!-- <sdk-version>4.0.0.GA</sdk-version> -->
     <!--use for android build-->
      <sdk-version>3.5.2.v20160311103211</sdk-version> 
 </ti:app>

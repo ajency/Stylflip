@@ -560,7 +560,14 @@ UI.alertDialog = function(props,callback) {
 	                fontSize: UI.fontSize(16),
 	                fontFamily: constant.FONT.ABEATBYKAI
 	           	};
-	            btn.color = '#ef4e6d';
+
+                if(props.title === 'rate app' && props.buttonNames[i] === 'Ignore'){
+                    btn.color = '#fff';
+                }
+                else{
+                    btn.color = '#ef4e6d';
+                    btnContainer.positive = true;
+                }
     		}
     		btnContainer.add(btn);
     		btnContainer.addEventListener('click', function() {

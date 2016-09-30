@@ -19,7 +19,7 @@ Utils.rateApp = function(){
 				title: 'rate app',
 				titleColor: '#ef4e6d',
 				message: 'Please take some time to rate our app',
-				buttonNames: ['Ok', 'Cancel']
+				buttonNames: ['Ignore', 'Rate Now']
 			});
 
 			alertDialog.addEventListener('click', function(e){
@@ -58,7 +58,7 @@ Utils.trackScreen = function(screen){
 
 	data.userid = userid ? userid : 'na';
 	
-	// Ti.API.info(constant.APP + " @@@@@@@@@@@@@@@@@@@@@@@@@@ trackscreen: [" + trkStr + "] @@@@@@@@@@@@@@@@@@@@@@@@");
+	
 	// for(var iz in data){
 	// 	Ti.API.info(constant.APP + " key: [" + iz + "] value: [" + data[iz] + "]");
 	// }
@@ -70,6 +70,7 @@ Utils.trackScreen = function(screen){
 		trkStr = 'ios.' + trkStr;
 	}
 
+	Ti.API.info(constant.APP + " @@@@@@@@@@@@@@@@@@@@@@@@@@ trackScreen: [" + trkStr + "] @@@@@@@@@@@@@@@@@@@@@@@@");
 	Titanium.Analytics.featureEvent(trkStr,data);
 
 };
@@ -89,9 +90,43 @@ Utils.trackEvent = function(event){
 			trkStr = 'ios.' + trkStr;
 		}
 
+		Ti.API.info(constant.APP + " @@@@@@@@@@@@@@@@@@@@@@@@@@ trackEvent: [" + trkStr + "] @@@@@@@@@@@@@@@@@@@@@@@@");
 		Titanium.Analytics.featureEvent(trkStr,data);
 	} 
 }
+
+Utils.trackNotification = function(nPayload){
+
+	if(nPayload.source !== 'acs') return;
+	
+	var itemId = '', screen = '', trackStr = 'notification.tap', userId = Utils.loggedInUserId();
+
+	if(nPayload.screen){
+		screen = nPayload.screen.toString().toLowerCase();
+		trackStr += ('.' + screen);
+	}
+
+	var data = {};
+
+	if(userId){
+		data.userid = userId;
+	}
+
+	if(nPayload.itemId){
+		data.itemid = nPayload.itemId;
+	}
+
+	if(osname === 'android'){
+		trackStr = 'android.' + trackStr;
+	}
+	else{
+		trackStr = 'ios.' + trackStr;
+	}
+
+	Ti.API.info(constant.APP + " #################### trackNotification: [" + trackStr + "] #########################");
+	Titanium.Analytics.featureEvent(trackStr,data);
+
+};
 
 Utils.setLoginCreds = function(email,password){
 	_loginEmail = email,
@@ -553,40 +588,6 @@ Utils.shortenUrl = function() {
 		this.httpClient = null;    
 	};
 };
-
-Utils.trackNotification = function(nPayload){
-
-	if(nPayload.source !== 'acs') return;
-	
-	var itemId = '', screen = '', trackStr = 'notification.tap', userId = Utils.loggedInUserId();
-
-	if(nPayload.screen){
-		screen = nPayload.screen.toString().toLowerCase();
-		trackStr += ('.' + screen);
-	}
-
-	var data = {};
-
-	if(userId){
-		data.userid = userId;
-	}
-
-	if(nPayload.itemId){
-		data.itemid = nPayload.itemId;
-	}
-
-	if(osname === 'android'){
-		trackStr = 'android.' + trackStr;
-	}
-	else{
-		trackStr = 'ios.' + trackStr;
-	}
-
-	Ti.API.info(constant.APP + " #################### trackStr: [" + trackStr + "] #########################");
-	Titanium.Analytics.featureEvent(trackStr,data);
-
-};
-
 
 module.exports = Utils;
 
