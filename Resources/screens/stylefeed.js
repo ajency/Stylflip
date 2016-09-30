@@ -963,7 +963,7 @@ exports.get = function(header) {
         });
 	}; //end _loadData
 	
-	_loadData(true);
+	// _loadData(true);
 	
 	
     var _getView = function() {

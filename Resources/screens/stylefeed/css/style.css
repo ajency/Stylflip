@@ -1,6 +1,8 @@
 html,body{
 	background: rgb(255,200,200);
 	overflow: auto;
+	width: 99%;
+	height: 99%;
 }
 
 h1{
@@ -22,4 +24,21 @@ h1{
 
 #image2{
 	background-image: url('images/image2.png');
+}
+
+.feed-carousel-container{
+	border: 1px solid black;
+	width: 99%;
+}
+
+#feed-products{
+	height: 39%;
+}
+
+#feed-brands{
+	height: 35%;
+}
+
+#feed-users{
+	height: 25%;
 }
