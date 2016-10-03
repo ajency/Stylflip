@@ -1,33 +1,60 @@
-Ti.API.info(new Date + " ###################### webview style feed init ##########################");
+var logContext = 'STYLFLEED-WEBVIEW';
+// var Tifound = Ti != undefined ? true : false
 
-// Ti.App.fireEvent('webViewStyleFeed:click',{viewClicked: 'clicked'});
+Ti.API.info(logContext + " ###################### webview style feed init ##########################");
 
-var liEle = document.createElement('div');
+// var liEle = document.createElement('div');
+var _markupBody = document.querySelector('body');
+var _feedProducts = document.querySelector('#feed-products');
+var _feedBrands = document.querySelector('#feed-brands');
 
-var image1Handle = document.getElementById('image1');
+var _attachProductImages = function(apiData){
+	for(var x = 0; x < apiData.length; x++){
+		if(apiData[x].productId && apiData[x].productId !== '0' && apiData[x].photo){
+			var containerDiv = document.createElement('div');
+			containerDiv.classList.add('images');
+			containerDiv.setAttribute('id',apiData[x].productId);
 
-image1Handle.addEventListener('click',function(){
-	Ti.App.fireEvent('webViewStyleFeed:click',{productId: 2688});
-});
-
-var image2Handle = document.getElementById('image2');
-
-image2Handle.addEventListener('click',function(){
-	Ti.App.fireEvent('webViewStyleFeed:click',{productId: 2688});
-});
-
-var _httpCallCb = function(e){
-	Ti.API.info(" ###################### app:styleFeedWebView listener called #####################");
-	var data = e.respArgs;
-	for(var x in data){
-		var item = data[x];
-		Ti.API.info(" key: " + x + " value: " + item);
-
-		var pr = item && item.productId ? item.productId : undefined;
-		if(pr){
-			Ti.API.info("image id: " + pr);
+			var image = new Image();
+			image.src = apiData[x].photo;
+			containerDiv.appendChild(image);
+			_feedProducts.appendChild(containerDiv);
 		}
-	}	
+	}
+	_markupBody.setAttribute('style','display:block;');
 };
 
+var _attachBrandImages = function(){
+	for(var x = 0; x < 5; x++){
+		var parentDiv = document.createElement('div');
+		parentDiv.classList.add('images');
+		// parentDiv.setAttribute();
+
+		var img = new Image();
+		img.src = 'images/default-shop-big.jpg';
+		parentDiv.appendChild(img);
+		_feedBrands.appendChild(parentDiv);
+	}
+};
+
+_attachBrandImages();
+
+var _httpCallCb = function(e){
+	var data = e.respArgs;
+	_attachProductImages(data);	
+};
+
+var _feedProductClickHandler = function(e){
+	Ti.API.info(logContext +  " _feedProductClickHandler clicked: target" + e.target.parentElement.id);
+	var prId = e.target.parentElement.id;
+
+	if(prId){
+		Ti.App.fireEvent('webViewStyleFeed:loadProduct',{productId: prId});
+	}
+}
+
+_feedProducts.addEventListener('click',_feedProductClickHandler);
+
+
 Ti.App.addEventListener('app:styleFeedWebView',_httpCallCb);
+

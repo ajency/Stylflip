@@ -333,6 +333,8 @@ exports.get = function(filterType) {
 			if(this.childViews == undefined || (_lastSelectedKey != undefined && _lastSelectedKey == this.key)) {
 				return;
 			}
+
+			Ti.API.info(constant.APP + " ####################### _arrFilterButtons clicked #####################");
 			var currentParentFilter = this;
 			var _currentSelectedFilterKey = currentParentFilter.key;
 			_lastSelectedKey = currentParentFilter.key;
@@ -397,7 +399,9 @@ exports.get = function(filterType) {
 			
 			if(_currentSelectedFilterKey == 'category' || _currentSelectedFilterKey == 'subCategory' || _currentSelectedFilterKey == 'brand' || _currentSelectedFilterKey == 'size') {
 				_getFilterDataFromServer(_currentSelectedFilterKey, (_currentSelectedFilterKey == 'subCategory' || _currentSelectedFilterKey == 'size' ? _selectedCategories.toString() : undefined), function(e) {
+					Ti.API.info(constant.APP + " ####################### _getFilterDataFromServer #####################");
 					_createView(e.childViews, _tmpSelection, currentParentFilter.multiSelection, function(e) {
+						Ti.API.info(constant.APP + " ####################### _createView #####################");
 						if(e.selectedFilters.length > 0) {
 							if(currentParentFilter.subFilter) {
 								currentParentFilter.children[0].backgroundImage = '/images/common/filter-field-tick.png';
@@ -411,6 +415,10 @@ exports.get = function(filterType) {
 						switch(_currentSelectedFilterKey) {
 							case 'brand':
 								_selectedBrands = e.selectedFilters;
+								Ti.API.info(constant.APP + " ####################### _selectedBrands : [" + _selectedBrands.length + "] #####################");
+								for(var ix in _selectedBrands){
+									Ti.API.info(constant.APP + " key: [" + ix + "] value: [" + _selectedBrands[ix] + "]");
+								}
 							break;
 							case 'category':
 								_selectedCategories = e.selectedFilters;

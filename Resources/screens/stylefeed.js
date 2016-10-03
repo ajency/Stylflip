@@ -900,6 +900,16 @@ exports.get = function(header) {
 	}; //end _createFeedRow
 
 
+	var _setPhotoUrl = function(data){
+		for(var x = 0; x < data.length; x++){
+			if(data[x].photo){
+				data[x].photo = Utils.getFullURL(data[x].photo);
+			}
+		}
+		
+		Ti.App.fireEvent('app:styleFeedWebView',{respArgs: data});
+	};
+
 	var _loadData = function(isRefresh) {
 		if(isRefresh) {
 			_pageIndex = 0;
@@ -944,6 +954,7 @@ exports.get = function(header) {
 	            var _feedData = response.data;
 	            var _listData = [];
 	            
+	            Ti.API.info(constant.APP + " _feedData length: " + _feedData.length);
 	            if(isRefresh) {
             		_listData.push(createNewFeedView());
             	}
@@ -971,7 +982,7 @@ exports.get = function(header) {
 				if(isRefresh) {
 					listView.setData(_listData);
 					Ti.App.fireEvent('app:apicallSuccess',{params: _requestArgs});
-					Ti.App.fireEvent('app:styleFeedWebView',{respArgs: response.data});
+					_setPhotoUrl(response.data);
 				}
 				else {
 					listView.appendData(_listData);
@@ -1003,7 +1014,7 @@ exports.get = function(header) {
         });
 	}; //end _loadData
 	
-	// _loadData(true);
+	_loadData(true);
 	
 	
     var _getView = function() {
@@ -1028,11 +1039,11 @@ exports.get = function(header) {
     };
     
     var _webViewSFClick = function(e){
-		Ti.API.info(constant.APP + " ############# WEBVIEW STYLE FEED CLICKED ###############");
+		// Ti.API.info(constant.APP + " ############# WEBVIEW STYLE FEED CLICKED ###############");
 		_loadProductDetails(e.productId);
 	};
 
-	Ti.App.addEventListener('webViewStyleFeed:click',_webViewSFClick);
+	Ti.App.addEventListener('webViewStyleFeed:loadProduct',_webViewSFClick);
 
     var _removeFromMemory = function() {
     	_style = null;
