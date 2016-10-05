@@ -997,6 +997,7 @@ exports.get = function(header) {
 	
 	
     var _getView = function() {
+		Utils.trackScreen('stylefeed.page');
         return mainView;
     };
     

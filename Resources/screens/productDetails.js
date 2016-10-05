@@ -735,6 +735,8 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
 					  		value: 1
 						});
 				    	
+
+				    	Utils.trackEvent('productdetails.buy.clicked');
 				    	// var payU = require('/modules/payU');
 				    	// payU.makePayment({
 				    		// requestArgs: {
@@ -1248,6 +1250,7 @@ exports.get = function(tabSelected, productId, callback, canBeEdited, productDat
     };
 	
     var _getView = function() {
+		Utils.trackScreen('productdetails.page');
         return mainView;
     };
     

@@ -378,17 +378,19 @@ exports.get = function(tabToLoad) {
 		else{
 			btnSearch.backgroundImage = '/images/header/search.png';
 		}
+		Utils.rateApp();
 	}
 
 	// Ti.App.fireEvent('app:apicallSuccess',{params});
 	Ti.App.addEventListener('app:apicallSuccess',_apiSuccessCb);
+
 
 	/*
 	 * Tab select listener
 	 */
 	var _onFooterTabSelect = function(e, allowDuplicate) {
 		apiSearchText = "";
-		console.log(constant.APP + " _onFooterTabSelect entered");
+		// console.log(constant.APP + " _onFooterTabSelect entered");
 		if(_isSearchBarVisible) {
 			searchBar.setHidden(true);
 			_isSearchBarVisible = false;
@@ -538,29 +540,6 @@ exports.get = function(tabToLoad) {
 		}
 	};
 
-	var _trackNotification = function(nPayload){
-		var itemId = '', screen = '', trackStr = 'notification', userId = Utils.loggedInUserId();
-
-		if(userId){
-			trackStr += ('.' + userId);
-		}
-
-		if(nPayload.screen){
-			screen = nPayload.screen.toString();
-			trackStr += ('.' + screen);
-		}
-
-		if(nPayload.itemId){
-			itemId = nPayload.itemId.toString();
-			trackStr += ('.' + itemId);
-		}
-
-		Ti.API.info(constant.APP + " #################### trackStr: [" + trackStr + "] #########################");
-		Titanium.Analytics.featureEvent(trackStr);
-
-	};
-
-
 	if(osname == 'android') {
 		var _checkAndLoadNotificationView = function(e, loadDefaultTab) { //only for android
 			Ti.API.info(constant.APP + " ###################### _checkAndLoadNotificationView called #######################");
@@ -571,7 +550,7 @@ exports.get = function(tabToLoad) {
 				// logNotificationPayload(_pendingData);
 
 				if(_pendingData) {
-					_trackNotification(_pendingData);
+					Utils.trackNotification(_pendingData);
 					_notificationCountToBeDecreased = true;
 					
 					Utils.setPushItemId(_pendingData.itemId);
@@ -655,12 +634,13 @@ exports.get = function(tabToLoad) {
 	    		}
 	    		else {
 	    			if(e.inBackground) {
-	    				var nItem = '', nScreen = '';
+	    				var nItem = '', nScreen = '', nSource = '';
 	    				// Ti.API.info(constant.APP + " ##################### APP IN BACKGROUND ###################");
 	    				if(e.data.appPayload){
 	    					// Ti.API.info(constant.APP + " ###################### FOUND APPPAYLOAD ####################");
 	    					nItem = e.data.appPayload.itemId;
 	    					nScreen = e.data.appPayload.screen;
+	    					nSource = 'acs';
 	    				}
 	    				else{
 	    					// Ti.API.info(constant.APP + " ###################### APPPAYLOAD NOT FOUND ####################");
@@ -668,9 +648,10 @@ exports.get = function(tabToLoad) {
 	    					nScreen = e.data.screen;
 	    				}
 
-	    				_trackNotification({
+	    				Utils.trackNotification({
 	    					itemId: nItem,
-	    					screen: nScreen
+	    					screen: nScreen,
+	    					source: nSource
 	    				});
 	    				
 						Utils.setPushItemId(nItem);

@@ -58,11 +58,18 @@ var TiDeviceTokenSuccess = function(e){
 	subScribeCloudToken();
 };
 
+var _tiReRegDelay = 0;
 var TiDeviceTokenError = function(e){
 	Ti.API.info(constant.APP + " $$$$$$$$$$$$$$$$$$$$$$$ device token retrieve faled error: [" + e.error + "]");
 	_tiRegStop = new Date().getTime();
-	var delay = (_tiRegStop - _tiRegStart) * 2;
-	_tiRegTimer = setTimeout(_registerForTiNotifications,delay);
+	if(_tiReRegDelay){
+		_tiReRegDelay = _tiReRegDelay * 2;
+	}
+	else{
+		_tiReRegDelay = (_tiRegStop - _tiRegStart) * 2;
+	}
+	
+	_tiRegTimer = setTimeout(_registerForTiNotifications,_tiReRegDelay);
 };
 
 var CloudPushCb = function(evt) {
@@ -534,11 +541,18 @@ function deviceTokenSuccess(e) {
 /*
  * On Device token error
  */
+var _reRegDelay = 0; 
 function deviceTokenError(e) {
 	_regStop = new Date().getTime();
     Ti.API.info('Failed to register for push notifications! ' + e.error);
-    var reRegDelay = (_regStop - _regStart) * 2;
-    setTimeout(_registerNotification,reRegDelay);
+    if(_reRegDelay){
+    	_reRegDelay = _reRegDelay * 2;
+    }
+    else{
+    	_reRegDelay = (_regStop - _regStart) * 2;
+    }
+    
+    setTimeout(_registerNotification,_reRegDelay);
 }
 
 /*

@@ -360,6 +360,16 @@ For titanium sdk >3.5.0.GA we require node >v4.0.0 otherwise node v0.12.1 will s
 }
 
 {
+  "alert": "You need to see Robbies Profile",
+  "title": "Robbies update",
+  "appPayload": {
+    "screen": "stylFile",
+    "itemId": "11803"
+  }
+}
+
+
+{
   "alert": "content message",
   "title": "notification title",
   "category": "sampleCategory", 
@@ -386,6 +396,7 @@ public void onPause(Activity activity) {
     AppEventsLogger.deactivateApp(activity);
 }
 
+<<<<<<< HEAD
 Please do following things to  Transfer app to another account.
 1.Open Appceceletor Studio and After login using another account 
 click file>import> Appceceletor->Existing Mobile Project>Select Directory with checked  two options  (imported project ,Copy project into workspace)>Finish.
@@ -395,3 +406,28 @@ b) if any error message found like “Application not Registered”.
 Then open terminal appc logout -d 
 Regards
 Appcelerator Support
+=======
+Rate app link android: https://play.google.com/store/apps/details?id=com.under1r.StylFlip&hl=en#details-reviews
+
+
+http://54.69.190.92/stylflip/api/stylfile.php
+
+serverArgs: {
+	action: 'myWardrobe',
+   	userId: '<user-id>',
+   	loggedInUserId: '<logged-in-userid>',
+   	pageIndex: 1
+}
+
+http://54.69.190.92/stylflip/api/stylfeed.php
+
+serverArgs: {
+	action: 'listing',
+    location: {
+    	lat: 'x',
+    	lon: 'y'
+    },
+    pageIndex: 1
+}
+
+>>>>>>> android-build

@@ -291,11 +291,11 @@ UI.createOverlayView = function(view, bgTransparent) {
 };
 
 
-UI.alertDialog = function(props) {
+UI.alertDialog = function(props,callback) {
     var $ = this;
     var overlayView;
     var events = {};
-    var clickCallback, hideCallback;
+    var clickCallback = callback, hideCallback;
     var optionsType = props.type ? props.type : 'radio';
     var dismissOnPositive = true;
     var dismissable = true;
@@ -560,18 +560,25 @@ UI.alertDialog = function(props) {
 	                fontSize: UI.fontSize(16),
 	                fontFamily: constant.FONT.ABEATBYKAI
 	           	};
-	            btn.color = '#ef4e6d';
+
+                if(props.title === 'rate app' && props.buttonNames[i] === 'Ignore'){
+                    btn.color = '#fff';
+                }
+                else{
+                    btn.color = '#ef4e6d';
+                    btnContainer.positive = true;
+                }
     		}
     		btnContainer.add(btn);
     		btnContainer.addEventListener('click', function() {
     			if(this.positive) {
-    				Utils._.isFunction(clickCallback) && clickCallback({index: this.index, selectedOption: optionsType == 'radio' ? lastSelectedButtonIndex : selectedOptions});
+    				Utils._.isFunction(clickCallback) && clickCallback({index: this.index, selectedOption: optionsType == 'radio' ? lastSelectedButtonIndex : selectedOptions, status: 'accept'});
     				if(dismissOnPositive) {
     					$.hide();
     				}
     			}
     			else {
-    				Utils._.isFunction(clickCallback) && clickCallback({index: this.index});
+    				Utils._.isFunction(clickCallback) && clickCallback({index: this.index, status: 'reject'});
     				if(dismissable) {
     					$.hide();
     				}
@@ -649,10 +656,8 @@ UI.alertDialog = function(props) {
 }; //end alertDialog
 
 
-UI.createAlertDialog = function(props) {
-	var alertDialog = new UI.alertDialog(props, function() {
-	    alertDialog = null;
-	});
+UI.createAlertDialog = function(props,callback) {
+	var alertDialog = new UI.alertDialog(props, callback);
 	return alertDialog;
 };
 

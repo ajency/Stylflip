@@ -145,6 +145,11 @@ exports.get = function(tabSelected, feedOrProductId, feedOrProductUserId) {
 	        }
 	    };
 	    
+	    var _searchText = _getSearchText();
+	    if(_searchText){
+	    	_requestArgs.serverArgs.searchText = _searchText;
+	    }
+
 	    if(tabSelected == 'stylefeed') {
 	    	_requestArgs.serverArgs.feedId = feedOrProductId;
 	    }
@@ -177,6 +182,13 @@ exports.get = function(tabSelected, feedOrProductId, feedOrProductUserId) {
 	        		}
 				}
 				
+				if(_requestArgs.serverArgs.searchText){
+					searchBtn.backgroundImage = '/images/header/closeicon.png';
+				}
+				else{
+					searchBtn.backgroundImage = '/images/header/search.png';
+				}
+
 				if(isRefresh) {
 					listView.setData(_listData);
 				}
@@ -237,8 +249,74 @@ exports.get = function(tabSelected, feedOrProductId, feedOrProductUserId) {
 		unselectedButtonStyle: _style.unselectedButton,
 	});
 	
+	var searchBar = Ti.UI.createView({
+		width: Ti.UI.FILL,
+		height: UI.height(30)
+	});
+
+	var searchTextField = Ti.UI.createTextField({
+		left: UI.left(5),
+		value: '',
+		hintText: 'Search for people',
+		returnKeyType: Ti.UI.RETURNKEY_SEARCH,
+		width: '90%'
+	});
+
+	var searchView = Ti.UI.createView({
+	   	right: UI.right(2),
+	    width: UI.width(28),
+	    height: UI.height(28)
+	});
+	var searchBtn = UI.createButton({
+	   	backgroundImage: '/images/header/search.png',
+	    width: UI.width(16),
+	    height: UI.width(16)
+	});
+	searchView.add(searchBtn);
+
+	var _setSearchText = function(text){
+		searchTextField.value = text;
+	};
+
+	var _getSearchText = function(){
+		return searchTextField.value;
+	}
+
+	// var _searchText = ''; 
+	var _searchClickCb = function(){
+		searchTextField.blur();
+		if(searchBtn.backgroundImage === '/images/header/closeicon.png'){
+			_setSearchText('');
+		}
+		_buttonBarClickCallback(true);
+	};
+
+	var _returnCb = function(){
+		searchTextField.blur();
+		_buttonBarClickCallback(true);
+	};
+
+	var _searchTextChangeCb = function(){
+		if(searchTextField.value === ''){
+			searchBtn.backgroundImage = '/images/header/search.png';
+		}
+		else{
+			searchBtn.backgroundImage = '/images/header/closeicon.png';
+		}
+	};
+
+	searchTextField.addEventListener('change',_searchTextChangeCb);
+	searchTextField.addEventListener('return',_returnCb);
+	searchView.addEventListener('click',_searchClickCb);
+
+	searchBar.add(searchTextField);
+	searchBar.add(searchView);
+
+
 	buttonBar.addEventListener('click', function(e) {
 		_currentSelectedTab = e.title;
+
+		_setSearchText('');
 		_buttonBarClickCallback(true);
 	});
 	
@@ -246,6 +324,7 @@ exports.get = function(tabSelected, feedOrProductId, feedOrProductUserId) {
    	// listView.setRowSpacing(1);
    	
    	contentView.add(buttonBar.getView());
+   	contentView.add(searchBar);
 	contentView.add(listView.getView());
 	
     
@@ -254,6 +333,14 @@ exports.get = function(tabSelected, feedOrProductId, feedOrProductUserId) {
     };
     
     var _removeFromMemory = function() {
+    	searchTextField.removeEventListener('return',_returnCb);
+    	searchTextField.removeEventListener('change',_searchTextChangeCb);
+		searchView.removeEventListener('click',_searchClickCb);
+		_searchTextChangeCb = null;
+		_searchClickCb = null;
+		_returnCb = null;
+		_setSearchText = null;
+		_getSearchText = null;
     	_style = null;
         Window.clearMemory(mainView);
         mainView = null;

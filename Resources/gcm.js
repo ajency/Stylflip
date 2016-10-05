@@ -35,8 +35,12 @@
 
 			if(appPayload) {
 				Ti.API.info(" ############################### appPayload found ##############################");
-				pendingDataObj.screen = appPayload.screen ? appPayload.screen : 'na';
-				pendingDataObj.itemId = appPayload.itemId ? appPayload.itemId : 'na';
+				pendingDataObj.source = 'acs';
+				for(var ix in appPayload){
+					pendingDataObj[ix] = appPayload[ix];
+				}
+				// pendingDataObj.screen = appPayload.screen ? appPayload.screen : 'na';
+				// pendingDataObj.itemId = appPayload.itemId ? appPayload.itemId : 'na';
 
 				Ti.API.info(" ################## logging out pendingDataObj from gcm service ##################")
 				for(var ic in pendingDataObj){

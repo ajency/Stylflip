@@ -2,6 +2,9 @@
 //	ios		- com.placard.StylFlip
 
 var osname = Ti.Platform.osname;
+var launchCount = Ti.App.Properties.getInt('launchCount',0);
+launchCount = launchCount + 1;
+Ti.App.Properties.setInt('launchCount',launchCount);
 
 if(osname === 'iphone' || osname === 'ipad') {
     var osVersion = Ti.Platform.version;
