@@ -1,7 +1,6 @@
 //	android - com.placard.StylFlip
 //	ios		- com.placard.StylFlip
-
-var osname = Ti.Platform.osname;
+var osname = Ti.Platform.osname, manufacturer = Ti.Platform.manufacturer, model = Ti.Platform.model;
 var launchCount = Ti.App.Properties.getInt('launchCount',0);
 launchCount = launchCount + 1;
 Ti.App.Properties.setInt('launchCount',launchCount);
@@ -21,7 +20,6 @@ else {
 }
 
 var constant = require('/constants').get();
-
 var Cache = require('/modules/cache').get();
 var Analytics = require('/modules/analytics').get();
 var UI = require('/modules/ui');

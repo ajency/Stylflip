@@ -5,32 +5,27 @@ exports.get = function(header) {
 	
 	var mainView = Ti.UI.createView(_style.mainView); 
 	
-	var feedView = Ti.UI.createView(_style.feedView); 
+	// var feedView = Ti.UI.createView(_style.feedView); 
 	
-	var listView = require('/components/listView').get();
+	// var listView = require('/components/listView').get();
 	
-	listView.addEventListener('scrolledToBottom', function() {
-		_loadData();
-	});
+	// listView.addEventListener('scrolledToBottom', function() {
+	// 	_loadData();
+	// });
 	
-	listView.addEventListener('pullToRefresh', function() {
-		_loadData(true);
-	});
+	// listView.addEventListener('pullToRefresh', function() {
+	// 	_loadData(true);
+	// });
 	
-	listView.setRowSpacing(1);
+	// listView.setRowSpacing(1);
 
-    var feedWebView = Ti.UI.createWebView({
-    	// url:'https://www.google.co.in/?gws_rd=ssl',
-    	url:'/screens/stylefeed/stylefeed.html',
-    	width: Ti.UI.FILL,
-    	height: Ti.UI.FILL
-    });
-
+    // var feedWebView = UI.createWebView('https://www.google.co.in/?gws_rd=ssl');
+     var feedWebView = UI.createWebView('/screens/stylefeed/stylefeed.html');
     mainView.add(feedWebView);
 
 	// mainView.add(feedView);
 	
-	feedView.add(listView.getView());
+	// feedView.add(listView.getView());
 	
 	
 	var feedText, imageToUpload;
@@ -391,10 +386,29 @@ exports.get = function(header) {
 	/*
 	 * List view load listener
 	 */
-	listView.addEventListener('load', function(e) {
-		Loader.hide();
-	});
+	// listView.addEventListener('load', function(e) {
+	// 	Loader.hide();
+	// });
 	
+	var _profileViewClickHandler = function(e) {
+    	var userId = '';
+    	if(e){
+    		userId = e.userId;
+    	}
+    	else{
+    		userId = this.userId;
+    	}
+    	if(userId == Utils.loggedInUserId()) {
+    		return;
+    	}
+    	Analytics.trackEvent({
+	  		category: "Username (StylFeed)",
+	  		action: "click",
+	  		label: "-",
+	  		value: 1
+		});
+    	_loadUserProfile(userId);
+    };
 	
 	/*
 	 * Create a single feed row
@@ -620,19 +634,8 @@ exports.get = function(header) {
 	    // if(Utils.loggedInUserId() != feedData.userId) {
 	    	profileView.add(btnReportView);
 	    // }
-	    
-	    profileView.addEventListener('click', function() {
-	    	if(this.userId == Utils.loggedInUserId()) {
-	    		return;
-	    	}
-	    	Analytics.trackEvent({
-		  		category: "Username (StylFeed)",
-		  		action: "click",
-		  		label: "-",
-		  		value: 1
-			});
-	    	_loadUserProfile(this.userId);
-	    });
+	   
+	    profileView.addEventListener('click',_profileViewClickHandler);
 	    
 	    var lblStatusColor = '#3333cc';
 		var lblStatus = Ti.UI.createLabel(Utils._.extend({}, _style.lblStatus, {
@@ -901,19 +904,23 @@ exports.get = function(header) {
 
 
 	var _setPhotoUrl = function(data){
+		// profilePicURL
 		for(var x = 0; x < data.length; x++){
 			if(data[x].photo){
 				data[x].photo = Utils.getFullURL(data[x].photo);
 			}
+			if(data[x].profilePicURL){
+				data[x].profilePicURL = Utils.getProfileImageURL(data[x].profilePicURL);
+			}
 		}
 		
-		Ti.App.fireEvent('app:styleFeedWebView',{respArgs: data});
+		Ti.App.fireEvent('app:stylefeedDataLoad',{respArgs: data});
 	};
 
 	var _loadData = function(isRefresh) {
 		if(isRefresh) {
 			_pageIndex = 0;
-			listView.setData([]);
+			// listView.setData([]);
 		}
 		
 	    var _requestArgs = {
@@ -956,13 +963,13 @@ exports.get = function(header) {
 	            
 	            Ti.API.info(constant.APP + " _feedData length: " + _feedData.length);
 	            if(isRefresh) {
-            		_listData.push(createNewFeedView());
+            		// _listData.push(createNewFeedView());
             	}
             	
             	if(_feedData.length == 0 && _pageIndex == 0) {
             		_listData.push(UI.createNoDataView());
             		// listView.setData([UI.createNoDataView()], false);
-            		listView.setData(_listData, false, true);
+            		// listView.setData(_listData, false, true);
             		Ti.App.fireEvent('app:apicallSuccess',{params: _requestArgs});
             		return;
             	}
@@ -973,48 +980,48 @@ exports.get = function(header) {
             		// _listData.push(createNewFeedView());
             	// }
             
-	        	for(var i=0; i<_feedData.length; i++) {
-	        		var separator = Ti.UI.createView(_commonStyle.hrLine);
-					_listData.push(_createFeedRow(_feedData[i], separator));
-					_listData.push(separator);
-				}
+	   //      	for(var i=0; i<_feedData.length; i++) {
+	   //      		var separator = Ti.UI.createView(_commonStyle.hrLine);
+				// 	_listData.push(_createFeedRow(_feedData[i], separator));
+				// 	_listData.push(separator);
+				// }
 				
 				if(isRefresh) {
-					listView.setData(_listData);
+					// listView.setData(_listData);
 					Ti.App.fireEvent('app:apicallSuccess',{params: _requestArgs});
 					_setPhotoUrl(response.data);
 				}
 				else {
-					listView.appendData(_listData);
+					// listView.appendData(_listData);
 				}
 				
 				if(_feedData.length > 0) {
 					_pageIndex++;
-					listView.showLazyLoadingRow();
+					// listView.showLazyLoadingRow();
 				}
 				else {
-					listView.hideLazyLoadingRow();
+					// listView.hideLazyLoadingRow();
 				}
         	},
         	error: function(error) {
         		if(isRefresh) {
-        			listView.setData([UI.createErrorView(error.errorMessage, function() {
-	               		_loadData(true);
-	               	})], false);
+        			// listView.setData([UI.createErrorView(error.errorMessage, function() {
+	          //      		_loadData(true);
+	          //      	})], false);
         		}
         		else {
         			UI.showAlert(error.errorMessage);
         		}
                 setTimeout(function() {
                 	if(_pageIndex > 0) {
-	                	listView.showLazyLoadingRow();
+	                	// listView.showLazyLoadingRow();
 	                }
                 }, 500);
         	}
         });
 	}; //end _loadData
 	
-	_loadData(true);
+	// _loadData(true);
 	
 	
     var _getView = function() {
@@ -1043,12 +1050,40 @@ exports.get = function(header) {
 		_loadProductDetails(e.productId);
 	};
 
+	var _loadBrandApiData = function(){
+		Utils.getBrands(function(responseData) {
+				var _childViews = [];
+				for(var i=0; i<responseData.length; i++) {
+					_childViews.push({
+						id: responseData[i].brandId,
+						title: responseData[i].name
+					});
+				}
+				Ti.API.info(constant.APP + " ############ retrieved brand data array of length [" + _childViews.length + "]");
+				Ti.App.fireEvent('app:brandApiDataFetched',{brandData: _childViews});
+			});
+		Loader.hide();
+	};
+
+	var _loadFeedData = function(){
+		_loadData(true);
+	}
+
 	Ti.App.addEventListener('webViewStyleFeed:loadProduct',_webViewSFClick);
+	Ti.App.addEventListener('webViewStyleFeed:loadBrandApiData',_loadBrandApiData);
+	Ti.App.addEventListener('webViewStyleFeed:loadFeedData',_loadFeedData);
+	Ti.App.addEventListener('webViewStyleFeed:loadUser',_profileViewClickHandler);
 
     var _removeFromMemory = function() {
     	_style = null;
-    	Ti.App.removeEventListener('webViewStyleFeed:click',_webViewSFClick);
+    	Ti.App.removeEventListener('webViewStyleFeed:loadProduct',_webViewSFClick);
+		Ti.App.removeEventListener('webViewStyleFeed:loadBrandApiData',_loadBrandApiData);
+		Ti.App.removeEventListener('webViewStyleFeed:loadFeedData',_loadFeedData);
+		Ti.App.removeEventListener('webViewStyleFeed:loadUser',_profileViewClickHandler);
+		_profileViewClickHandler = null;
+		_loadFeedData = null;
     	_webViewSFClick = null;
+    	_loadBrandApiData = null;
         Window.clearMemory(mainView);
         mainView = null;
         _getView = null;

@@ -1,6 +1,6 @@
-exports.get = function() {
+exports.get = function(filterParams) {
 	var _style = require('/styles/shop').get();
-	
+	var _filterParams = filterParams !== undefined ? filterParams : undefined;
 	var _pageIndex = 0;
 	var _currentView = 'grid';
 	
@@ -479,6 +479,7 @@ exports.get = function() {
 	    
 	    if(_shopFilters != undefined) {
 	    	for(var _key in _shopFilters) {
+	    		Ti.API.info(constant.APP + " key: [" + _key + "] value: [" + _shopFilters[_key] + "]");
 	    		_requestArgs.serverArgs[_key] = _shopFilters[_key];
 	    	}
 	    }
@@ -491,6 +492,9 @@ exports.get = function() {
 	    	_requestArgs.serverArgs.userId = Utils.loggedInUserId();
 	    }
 		
+		for(var iz in _requestArgs.serverArgs){
+			Ti.API.info(constant.APP + " serverArgs => key: (" + iz + ") value: (" + _requestArgs.serverArgs[iz] + ") type: (" + typeof _requestArgs.serverArgs[iz] + ")");
+		}
         /*
          * Hit web service
          */
@@ -771,11 +775,7 @@ exports.get = function() {
         });
 	}; //end _showGridView
 	
-	// _showListView();
-	_showGridView(true);
-	
-	
-    var _getView = function() {
+	var _getView = function() {
 		Utils.trackScreen('shop.page');
         return mainView;
     };
@@ -807,8 +807,7 @@ exports.get = function() {
 		
     	_pullToRefreshCallback();
     };
-    
-        
+
     var _removeFromMemory = function() {
     	_style = null;
         Window.clearMemory(mainView);
@@ -818,7 +817,16 @@ exports.get = function() {
         _searchData = null;
         _removeFromMemory = null;
     };
-    
+
+	// _showListView();
+	if(_filterParams){
+		Ti.API.info(constant.APP + " ################### filterParams [" + filterParams + "]");
+		_filterData(_filterParams);
+	}
+	else{
+		_showGridView(true);
+	}
+	       
     return {
         getView: _getView,
         filterData: _filterData,

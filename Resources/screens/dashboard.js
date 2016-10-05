@@ -511,6 +511,9 @@ exports.get = function(tabToLoad) {
 					case 'stylefeed_push':
 						currentView = require('/screens/feedDetails').get(tabSelected='stylefeed', Utils.getPushItemId());
 					break;
+					case 'shop':
+						currentView = require('/screens/shop').get(e.objFilter !== undefined ? e.objFilter : undefined);
+					break;
 					default:
 						currentView = require('/screens/'+(e.key)).get(e.key == 'social' ? footer : undefined);
 					break;

@@ -5,7 +5,7 @@ var Animation = require('/modules/animation');
 
 var positiveButtons = ['yes', 'ok', 'true', 'correct', 'agree'];
 var negativeButtons = ['no', 'cancel', 'false', 'wrong', 'disagree'];
-
+var feedWebView = null;
 
 var UI = {};
 
@@ -13,6 +13,31 @@ UI.disableUpdateOnResume = false;
 UI.firstLogin = false;
 UI.platformWidth = pwidth;
 UI.platformHeight = pheight;
+
+UI.createWebView = function(url){
+    if(feedWebView === null){
+        Ti.API.info(constant.APP + " ############################## manufacturer: [" + manufacturer + "] model: [" + model+ "] ############################");
+        feedWebView = Ti.UI.createWebView({
+            // url:'https://www.google.co.in/?gws_rd=ssl',
+            // url:'/screens/stylefeed/stylefeed.html',
+            // borderRadius: 5,
+            enableZoomControls: false,
+            width: Ti.UI.FILL,
+            height: Ti.UI.FILL
+        });
+
+        var disableHwAcc = model.match(/nexus/i) ? true : false;
+
+        if(disableHwAcc){
+            Ti.API.info(constant.APP + " ################# hardware acc disabled ###############");
+            feedWebView.setBorderRadius(1);
+        }
+        
+        feedWebView.setScalesPageToFit(true);
+    }
+    feedWebView.setUrl(url);
+    return feedWebView;
+};
 
 UI.top = function(top){
  	return (pwidth * top) / 320;

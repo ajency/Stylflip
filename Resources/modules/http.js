@@ -207,7 +207,7 @@ HttpClient.apiCall = function(params, method, api, successCallback, errorCallbac
 	  	// http onload method
 		_httpClient.onload = function() {
 			Titanium.API.info(constant.APP + " http api call message recived");
-			Titanium.API.info(this.responseText);
+			// Titanium.API.info(this.responseText);
 
 			// Ti.App.fireEvent('app:apicallSuccess',{params: params});
 			

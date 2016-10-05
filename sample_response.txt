@@ -438,3 +438,13 @@ serverArgs: {
 [INFO]  STYLFLEED-WEBVIEW key: wardrobeId value: 0
 [INFO]  STYLFLEED-WEBVIEW key: productId value: 0
 [INFO]  STYLFLEED-WEBVIEW key: feedTitle value: crustacious delight
+
+var _objFilter = {
+	    		sortBy: _selectedSortBy,
+	    		brands: _selectedBrands,
+	    		categories: _selectedCategories,
+	    		subCategories: _selectedSubCategories,
+	    		sizes: _selectedSizes,
+	    		conditions: _selectedConditions,
+	    		priceRange: _selectedPriceRanges
+	    	};

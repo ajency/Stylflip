@@ -511,6 +511,18 @@ exports.get = function(filterType) {
 	    		conditions: _selectedConditions,
 	    		priceRange: _selectedPriceRanges
 	    	};
+
+	    	// for(var ix in _objFilter){
+	    	// 	Ti.API.info(constant.APP + " key: [" + ix + "] value: [" + _objFilter[ix] + "]");
+	    	// 	if(typeof _objFilter[ix] === 'array' || typeof _objFilter[ix] === 'object'){
+	    	// 		var innerDatastructure = _objFilter[ix];
+	    	// 		for(var iz in innerDatastructure){
+	    	// 			Ti.API.info(constant.APP + "           inner key [" + iz + "] value: [" + innerDatastructure[iz] + "]");
+	    	// 		}
+	    	// 	}
+
+	    	// }
+
 	    	_sortByFilters = _selectedSortBy;
 	    	_brandsFilters = _selectedBrands;
 	    	_categoriesFilters = _selectedCategories;
