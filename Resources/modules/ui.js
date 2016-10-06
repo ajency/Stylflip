@@ -21,6 +21,7 @@ UI.createWebView = function(url){
             // url:'https://www.google.co.in/?gws_rd=ssl',
             // url:'/screens/stylefeed/stylefeed.html',
             // borderRadius: 5,
+            willHandleTouches: false,
             enableZoomControls: false,
             width: Ti.UI.FILL,
             height: Ti.UI.FILL
