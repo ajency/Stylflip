@@ -821,6 +821,14 @@ exports.get = function(filterParams) {
 	// _showListView();
 	if(_filterParams){
 		Ti.API.info(constant.APP + " ################### filterParams [" + filterParams + "]");
+
+		for(var iz in _filterParams){
+			switch(iz){
+				case 'brands': _brandsFilters = filterParams[iz];break;
+			}
+			filterParams[iz] = filterParams[iz].toString();
+		}
+
 		_filterData(_filterParams);
 	}
 	else{

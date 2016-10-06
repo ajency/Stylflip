@@ -33,7 +33,7 @@ UI.createWebView = function(url){
             feedWebView.setBorderRadius(1);
         }
         
-        feedWebView.setScalesPageToFit(true);
+        // feedWebView.setScalesPageToFit(true);
     }
     feedWebView.setUrl(url);
     return feedWebView;

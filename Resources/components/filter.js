@@ -1,4 +1,4 @@
-exports.get = function(filterType) {
+exports.get = function(filterType,filterOptions) {
 	var _style = require('/components/styles/filter').get();
 	
 	var _filterCallback, _hideCallback;
@@ -14,6 +14,8 @@ exports.get = function(filterType) {
 	filterView.add(leftView);
 	filterView.add(rightView);
 	
+
+	Ti.API.info(constant.APP + " ####################### filterOptions: " + filterOptions + " ########################");
 	/*
 	 * This view will create child view for right view
 	 */
@@ -130,8 +132,8 @@ exports.get = function(filterType) {
 	
 	if(filterType == 'shop') {
 		var _filterOptions = [
-			{ key: 'sortBy', title: 'VIEW POSTS BY', options: [], checked: _sortByFilters.length > 0, multiSelection: false, childViews: [{id: 'Newest to Oldest', title: 'Newest to Oldest'}, {id: 'Price - High to Low', title: 'Price - High to Low'}, {id: 'Price - Low to High', title: 'Price - Low to High'}, {id: 'Popularity', title: 'Popularity'}, {id: 'Discounts', title: 'Discounts'}] },
-			{ key: 'filterBy', title: 'FILTER BY', checked: (_brandsFilters.length > 0 || _categoriesFilters.length > 0 || _subCategoriesFilters.length > 0 || _sizesFilters.length > 0 || _conditionsFilters.length > 0 || _priceRangeFilters.length > 0), options: [
+				{ key: 'sortBy', title: 'VIEW POSTS BY', options: [], checked: _sortByFilters.length > 0, multiSelection: false, childViews: [{id: 'Newest to Oldest', title: 'Newest to Oldest'}, {id: 'Price - High to Low', title: 'Price - High to Low'}, {id: 'Price - Low to High', title: 'Price - Low to High'}, {id: 'Popularity', title: 'Popularity'}, {id: 'Discounts', title: 'Discounts'}] },
+				{ key: 'filterBy', title: 'FILTER BY', checked: (_brandsFilters.length > 0 || _categoriesFilters.length > 0 || _subCategoriesFilters.length > 0 || _sizesFilters.length > 0 || _conditionsFilters.length > 0 || _priceRangeFilters.length > 0), options: [
 				{ key: 'brand', title: 'BRAND', enabled: true, checked: _brandsFilters.length > 0, multiSelection: true, childViews: [] },
 				{ key: 'category', title: 'CATEGORY', enabled: true, checked: _categoriesFilters.length > 0, multiSelection: true, childViews: [] },
 				{ key: 'subCategory', title: 'SUB-CATEGORY', enabled: false, checked: _subCategoriesFilters.length > 0, multiSelection: true, childViews: [] },

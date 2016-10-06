@@ -1,7 +1,7 @@
 exports.get = function(config) {
 	var _style = require('/components/styles/header').get();
 	
-	var _clickCallback, _filterCallback, _currentFilterType;
+	var _clickCallback, _filterCallback, _currentFilterType, _currentSelectedFilterOptions;
 	var btnMenuView, btnBackView;
 	
 	var headerContainerView = Ti.UI.createView(Utils._.extend({}, _style.headerContainerView, {
@@ -110,7 +110,7 @@ exports.get = function(config) {
 			if(btnMenuView) {
 				btnMenuView.visible = false;
 			}
-			filterView = require('/components/filter').get(_currentFilterType);
+			filterView = require('/components/filter').get(_currentFilterType,_currentSelectedFilterOptions);
 			filterView.setTop(headerContainerView.height);
 			filterView.addEventListener('filter', function(e) {
 				Utils._.isFunction(_filterCallback) && _filterCallback(e);
@@ -361,6 +361,14 @@ exports.get = function(config) {
 		_currentFilterType = filterType;
 	};
 	
+	var _setCurrentSelectedFilterOptions = function(selectedFilterOptions){
+		// Ti.API.info(constant.APP + " ############## _setCurrentSelectedFilterOptions ##############");
+		_currentSelectedFilterOptions = selectedFilterOptions;
+		if(_currentSelectedFilterOptions){
+			// Ti.API.info(constant.APP + " ############## show filter ##############");
+			_setFilterActive(true);
+		}
+	};
 	
 	var _hideBackButton = function() {
 		try {
@@ -392,6 +400,7 @@ exports.get = function(config) {
 		setFilterActive: _setFilterActive,
 		setSearchActive: _setSearchActive,
 		setCurrentFilterType: _setCurrentFilterType,
+		setCurrentSelectedFilterOptions: _setCurrentSelectedFilterOptions,
 		hideBackButton: _hideBackButton,
 		addEventListener: _addEventListener,
 		addMenuBar: _addMenuBar,

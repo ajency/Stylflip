@@ -398,6 +398,7 @@ exports.get = function(tabToLoad) {
 		header.resetTitle();
 		searchBar.setText('');
 		header.setCurrentFilterType(e.key);
+
 		if(e.key == 'stylefeed') {
 			Analytics.trackScreen({
 				screenName: 'StylFeed'
@@ -421,8 +422,8 @@ exports.get = function(tabToLoad) {
 				searchBar.setText(_feedSearchText != undefined ? _feedSearchText : '');
 				header.setSearchActive(_feedSearchText); //change search icon
 				header.setFilterActive(_feedFilters && Object.keys(_feedFilters).length > 0);
-				header.enableFilter(true);
-				header.enableSearch(true);
+				header.enableFilter(false);
+				header.enableSearch(false);
 				header.enableCompose(true);
 				
 				_showSearchBar(_feedSearchText);
@@ -479,6 +480,7 @@ exports.get = function(tabToLoad) {
 			break;
 		}
 		
+		header.setCurrentSelectedFilterOptions(e.objFilter !== undefined ? e.objFilter : undefined);
 		//	Close all windows if more than one are opened
 		Window.closeAll(function() {
 			if(_currentKey != e.key || allowDuplicate) {
