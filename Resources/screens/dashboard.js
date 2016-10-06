@@ -398,6 +398,7 @@ exports.get = function(tabToLoad) {
 		header.resetTitle();
 		searchBar.setText('');
 		header.setCurrentFilterType(e.key);
+
 		if(e.key == 'stylefeed') {
 			Analytics.trackScreen({
 				screenName: 'StylFeed'
@@ -421,8 +422,8 @@ exports.get = function(tabToLoad) {
 				searchBar.setText(_feedSearchText != undefined ? _feedSearchText : '');
 				header.setSearchActive(_feedSearchText); //change search icon
 				header.setFilterActive(_feedFilters && Object.keys(_feedFilters).length > 0);
-				header.enableFilter(true);
-				header.enableSearch(true);
+				header.enableFilter(false);
+				header.enableSearch(false);
 				header.enableCompose(true);
 				
 				_showSearchBar(_feedSearchText);
@@ -479,6 +480,7 @@ exports.get = function(tabToLoad) {
 			break;
 		}
 		
+		header.setCurrentSelectedFilterOptions(e.objFilter !== undefined ? e.objFilter : undefined);
 		//	Close all windows if more than one are opened
 		Window.closeAll(function() {
 			if(_currentKey != e.key || allowDuplicate) {
@@ -511,8 +513,10 @@ exports.get = function(tabToLoad) {
 					case 'stylefeed_push':
 						currentView = require('/screens/feedDetails').get(tabSelected='stylefeed', Utils.getPushItemId());
 					break;
+					case 'shop':
+						currentView = require('/screens/shop').get(e.objFilter !== undefined ? e.objFilter : undefined);
+					break;
 					default:
-						//Ti.API..info(constant.APP + " loading route ...");
 						currentView = require('/screens/'+(e.key)).get(e.key == 'social' ? footer : undefined);
 					break;
 				}
@@ -729,6 +733,12 @@ exports.get = function(tabToLoad) {
 		return mainView;	
 	};
 	
+	var _webViewSFClick = function(){
+		Ti.API.info(constant.APP + " ############# WEBVIEW STYLE FEED CLICKED ###############");
+	};
+
+	Ti.App.addEventListener('webViewStyleFeed:click',_webViewSFClick);
+
 	var _removeFromMemory = function() {
 		//Ti.API..info(constant.APP + " ###################### REMOVING DASHBOARD FROM MEMORY ####################");
 		Ti.App.removeEventListener('onOptionSelect', _onOptionSelect);
@@ -755,6 +765,7 @@ exports.get = function(tabToLoad) {
 			}
 			// searchBar.removeEventListener('search', _searchCb);
 			// header.removeEventListener('filter', _headerFilterCb);
+			Ti.App.removeEventListener('webViewStyleFeed:click',_webViewSFClick);
 		}
 		catch(e){} 
 		

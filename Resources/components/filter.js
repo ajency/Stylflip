@@ -1,4 +1,4 @@
-exports.get = function(filterType) {
+exports.get = function(filterType,filterOptions) {
 	var _style = require('/components/styles/filter').get();
 	
 	var _filterCallback, _hideCallback;
@@ -14,6 +14,8 @@ exports.get = function(filterType) {
 	filterView.add(leftView);
 	filterView.add(rightView);
 	
+
+	Ti.API.info(constant.APP + " ####################### filterOptions: " + filterOptions + " ########################");
 	/*
 	 * This view will create child view for right view
 	 */
@@ -130,8 +132,8 @@ exports.get = function(filterType) {
 	
 	if(filterType == 'shop') {
 		var _filterOptions = [
-			{ key: 'sortBy', title: 'VIEW POSTS BY', options: [], checked: _sortByFilters.length > 0, multiSelection: false, childViews: [{id: 'Newest to Oldest', title: 'Newest to Oldest'}, {id: 'Price - High to Low', title: 'Price - High to Low'}, {id: 'Price - Low to High', title: 'Price - Low to High'}, {id: 'Popularity', title: 'Popularity'}, {id: 'Discounts', title: 'Discounts'}] },
-			{ key: 'filterBy', title: 'FILTER BY', checked: (_brandsFilters.length > 0 || _categoriesFilters.length > 0 || _subCategoriesFilters.length > 0 || _sizesFilters.length > 0 || _conditionsFilters.length > 0 || _priceRangeFilters.length > 0), options: [
+				{ key: 'sortBy', title: 'VIEW POSTS BY', options: [], checked: _sortByFilters.length > 0, multiSelection: false, childViews: [{id: 'Newest to Oldest', title: 'Newest to Oldest'}, {id: 'Price - High to Low', title: 'Price - High to Low'}, {id: 'Price - Low to High', title: 'Price - Low to High'}, {id: 'Popularity', title: 'Popularity'}, {id: 'Discounts', title: 'Discounts'}] },
+				{ key: 'filterBy', title: 'FILTER BY', checked: (_brandsFilters.length > 0 || _categoriesFilters.length > 0 || _subCategoriesFilters.length > 0 || _sizesFilters.length > 0 || _conditionsFilters.length > 0 || _priceRangeFilters.length > 0), options: [
 				{ key: 'brand', title: 'BRAND', enabled: true, checked: _brandsFilters.length > 0, multiSelection: true, childViews: [] },
 				{ key: 'category', title: 'CATEGORY', enabled: true, checked: _categoriesFilters.length > 0, multiSelection: true, childViews: [] },
 				{ key: 'subCategory', title: 'SUB-CATEGORY', enabled: false, checked: _subCategoriesFilters.length > 0, multiSelection: true, childViews: [] },
@@ -333,6 +335,8 @@ exports.get = function(filterType) {
 			if(this.childViews == undefined || (_lastSelectedKey != undefined && _lastSelectedKey == this.key)) {
 				return;
 			}
+
+			Ti.API.info(constant.APP + " ####################### _arrFilterButtons clicked #####################");
 			var currentParentFilter = this;
 			var _currentSelectedFilterKey = currentParentFilter.key;
 			_lastSelectedKey = currentParentFilter.key;
@@ -397,7 +401,9 @@ exports.get = function(filterType) {
 			
 			if(_currentSelectedFilterKey == 'category' || _currentSelectedFilterKey == 'subCategory' || _currentSelectedFilterKey == 'brand' || _currentSelectedFilterKey == 'size') {
 				_getFilterDataFromServer(_currentSelectedFilterKey, (_currentSelectedFilterKey == 'subCategory' || _currentSelectedFilterKey == 'size' ? _selectedCategories.toString() : undefined), function(e) {
+					Ti.API.info(constant.APP + " ####################### _getFilterDataFromServer #####################");
 					_createView(e.childViews, _tmpSelection, currentParentFilter.multiSelection, function(e) {
+						Ti.API.info(constant.APP + " ####################### _createView #####################");
 						if(e.selectedFilters.length > 0) {
 							if(currentParentFilter.subFilter) {
 								currentParentFilter.children[0].backgroundImage = '/images/common/filter-field-tick.png';
@@ -411,6 +417,10 @@ exports.get = function(filterType) {
 						switch(_currentSelectedFilterKey) {
 							case 'brand':
 								_selectedBrands = e.selectedFilters;
+								Ti.API.info(constant.APP + " ####################### _selectedBrands : [" + _selectedBrands.length + "] #####################");
+								for(var ix in _selectedBrands){
+									Ti.API.info(constant.APP + " key: [" + ix + "] value: [" + _selectedBrands[ix] + "]");
+								}
 							break;
 							case 'category':
 								_selectedCategories = e.selectedFilters;
@@ -503,6 +513,18 @@ exports.get = function(filterType) {
 	    		conditions: _selectedConditions,
 	    		priceRange: _selectedPriceRanges
 	    	};
+
+	    	// for(var ix in _objFilter){
+	    	// 	Ti.API.info(constant.APP + " key: [" + ix + "] value: [" + _objFilter[ix] + "]");
+	    	// 	if(typeof _objFilter[ix] === 'array' || typeof _objFilter[ix] === 'object'){
+	    	// 		var innerDatastructure = _objFilter[ix];
+	    	// 		for(var iz in innerDatastructure){
+	    	// 			Ti.API.info(constant.APP + "           inner key [" + iz + "] value: [" + innerDatastructure[iz] + "]");
+	    	// 		}
+	    	// 	}
+
+	    	// }
+
 	    	_sortByFilters = _selectedSortBy;
 	    	_brandsFilters = _selectedBrands;
 	    	_categoriesFilters = _selectedCategories;

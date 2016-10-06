@@ -396,8 +396,8 @@ public void onPause(Activity activity) {
     AppEventsLogger.deactivateApp(activity);
 }
 
-<<<<<<< HEAD
-Please do following things to  Transfer app to another account.
+
+Please do following things to Transfer app to another account.
 1.Open Appceceletor Studio and After login using another account 
 click file>import> Appceceletor->Existing Mobile Project>Select Directory with checked  two options  (imported project ,Copy project into workspace)>Finish.
 2. Make sure ACS is enabled and Run Project
@@ -406,7 +406,7 @@ b) if any error message found like “Application not Registered”.
 Then open terminal appc logout -d 
 Regards
 Appcelerator Support
-=======
+
 Rate app link android: https://play.google.com/store/apps/details?id=com.under1r.StylFlip&hl=en#details-reviews
 
 
@@ -430,4 +430,34 @@ serverArgs: {
     pageIndex: 1
 }
 
->>>>>>> android-build
+
+[INFO]  {"success":true,"error":false,"meta":{"status":"ok","code":200,"method_name":"SubscribeNotificationByToken"}}
+[INFO]  STYLFLIP $$$$$$$$$$$$$$$$$$$$$$$$$ ACS NOTIFICATION SUBSCRIPTION SUCCESS $$$$$$$$$$$$$$$$$$$$$
+[INFO]  STYLFLEED-WEBVIEW key: profilePicURL value: uploads/profilePics/thumbnails/11262_thumbnail_tixhr1018288635.png
+[INFO]  STYLFLEED-WEBVIEW key: recentComments value:
+[INFO]  STYLFLEED-WEBVIEW key: likes value: 0
+[INFO]  STYLFLEED-WEBVIEW key: userId value: 11262
+[INFO]  STYLFLEED-WEBVIEW key: isFollowing value: 0
+[INFO]  STYLFLEED-WEBVIEW key: isLiked value: false
+[INFO]  STYLFLEED-WEBVIEW key: timestamp value: 4 days ago
+[INFO]  STYLFLEED-WEBVIEW key: feedId value: 2567
+[INFO]  STYLFLEED-WEBVIEW key: isCommented value: false
+[INFO]  STYLFLEED-WEBVIEW key: photo value: uploads/feedPics/thumbnails/11262_thumbnail_tixhr-64832265.png
+[INFO]  STYLFLEED-WEBVIEW key: isTagged value: false
+[INFO]  STYLFLEED-WEBVIEW key: userLocation value: Chicalim
+[INFO]  STYLFLEED-WEBVIEW key: comments value: 0
+[INFO]  STYLFLEED-WEBVIEW key: username value: Wildspirit
+[INFO]  STYLFLEED-WEBVIEW key: wardrobeId value: 0
+[INFO]  STYLFLEED-WEBVIEW key: productId value: 0
+[INFO]  STYLFLEED-WEBVIEW key: feedTitle value: crustacious delight
+
+var _objFilter = {
+	    		sortBy: _selectedSortBy,
+	    		brands: _selectedBrands,
+	    		categories: _selectedCategories,
+	    		subCategories: _selectedSubCategories,
+	    		sizes: _selectedSizes,
+	    		conditions: _selectedConditions,
+	    		priceRange: _selectedPriceRanges
+	    	};
+

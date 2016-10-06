@@ -1,0 +1,103 @@
+body{
+	background: rgb(255,255,255);
+	/*overflow: hidden;*/
+	user-select: none;
+	width: 99vw;
+	height: 99vh;
+}appc 
+
+h1{
+	text-align: center;	
+}
+
+.images{
+	width: 20%;
+	height: 80%;
+	margin: 2% 2%;
+	/*border: 1px solid black;*/
+	display: inline-block;
+	background-repeat: no-repeat;
+	background-position: center;
+	box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.5);
+}
+
+#feed-category .feed-carousel-container .images{
+	width: 60%;
+}
+
+.fixed-images{
+	width: 19%;
+	height: 80%;
+	margin: 2% 1%;
+	display: inline;
+	background-repeat: no-repeat;
+	background-position: center;
+	box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.5);
+}
+
+/*temporary for debug only*/
+#feed-top-brands .images{
+	text-align: center;
+	vertical-align: middle;
+	line-height: 400%;
+	background-color: rgb(239,78,109);
+}
+
+.images img{
+	/*transition: opacity 1s ease-in;*/
+	width: 100%;
+	height: 100%;
+	/*content: url('../images/default-shop-big.jpg');*/
+}
+
+.feed-carousel-container{
+	/*border: 1px solid rgb(239,78,109);*/
+	font-size: 100%;
+	height: 75%;
+	width: 99%;
+	overflow-x: auto;
+	overflow-y: hidden; 
+	white-space: nowrap;
+	clear: both;
+}
+
+.carousel-wrapper{
+	background: rgb(240,240,240);
+	margin-top: 3%;
+	margin-left: 1%;
+	width: 99%;
+	box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.5);
+}
+
+.carousel-header{
+	text-align: center;
+	width: 99%;
+	/*border: 1px solid black;*/
+	font-weight: bold;
+	font-style: italic;
+	color: rgb(239,78,109);
+}
+
+#feed-category{
+	height: 30vh;
+}
+
+#feed-loved-products{
+	height: 20vh;
+}
+
+#feed-top-brands{
+	height: 20vh;
+}
+
+#feed-featured-users{
+	height: 20vh;
+}
+
+#feed-price{
+	height: 20vh;
+}
+
+#feed-condition{
+	height: 20vh;
+}
