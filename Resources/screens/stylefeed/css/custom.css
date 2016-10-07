@@ -1,0 +1,141 @@
+.m-a-0 {
+  margin: 0;
+}
+.p-a-0 {
+  padding: 0;
+}
+.hidden {
+  display: none;
+}
+.bold {
+  font-weight: bold;
+}
+.bold {
+  font-weight: bold;
+}
+.normal {
+  font-weight: normal;
+}
+.light {
+  font-weight: light;
+}
+.color-primary {
+  color: #ef4e6f;
+}
+.color-body {
+  color: #494949;
+}
+.color-title {
+  color: #222222;
+}
+.img-full-100 {
+  width: 100%;
+}
+.img-max-100 {
+  max-width: 100%;
+}
+body,
+html {
+  font-family: 'Roboto', Arial, sans-serif;
+  color: #494949;
+}
+h1 {
+  font-size: 48px;
+}
+h2 {
+  font-size: 32px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 14px;
+}
+a {
+  text-decoration: none;
+}
+.section {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  padding: 10px 15px 5px;
+}
+.section + .section {
+  padding-top: 20px;
+}
+.sec_ttle {
+  color: #222222;
+  line-height: 44px;
+  margin-bottom: 10px;
+}
+.sec_ttle:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+.sec-link {
+  float: right;
+  line-height: 44px;
+  padding-left: 5px;
+  font-size: 0.85em;
+  font-weight: normal;
+  opacity: 0.7;
+}
+.sec-scroll {
+  white-space: nowrap;
+  overflow-x: scroll;
+}
+.shop-item {
+  width: 42%;
+  display: inline-block;
+  margin-right: 5px;
+  color: #494949;
+  background: #fcfcfc;
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+.shop-item .shop-item-text {
+  padding: 4px 8px;
+  display: block;
+}
+.shop-item .shop-item-img,
+.shop-item .shop-item-title,
+.shop-item .shop-item-meta,
+.shop-item .shop-item-price {
+  display: block;
+  line-height: 16px;
+}
+.shop-item .shop-item-title {
+  font-weight: bold;
+}
+.shop-item .shop-item-meta {
+  opacity: 0.7;
+}
+.shop-item .shop-item-price {
+  color: #ef4e6f;
+  font-weight: bold;
+  margin-top: 4px;
+}
+.single-pick {
+  display: block;
+  height: 210px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.user-item {
+  width: 75%;
+  display: inline-block;
+  margin-right: 5px;
+  color: #494949;
+  background: #fcfcfc;
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+.user-item .user-item-top {
+  padding: 4px 8px;
+  display: block;
+}

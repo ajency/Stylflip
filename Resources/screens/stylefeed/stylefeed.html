@@ -3,15 +3,96 @@
 <head>
 	<title>Stylefeeds</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" type="text/css" href="css/style.css"/>
+	<!-- The 2 fonts -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,500i,700,900">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+	<!-- CSS to reset all styles -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+	<!-- Custom CSS -->
+	<link rel="stylesheet" href="css/custom.css">
+	<link rel="stylesheet" href="css/style.css" type="text/css">
 </head>
 <body>
-	<!-- <h1>Hello style feed</h1> -->
-	<div id="feed-category" class="carousel-wrapper">
+
+	<section class="section sec-collection">
+		<h4 class="sec_ttle">
+			Collection - New
+			<a href="#" class="sec-link color-body">View All <i class="fa fa-angle-right"></i></a>
+		</h4>
+		<div class="sec-scroll">
+			<a href="#" class="shop-item">
+				<span class="shop-item-img">
+					<img src="images/01.jpg" class="img-full-100" alt="">
+				</span>
+				<span class="shop-item-text">
+					<span class="shop-item-title">Blue &amp; Black Dress</span>
+					<span class="shop-item-meta">Other | M (US/UK)</span>
+					<span class="shop-item-price"><i class="fa fa-inr"></i> 839</span>
+				</span>
+			</a>
+			<a href="#" class="shop-item">
+				<span class="shop-item-img">
+					<img src="images/02.jpg" class="img-full-100" alt="">
+				</span>
+				<span class="shop-item-text">
+					<span class="shop-item-title">Short Skirt</span>
+					<span class="shop-item-meta">Other | S (US/UK)</span>
+					<span class="shop-item-price"><i class="fa fa-inr"></i> 720</span>
+				</span>
+			</a>
+			<a href="#" class="shop-item">
+				<span class="shop-item-img">
+					<img src="images/01.jpg" class="img-full-100" alt="">
+				</span>
+				<span class="shop-item-text">
+					<span class="shop-item-title">Blue &amp; Black Dress</span>
+					<span class="shop-item-meta">Other | M (US/UK)</span>
+					<span class="shop-item-price"><i class="fa fa-inr"></i> 839</span>
+				</span>
+			</a>
+			<a href="#" class="shop-item">
+				<span class="shop-item-img">
+					<img src="images/02.jpg" class="img-full-100" alt="">
+				</span>
+				<span class="shop-item-text">
+					<span class="shop-item-title">Short Skirt</span>
+					<span class="shop-item-meta">Other | S (US/UK)</span>
+					<span class="shop-item-price"><i class="fa fa-inr"></i> 720</span>
+				</span>
+			</a>
+		</div>
+	</section>
+
+	<section class="section sec-brand">
+		<h4 class="sec_ttle">
+			Shop by Brand
+			<a href="#" class="sec-link color-body">View All <i class="fa fa-angle-right"></i></a>
+		</h4>
+		<div class="pick-row">
+			<a href="#" class="single-pick">
+				<img src="images/category-01.jpg" class="img-full-100" alt="">
+			</a>
+		</div>
+		<div class="sec-scroll">
+			<a href="#" class="user-item">
+				<span class="user-item-top">
+					<span class="user-img pull-left" style="background-img: url('images/user.jpg');"></span>
+					<span class="user-name">Najo</span>
+					<span class="user-location">India</span>
+				</span>
+			</a>
+		</div>
+	</section>
+
+	<div id="feed-category" class="carousel-wrapper hidden">
 		<div class='carousel-header'>Categories</div>
-		<div class="feed-carousel-container">
-			<div class="images">
-				<img/>
+		<div class="feed-carousel-container category-carousel">
+			<div class="category-item">
+				<img src="images/category-01.jpg" />
+				<div class="category-details">
+					<h5 class="category-adj">Extravagant</h5>
+					<h2 class="category-title">Wedding Attire</h2>
+				</div>
 			</div>
 			<div class="images"><img/></div>
 			<div class="images"><img/></div>
@@ -19,7 +100,7 @@
 			<div class="images"><img/></div>
 		</div>
 	</div>
-	<div id="feed-loved-products" class="carousel-wrapper">
+	<div id="feed-loved-products" class="carousel-wrapper hidden">
 		<div class='carousel-header'>Loved Products</div>
 		<div class="feed-carousel-container">
 			<div class="images"><img/></div>
@@ -29,7 +110,7 @@
 			<div class="images"><img/></div>
 		</div>
 	</div>
-	<div id="feed-top-brands" class="carousel-wrapper">
+	<div id="feed-top-brands" class="carousel-wrapper hidden">
 		<div class='carousel-header'>Top Brands</div>
 		<div class="feed-carousel-container">
 			<div class="images"><img/></div>
@@ -39,7 +120,7 @@
 			<div class="images"><img/></div>
 		</div>
 	</div>
-	<div id="feed-featured-users" class="carousel-wrapper">
+	<div id="feed-featured-users" class="carousel-wrapper hidden">
 		<div class='carousel-header'>Featured Users</div>
 		<div class="feed-carousel-container">
 			<div class="images"><img/></div>
@@ -49,7 +130,7 @@
 			<div class="images"><img/></div>
 		</div>
 	</div>
-	<div id="feed-price" class="carousel-wrapper">
+	<div id="feed-price" class="carousel-wrapper hidden">
 		<div class='carousel-header'>Price</div>
 		<div class="feed-carousel-container">
 			<div class="images"><img/></div>
@@ -59,7 +140,7 @@
 			<div class="images"><img/></div>
 		</div>
 	</div>
-	<div id="feed-condition" class="carousel-wrapper">
+	<div id="feed-condition" class="carousel-wrapper hidden">
 		<div class='carousel-header'>Condition</div>
 		<div class="feed-carousel-container">
 			<div class="images"><img/></div>
