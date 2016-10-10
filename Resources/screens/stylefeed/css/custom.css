@@ -180,6 +180,51 @@ a:active {
   font-weight: 500;
   box-shadow: 0 0 14px rgba(0, 0, 0, 0.1), 0 4px 13px rgba(0, 0, 0, 0.1);
 }
+.category-scroll .single-pick {
+  display: inline-block;
+  height: 170px;
+  width: 90%;
+  position: relative;
+}
+.category-scroll .category-overlay {
+  background: #000;
+  opacity: 0.4;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+.category-scroll .category-text {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  margin: auto;
+  text-align: center;
+  padding-top: 35px;
+  font-size: 13px;
+  color: #fff;
+}
+.category-scroll .category-adj {
+  display: block;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  letter-spacing: 3px;
+  opacity: 0.8;
+}
+.category-scroll .category-adj:before,
+.category-scroll .category-adj:after {
+  content: '-';
+  margin: 0 5px;
+}
+.category-scroll .category-title {
+  display: block;
+  font-weight: 500;
+  font-size: 2em;
+  white-space: normal;
+}
 .user-item {
   width: auto;
   max-width: 130px;
