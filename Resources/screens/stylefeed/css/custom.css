@@ -151,18 +151,46 @@ a:active {
 }
 .single-pick {
   display: block;
-  height: 210px;
+  max-height: 210px;
   overflow: hidden;
   margin-bottom: 10px;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.brand-scroll .single-pick {
+  display: inline-block;
+  height: 170px;
+  width: 90%;
+}
+.brand-scroll .single-pick-brand-name {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  color: #222222;
+  text-align: center;
+}
+.brand-scroll .single-pick-brand-name span {
+  display: inline-block;
+  background: #fff;
+  padding: 9px 25px;
+  font-weight: 500;
+  box-shadow: 0 0 14px rgba(0, 0, 0, 0.1), 0 4px 13px rgba(0, 0, 0, 0.1);
 }
 .user-item {
-  width: 82%;
+  width: auto;
+  max-width: 130px;
   display: inline-block;
   margin-right: 5px;
   color: #494949;
-  background: #f6f9fa;
   font-size: 13px;
   margin-bottom: 15px;
+  text-align: center;
+  padding: 0 15px;
+  box-sizing: border-box;
+  vertical-align: top;
 }
 .user-item:last-child {
   margin-right: 0px;
@@ -171,16 +199,8 @@ a:active {
 .user-item:active {
   opacity: 0.8;
 }
-.user-item .user-item-top {
-  padding: 8px;
-  display: block;
-}
-.user-item .user-item-top:after {
-  content: '';
-  display: table;
-  clear: both;
-}
 .user-item .user-img {
+  display: block;
   width: 50px;
   height: 50px;
   margin-right: 10px;
@@ -188,6 +208,7 @@ a:active {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  margin: 0 auto;
 }
 .user-item .user-name,
 .user-item .user-location {
@@ -197,8 +218,9 @@ a:active {
 .user-item .user-name {
   font-weight: 700;
   margin-top: 7px;
-  margin-bottom: 6px;
+  margin-bottom: 3px;
   font-size: 1.15em;
+  white-space: normal;
 }
 .single-product {
   font-size: 13px;
