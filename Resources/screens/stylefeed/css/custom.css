@@ -171,6 +171,7 @@ a:active {
   bottom: 20px;
   color: #222222;
   text-align: center;
+  white-space: normal;
 }
 .brand-scroll .single-pick-brand-name span {
   display: inline-block;
