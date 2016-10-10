@@ -148,7 +148,8 @@ exports.get = function(config) {
     			message: 'You will loose your changes to your filters. Proceed?',
     			buttonNames: ['Ok', 'Cancel']
     		});
-    		alertDialog.addEventListener('click', function(e) {
+
+    		function alertDialogClick(e) {
     			if(e.index == 0) {
 					if(btnMenuView) {
 						btnMenuView.visible = true;
@@ -158,7 +159,9 @@ exports.get = function(config) {
 					headerView.remove(btnBackView);
 					_enableFilterDone(false);
     			}
-    		});
+    		}
+
+    		alertDialog.addEventListener('click',alertDialogClick);
     		alertDialog.show();
     		alertDialog = null;
     	}

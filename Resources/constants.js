@@ -44,7 +44,20 @@ exports.get = function() {
 		WINDOW_HEIGHT: (pheight - windowTopPos) - topMargin,
 		POP_UP_CONTENT_MAX_HEIGHT: ((pheight - windowTopPos) - ((pwidth * 45) / 320)) - topMargin,
 		TOP_MARGIN: topMargin,
-		
+		CONDITION_FILTERS: [
+			{id: 'Brand new with tags', title: 'Brand new with tags'}, 
+			{id: 'New without tags', title: 'New without tags'}, 
+			{id: 'Barely Worn (once or twice)', title: 'Barely Worn (once or twice)'}, 
+			{id: 'Gently Used', title: 'Gently Used'}
+		],
+		PRICE_FILTERS: [
+			{id: 'Less than 500', title: 'Less than \u20B9 500'}, 
+			{id: '500 - 1000', title: '\u20B9 500 - \u20B9 1000'}, 
+			{id: '1000 - 2000', title: '\u20B9 1000 - \u20B9 2000'}, 
+			{id: '2000 - 3000', title: '\u20B9 2000 - \u20B9 3000'}, 
+			{id: '3000 - 4000', title: '\u20B9 3000 - \u20B9 4000'}, 
+			{id: '4000 and above', title: '\u20B9 4000 and Above'}
+		],
 		FONT: {
 			DEFAULT_FONT: 'Roboto',
 			ABEATBYKAI: 'abeatbyKai'

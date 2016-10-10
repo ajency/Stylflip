@@ -18,16 +18,16 @@ UI.createWebView = function(url){
     if(feedWebView === null){
         Ti.API.info(constant.APP + " ############################## manufacturer: [" + manufacturer + "] model: [" + model+ "] ############################");
         feedWebView = Ti.UI.createWebView({
-            // url:'https://www.google.co.in/?gws_rd=ssl',
-            // url:'/screens/stylefeed/stylefeed.html',
-            // borderRadius: 5,
             enableZoomControls: false,
             width: Ti.UI.FILL,
             height: Ti.UI.FILL
         });
 
-        var disableHwAcc = model.match(/nexus/i) ? true : false;
+        if(osname !== 'android'){
+            feedWebView.willHandleTouches = false; 
+        }
 
+        var disableHwAcc = model.match(/nexus/i) ? true : false;
         if(disableHwAcc){
             Ti.API.info(constant.APP + " ################# hardware acc disabled ###############");
             feedWebView.setBorderRadius(1);
@@ -37,6 +37,12 @@ UI.createWebView = function(url){
     }
     feedWebView.setUrl(url);
     return feedWebView;
+};
+
+UI.resetWebView = function(){
+    if(feedWebView){
+        feedWebView.setUrl('/screens/stylefeed/blank.html');
+    }
 };
 
 UI.top = function(top){
@@ -304,6 +310,7 @@ UI.createOverlayView = function(view, bgTransparent) {
 	            _clearMemory();
 	        });
     	}
+        overlayView.setTouchEnabled(false);
     };
     
     overlayView.addEventListener('click', function() {
@@ -653,7 +660,7 @@ UI.alertDialog = function(props,callback) {
         // events.event = event;
         // events.listener = callback;
     };
-    
+
     var _hideListener = function() {
         Utils._.isFunction(hideCallback) && hideCallback();
         clickCallback = null;
@@ -667,6 +674,8 @@ UI.alertDialog = function(props,callback) {
             alertView = null;
         });
     };
+
+    $.hideListener = _hideListener;
     
     $.hide = function() {
         overlayView.hide(function() {
@@ -680,12 +689,10 @@ UI.alertDialog = function(props,callback) {
     }
 }; //end alertDialog
 
-
 UI.createAlertDialog = function(props,callback) {
 	var alertDialog = new UI.alertDialog(props, callback);
 	return alertDialog;
 };
-
 
 UI.dialogBox = function(props) {
     var $ = this;
@@ -808,7 +815,6 @@ UI.dialogBox = function(props) {
         // contentView.height = dialogBox.height - lblTitle.height;
     // }
 };
-
 
 UI.buttonBarView = function(obj) {
 	var $ = this;

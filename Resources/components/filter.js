@@ -138,8 +138,8 @@ exports.get = function(filterType,filterOptions) {
 				{ key: 'category', title: 'CATEGORY', enabled: true, checked: _categoriesFilters.length > 0, multiSelection: true, childViews: [] },
 				{ key: 'subCategory', title: 'SUB-CATEGORY', enabled: false, checked: _subCategoriesFilters.length > 0, multiSelection: true, childViews: [] },
 				{ key: 'size', title: 'SIZES', enabled: true, checked: _sizesFilters.length > 0, multiSelection: true, childViews: [] },
-				{ key: 'condition', title: 'CONDITION', enabled: true, checked: _conditionsFilters.length > 0, multiSelection: true, childViews: [{id: 'Brand new with tags', title: 'Brand new with tags'}, {id: 'New without tags', title: 'New without tags'}, {id: 'Barely Worn (once or twice)', title: 'Barely Worn (once or twice)'}, {id: 'Gently Used', title: 'Gently Used'}] },
-				{ key: 'priceRange', title: 'PRICE RANGE', enabled: true, checked: _priceRangeFilters.length > 0, multiSelection: false, childViews: [{id: 'Less than 500', title: 'Less than \u20B9 500'}, {id: '500 - 1000', title: '\u20B9 500 - \u20B9 1000'}, {id: '1000 - 2000', title: '\u20B9 1000 - \u20B9 2000'}, {id: '2000 - 3000', title: '\u20B9 2000 - \u20B9 3000'}, {id: '3000 - 4000', title: '\u20B9 3000 - \u20B9 4000'}, {id: '4000 and above', title: '\u20B9 4000 and Above'}] }
+				{ key: 'condition', title: 'CONDITION', enabled: true, checked: _conditionsFilters.length > 0, multiSelection: true, childViews: constant.CONDITION_FILTERS },
+				{ key: 'priceRange', title: 'PRICE RANGE', enabled: true, checked: _priceRangeFilters.length > 0, multiSelection: false, childViews: constant.PRICE_FILTERS }
 			]}
 		];
 	}
