@@ -1,0 +1,288 @@
+<!doctype html>
+<!--Quite a few clients strip your Doctype out, and some even apply their own. Many clients do honor your doctype and it can make things much easier if you can validate constantly against a Doctype.-->
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stylflip</title>
+
+<!-- Please use an inliner tool to convert all CSS to inline as inpage or external CSS is removed by email clients -->
+<!-- When use in Email please remove all comments as it is removed by Email clients-->
+<!-- important in CSS is used to prevent the styles of currently inline CSS from overriding the ones mentioned in media queries when corresponding screen sizes are encountered -->
+
+<style type="text/css">
+body {
+	margin: 0;
+}
+body, table, td, p, a, li, blockquote {
+	-webkit-text-size-adjust: none!important;
+ font-family:Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif font-style: normal;
+	font-weight: 400;
+}
+button {
+	width: 90%;
+}
+
+@media screen and (max-width:600px) {
+/*styling for objects with screen size less than 600px; */
+body, table, td, p, a, li, blockquote {
+	-webkit-text-size-adjust: none!important;
+	font-family: Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif
+}
+table {
+	/* All tables are 100% width */
+	width: 100%;
+}
+.footer {
+	/* Footer has 2 columns each of 48% width */
+	height: auto !important;
+	max-width: 48% !important;
+	width: 48% !important;
+}
+table.responsiveImage {
+	/* Container for images in catalog */
+	height: auto !important;
+	max-width: 30% !important;
+	width: 30% !important;
+}
+table.responsiveContent {
+	/* Content that accompanies the content in the catalog */
+	height: auto !important;
+	max-width: 66% !important;
+	width: 66% !important;
+}
+.top {
+	/* Each Columnar table in the header */
+	height: auto !important;
+	max-width: 48% !important;
+	width: 48% !important;
+}
+.catalog {
+	margin-left: 0%!important;
+}
+}
+
+@media screen and (max-width:480px) {
+/*styling for objects with screen size less than 480px; */
+body, table, td, p, a, li, blockquote {
+	-webkit-text-size-adjust: none!important;
+	font-family: Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif
+}
+table {
+	/* All tables are 100% width */
+	width: 100% !important;
+	border-style: none !important;
+}
+.footer {
+	/* Each footer column in this case should occupy 96% width  and 4% is allowed for email client padding*/
+	height: auto !important;
+	max-width: 96% !important;
+	width: 96% !important;
+}
+.table.responsiveImage {
+	/* Container for each image now specifying full width */
+	height: auto !important;
+	max-width: 96% !important;
+	width: 96% !important;
+}
+.table.responsiveContent {
+	/* Content in catalog  occupying full width of cell */
+	height: auto !important;
+	max-width: 96% !important;
+	width: 96% !important;
+}
+.top {
+	/* Header columns occupying full width */
+	height: auto !important;
+	max-width: 100% !important;
+	width: 100% !important;
+}
+.catalog {
+	margin-left: 0%!important;
+}
+button {
+	width: 90%!important;
+}
+}
+</style>
+</head>
+<body yahoo="yahoo">
+<table width="100%"  cellspacing="0" cellpadding="0">
+    <tbody>
+  
+  <tr>
+    <td><table width="600"  align="center" cellpadding="0" cellspacing="0">
+        <tr> 
+          <!-- HTML Spacer row -->
+          <td style="font-size: 0; line-height: 0;" height="20"><table width="96%" align="left"  cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="font-size: 0; line-height: 0;" height="20">&nbsp;</td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr> 
+          <!-- HTML IMAGE SPACER -->
+          <td style="font-size: 0; line-height: 0;" height="20"><table align="left"  cellpadding="0" cellspacing="0" >
+              <tr>
+                <td ><img src="http://www.stylflip.com/stylflip/emailTemplates/images/WELCOME-header-banner.jpg"  alt="" height="" width="100%" class=""></td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr> 
+          <!-- HTML Spacer row -->
+          <td style="font-size: 0; line-height: 0;" height="20"><table width="100%" align="left"  cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="font-size: 0; line-height: 0;" height="20">&nbsp;</td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr>
+          <td><table cellpadding="0" cellspacing="0" align="center" width="100%" style="margin-left:0" class="catalog">
+              <!-- Table for catalog -->
+              <tr>
+                <td ><table class ="responsive-table" width="33%"  cellspacing="0" cellpadding="0" align="left" style="margin: 10px 0px 10px 0px;">
+                    <!-- Table container for each image and description in catalog -->
+                    <tbody>
+                      <tr>
+                        <td><table class="table.responsiveImage" width="66%"  cellspacing="0" cellpadding="0" align="center">
+                            <!-- Table container for image -->
+                            <tbody>
+                              <tr>
+                                <td align="center" style="padding:10px 3px 10px 3px;"><img src="http://www.stylflip.com/stylflip/emailTemplates/images/discover closet.png" alt="sample" style="width: 75px;height:75px;"></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <table class="table.responsiveContent" width="66%"  cellspacing="0" cellpadding="0" align="center">
+                            <!-- Table container for content -->
+                            <tbody>
+                              <tr>
+                                <td><p style="font-size: 14px; font-style: normal; font-weight: normal; color: #EF4E6D;  padding: 5px 0px 0px 10px;line-height: 1.5em; font-family:Gotham, 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align:center">Discover fashion through closets of like-minded women around you </p></td>
+                              </tr>
+                            </tbody>
+                          </table></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <table class ="responsive-table" width="33%"  cellspacing="0" cellpadding="0" align="left" style="margin: 10px 0px 10px 0px;">
+                    <!-- Table container for each image and description in catalog -->
+                    <tbody>
+                      <tr>
+                        <td><table class="table.responsiveImage" width="66%"  cellspacing="0" cellpadding="0" align="center">
+                            <!-- Table container for image -->
+                            <tbody>
+                              <tr>
+                                <td align="center" style="padding:10px 3px 10px 3px;"><img src="http://www.stylflip.com/stylflip/emailTemplates/images/gently used clothes.png" alt="sample" style="width: 75px;height:75px;"></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <table class="table.responsiveContent" width="66%"  cellspacing="0" cellpadding="0" align="center">
+                            <!-- Table container for content -->
+                            <tbody>
+                              <tr>
+                                <td><p style="font-size: 14px; font-style: normal; font-weight: normal; color: #EF4E6D;  padding: 5px 0px 0px 10px;line-height: 1.5em; font-family:Gotham, 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align:center">Sell new and gently-used items from your closet for cash  </p></td>
+                              </tr>
+                            </tbody>
+                          </table></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <table class ="responsive-table" width="33%"  cellspacing="0" cellpadding="0" align="left" style="margin: 10px 0px 10px 0px;">
+                    <!-- Table container for each image and description in catalog -->
+                    <tbody>
+                      <tr>
+                        <td><table class="table.responsiveImage" width="66%"  cellspacing="0" cellpadding="0" align="center">
+                            <!-- Table container for image -->
+                            <tbody>
+                              <tr>
+                                <td align="center" style="padding:10px 3px 10px 3px;"><img src="http://www.stylflip.com/stylflip/emailTemplates/images/authentic branded.png" alt="sample" style="width: 75px;height:75px;"></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <table class="table.responsiveContent" width="66%"  cellspacing="0" cellpadding="0" align="center">
+                            <!-- Table container for content -->
+                            <tbody>
+                              <tr>
+                                <td><p style="font-size: 14px; font-style: normal; font-weight: normal; color: #EF4E6D;  padding: 5px 0px 0px 10px;line-height: 1.5em; font-family:Gotham, 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align:center">Shop for authentic, branded items from a trusted community </p></td>
+                              </tr>
+                            </tbody>
+                          </table></td>
+                      </tr>
+                    </tbody>
+                  </table></td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr> 
+          
+          <!-- Introduction area -->
+          
+          <td><table width="96%"  align="left" cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="font-size: 0; line-height: 0;" height="20"><table width="96%" align="left"  cellpadding="0" cellspacing="0">
+                    <tr> 
+                      <!-- HTML Spacer row -->
+                      <td style="font-size: 0; line-height: 0;" height="20">&nbsp;</td>
+                    </tr>
+                  </table></td>
+              </tr>
+              <tr> 
+                <!-- Row container for Intro/ Description -->
+                <td align="left" style="font-size: 14px; font-style: normal; font-weight: 400; color: #404142; line-height: 1.8; text-align:left; padding:0px 0px 0px 20px; font-family:Gotham, 'Helvetica Neue', Helvetica, Arial, sans-serif;">Let’s get you started with some tips
+                  <ol>
+                    <li><b>Complete your profile</b> – Tell us a little something about yourself</li>
+                    <li><b>List your first item </b>– Upload a stylish picture, add a catchy description, set your price and cash in! Check out our <a href="http://stylflip.com/site/?page_id=3158">Style Guide </a>to take those great shots</li>
+                    <li><b>Follow closets</b> – StylSocial helps you discover and follow some of our most popular flippers. Use can also search for people you know</li>
+                    <li><b>Invite your friends</b> – Shopping is always better with friends. Why not tell them about StylFlip and get them to download the app !</li>
+                    <li><b>Make a difference</b> – StylFlip supports various social causes through its partners. Find out how you can <a href="http://stylflip.com/site/?page_id=3050">make a difference.</a>	</li>
+                  </ol></td>
+				 
+              </tr>
+			  <tr>
+                <td  align="left" style="font-size: 14px; font-style: normal; font-weight: 400; color: #EF4E6D; line-height: 1.8; text-align:center; padding:10px 0px 10px 0px; font-family:Gotham, 'Helvetica Neue', Helvetica, Arial, sans-serif;">To get you started, we are throwing in a <b>10% Off</b> on your first purchase. Use coupon code <b>FLIP10</b> at the time of checkout<br>
+                  
+                   </td>
+              </tr>
+              <tr> 
+                <!-- HTML IMAGE SPACER -->
+                <td style="font-size: 0; line-height: 0;" height="20"><table align="left"  cellpadding="0" cellspacing="0" >
+                    <tr>
+                      <td ><img src="http://www.stylflip.com/stylflip/emailTemplates/images/WELCOME-footer-banner.jpg"  alt="" height="" width="100%" class=""></td>
+                    </tr>
+                  </table></td>
+              </tr>
+              
+            </table></td>
+        </tr>
+        <tr> 
+          <!-- HTML Spacer row -->
+          <td style="font-size: 0; line-height: 0;" height="10"><table width="96%" align="left"  cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="font-size: 0; line-height: 0;" height="20">&nbsp;</td>©
+              </tr>
+            </table></td>
+        </tr>
+        <tr> 
+          <!-- HTML spacer row -->
+          <td style="font-size: 0; line-height: 0;" height="20"><table width="96%" align="left"  cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="font-size: 0; line-height: 0;" height="20">&nbsp;</td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr bgcolor="#ffffff">
+          <td>
+			<p style="font-size: 10px; font-style: normal; padding-bottom:30px;font-weight: 400; color: #EF4E6D; line-height: 1.8;  padding:10px 0px 45px 50px; font-family:Roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;margin-left:0px;position:relative;top:-35px; ">©&nbsp;2016 Placard Digital Solutions Private Limited.
+				     						<a href="http://stylflip.com/site/?page_id=3333" style="color:#EF4E6D; text-decoration:none; display:inline-block; margin-left:0px;">The StylFlip Promise</a> | <a href="http://stylflip.com/site/?page_id=3302" style="color:#EF4E6D; text-decoration:none;">Privacy Policy</a> | <a href="http://stylflip.com/site/?page_id=3304" style="color:#EF4E6D; text-decoration:none;">Terms & Conditions</a><br>
+<p align="center" style="font-family:Gotham, 'Helvetica Neue', Helvetica, Arial, sans-serif;position:relative;top:-85px;"> <a style="color:#404142; text-decoration:none; padding-left:20px; font-size:14px;" href="https://www.facebook.com/Stylflip/"><img src="http://www.stylflip.com/stylflip/emailTemplates/images/sf-mailer-fb.png" width="40"/></a> <a style="color:#404142; text-decoration:none; padding-left:20px;  font-size:14px;" href="https://twitter.com/stylflip"><img src="http://www.stylflip.com/stylflip/emailTemplates/images/sf-mailer-tw.png" width="40"/></a> <a style="color:#404142; text-decoration:none; font-size:14px; padding-left:20px; padding-right:20px; " href="https://www.instagram.com/stylflip/"><img src="http://www.stylflip.com/stylflip/emailTemplates/images/sf-mailer-ig.png" width="40"/></a>											
+           </td>
+        </tr>
+		
+          </tbody>
+        
+      </table></td>
+  </tr>
+    </tbody>
+  
+</table>
+</body>
+</html>

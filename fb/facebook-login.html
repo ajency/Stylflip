@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Facebook login</title>
+	</head>
+	<body>
+		<script>
+		alert('cool');
+		  window.fbAsyncInit = function() {
+		    FB.init({
+		      appId      : '1486437388326591',
+		      xfbml      : true,
+		      version    : 'v2.5'
+		    });
+		  };
+		
+		  (function(d, s, id){
+		     var js, fjs = d.getElementsByTagName(s)[0];
+		     if (d.getElementById(id)) {return;}
+		     js = d.createElement(s); js.id = id;
+		     js.src = "http://connect.facebook.net/en_US/sdk.js";
+		     fjs.parentNode.insertBefore(js, fjs);
+		   }(document, 'script', 'facebook-jssdk'));
+		   
+		   function login() {
+			  FB.login(function(e){
+			  	console.log(e);
+			  	console.log(e.authResponse.userID);
+			  	FB.api('/me', function(userInfo) {
+			        console.log(userInfo);
+		      	});
+			  }, {scope: 'publish_actions, email, public_profile'});
+		   }
+		</script>
+		<!-- <button onclick="myFacebookLogin()">Login with Facebook</button> -->
+	</body>
+</html>
+		

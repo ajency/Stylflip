@@ -1,0 +1,203 @@
+body
+{
+	font-family: Verdana;
+	font-size: 11px;
+	margin-left: 10px;
+	color: #000000;
+	background-color: #FFD5EA;
+	margin: 5px; /* it's good practice to zero the margin and padding of the body element to account for differing browser defaults */
+	padding: 5px;
+}
+
+
+
+
+a 
+{
+	font-family: Verdana;
+	font-size: 11px;
+	color: #000000;
+	font-weight: bold;
+}
+
+
+.edit
+{
+	background-image:url(../images/edit.gif);
+	width:20px;
+	height:22px;
+	cursor:text;
+}
+
+
+.test
+{
+	font-weight:bold;
+	background-color:#FFFFFF;
+	color:#FF0000;
+	border-collapse:separate;
+}
+
+.delete
+{
+	background-image:url(../images/delete.gif);
+	width:32px;
+	height:32px;
+	cursor:text;
+}
+
+
+a:link 
+{
+	text-decoration: none;
+}
+
+a:visited
+{
+	text-decoration: none;
+	color: #000000;
+}
+
+a:hover 
+{
+	text-decoration: none;
+	color: #666666;
+}
+
+
+a:active 
+{
+	text-decoration: none;
+	color: #000000;
+}
+
+.style1 
+{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+}
+
+
+.scroll 
+{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	border-width: 1px;
+	border-style:none;
+	width: auto;
+	height: 420px;
+	overflow:scroll;
+	padding: 5px;
+	margin-top: 5px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-bottom: 5px;
+}
+
+
+
+.login
+{
+	font-family: Verdana;
+	font-size: 11px;
+	display:none;
+	margin:20px;
+	
+}
+
+
+.pcheck
+{
+	visibility:visible;
+
+}
+
+
+.btn_back
+{
+height:auto;
+width:auto;
+margin-top:0px;
+}
+
+.btns
+{
+height:135px;
+width:34px;
+background-image:url(../images/btn_back.jpg);
+}
+
+
+.sidebar
+{
+float:left;
+margin-left:10px;
+width:200px;
+height:auto;
+font-family:Verdana, Arial, Helvetica, sans-serif;
+font-size:12px;
+}
+
+.reg_form
+{
+float:left;
+width:auto;
+height:auto;
+font-family:Verdana, Arial, Helvetica, sans-serif;
+font-size:12px;
+}
+
+
+.right_sidebar
+{
+float:right;
+width:auto;
+height:auto;
+font-family:Verdana, Arial, Helvetica, sans-serif;
+font-size:12px;
+}
+
+
+
+/*  --   records display page css starts --  */
+
+.table {
+font-family:Verdana, Arial, Helvetica, sans-serif;
+width:100%;
+border-collapse:collapse;
+border:1px solid #666666;
+padding:10px;
+}
+
+.table th
+{
+font-size:12px;
+text-align:left;
+background-color:#cccccc;
+border:1px solid #666666;
+color:#000000;
+padding: 5px;
+}
+
+.table tr alt td
+{
+color:#000000;
+background-color:#FFFFFF;
+text-align:left;
+padding: 5px;
+}
+
+.table td
+{
+color:#000000;
+background-color:#EBEBEB;
+font-size:11px;
+text-align:left;
+border:1px solid #666666;
+padding: 5px;
+}
+
+.hide {
+	display:none;
+}
+/*  --   records display page css ends --  */
