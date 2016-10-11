@@ -69,56 +69,57 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     };
 	
     /*calculate product asking price*/
-    // var _getSellingPrice = function(listPrice){
-    //     // Ti.API.info(constant.APP + " ######### _getSellingPrice called ##########");
-    //     var listPrice = parseFloat(listPrice);
-    //     listPrice = isNaN(listPrice) ? 0 : listPrice;
+    var _80pListingPrice = 0;
+    var _getSellingPrice = function(listPrice){
+        // Ti.API.info(constant.APP + " ######### _getSellingPrice called ##########");
+        var listPrice = parseFloat(listPrice), askPrice = 0;
+        listPrice = isNaN(listPrice) ? 0 : listPrice;
 
-    //     if(!listPrice){
-    //         return '';
-    //     }
+        if(!listPrice){
+            return '';
+        }
 
-    //     // var subShippingPrice = listPrice <= 2519;
-    //     // if(subShippingPrice){
-    //     //     listPrice = listPrice - 120;
-    //     // }
-    //     // sellPrice = ( listPrice * 100 ) / ( 100 + Utils.getCommisionPercentage() );
+        // var subShippingPrice = listPrice <= 2519;
+        // if(subShippingPrice){
+        //     listPrice = listPrice - 120;
+        // }
+        // sellPrice = ( listPrice * 100 ) / ( 100 + Utils.getCommisionPercentage() );
 
-    //     var askPrice = Math.round( listPrice * ( 1 - ( Utils.getCommisionPercentage() / 100 ) ) );
+        listPrice = Math.round( listPrice * ( 1 - ( Utils.getCommisionPercentage() / 100 ) ) );
+        _80pListingPrice = listPrice;
 
-    //     _getCommission(listPrice,askPrice,'ask');
-    //     if(askPrice < 2000){
-    //         askPrice -= 120;
-    //     }
+        if(listPrice < 2000){
+            askPrice = listPrice - 120;
+        }
+        else{
+            askPrice = listPrice;
+        }
 
-    //     if(askPrice <= 0){
-    //         _getCommission();
-    //         return '';
-    //     }
-    //     else{
-    //         return Math.round(askPrice);
-    //     }
+        if(askPrice <= 0){
+            return '';
+        }
+        else{
+            return askPrice;
+        }
         
-    // };
+    };
 	
     // var _commPrice = 0;
-    // var _getCommission = function(dPrice,aPrice,type){
-    //     if(dPrice && aPrice){
-    //         _commPrice = (dPrice - aPrice);
-    //     }
-    //     else{
-    //         _commPrice = 0;
-    //     }
+    var _getCommission = function(dPrice){
+        dPrice = parseInt( dPrice );
+        dPrice = isNaN( dPrice ) ? 0 : dPrice;
         
-    // };
+        var comm = dPrice * ( Utils.getCommisionPercentage() / 100 );
+        return comm;
+    };
 
-	var _getShippingAndHandlingFees = function(sellingPrice) {
+	var _getShippingAndHandlingFees = function() {
 		//Ti.API.info(constant.APP + " ############## _getShippingAndHandlingFees CALLED #############");
-		sellingPrice = isNaN(parseFloat(sellingPrice)) ? 0 : parseFloat(sellingPrice);
-		if(sellingPrice == 0) {
+		var intaskPrice = isNaN(parseFloat(_80pListingPrice)) ? 0 : parseFloat(_80pListingPrice);
+		if(intaskPrice == 0) {
 			return '0';
 		}
-		if(sellingPrice < 2000) {
+		if(intaskPrice < 2000) {
 			return '120';
 		}
 		return '0';
@@ -147,7 +148,6 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     mainView.add(header.getView());
     mainView.add(contentView);
     mainView.add(footer.getView());
-    
     
     var fieldsView = Ti.UI.createView({
     	top: 0,
@@ -1306,6 +1306,8 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
         width: Ti.UI.FILL,
         textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
         hintText:'Asking Price',
+        editable: false,
+        touchEnabled: false,
         maxLength: 6
     }));
 
@@ -1368,8 +1370,8 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
         width: Ti.UI.FILL,
         textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
         maxLength: 6,
-        editable: false,
-        touchEnabled: false,
+        // editable: false,
+        // touchEnabled: false,
         font: {
             fontSize: UI.fontSize(14),
             fontFamily: constant.FONT.DEFAULT_FONT
@@ -1551,10 +1553,9 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 
     hr2.add(line2);
 
-    priceView.add(askPriceView);
-    priceView.add(oriPriceView);
     priceView.add(listPriceView);
-    
+    priceView.add(oriPriceView);
+    priceView.add(askPriceView);
     
     priceView.add(lblShippingInfo);
     priceView.add(btnViewDetails);
@@ -1580,7 +1581,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     		title: 'Price Break-up',
             titleColor: '#ef4e6d',
     		// message: 'Listing is always free on Stylflip. If the amount you get (asking price) is less than \u20B9 2000, we mark-up this price by 20% and charge an additional \u20B9 120 for shipping.\n\nDisplay Price: '+(displayPrice.value === '' || displayPrice.value === '0' ? 0 : displayPrice.value) + '\nSF Comm.: \u20B9 '+ Math.ceil((askingPrice.value * Utils.getCommisionPercentage()) / 100) +'\nS & H: '+_getShippingAndHandlingFees(askingPrice.value)+'\nAmount you get: \u20B9 '+(askingPrice.value == '' || askingPrice.value == '0' ? 0 : askingPrice.value),
-            message: 'Listing is always free on Stylflip. We markup the amount you get (asking price) by 20%, and charge an additional \u20B9 120 for shipping if asking price is less than \u20B9 2000.\n\nDisplay Price: '+(displayPrice.value === '' || displayPrice.value === '0' ? 0 : displayPrice.value) + '\nSF Comm.: \u20B9 '+ Math.ceil((askingPrice.value * Utils.getCommisionPercentage()) / 100) +'\nS & H: \u20B9 '+_getShippingAndHandlingFees(askingPrice.value)+'\nAmount you get: \u20B9 '+(askingPrice.value == '' || askingPrice.value == '0' ? 0 : askingPrice.value),
+            message: 'Listing is always free on Stylflip. We markup the amount you get (asking price) by 20%, and charge an additional \u20B9 120 for shipping if asking price is less than \u20B9 2000.\n\nDisplay Price: '+(displayPrice.value === '' || displayPrice.value === '0' ? 0 : displayPrice.value) + '\nSF Comm.: \u20B9 '+_getCommission(displayPrice.value)+'\nS & H: \u20B9 '+_getShippingAndHandlingFees()+'\nAmount you get: \u20B9 '+(askingPrice.value == '' || askingPrice.value == '0' ? 0 : askingPrice.value),
             buttonNames: ['GOT IT']
     	});
 
@@ -1608,48 +1609,48 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     
     // var askPriceChange = false, dispPriceChange = false;
     
-    askingPrice.addEventListener('change', function() {
-    	// Ti.API.info(constant.APP + " ############## askingPrice changed #############");
-        // if(dispPriceChange){
-        //     dispPriceChange = false;
-        //     if(displayPrice.value !== ''){
-        //         askingPrice.editable = false;
-        //         askingPrice.touchEnabled = false;
-        //     }
-        //     else{
-        //         askingPrice.editable = true;
-        //         askingPrice.touchEnabled = true;
-        //     }
-        //     return;
-        // }
-        // askPriceChange = true;
-        displayPrice.value = _getCalculatedPrice(askingPrice.value.trim(), txtOriginalPrice.value.trim());
+    // askingPrice.addEventListener('change', function() {
+    // 	// Ti.API.info(constant.APP + " ############## askingPrice changed #############");
+    //     // if(dispPriceChange){
+    //     //     dispPriceChange = false;
+    //     //     if(displayPrice.value !== ''){
+    //     //         askingPrice.editable = false;
+    //     //         askingPrice.touchEnabled = false;
+    //     //     }
+    //     //     else{
+    //     //         askingPrice.editable = true;
+    //     //         askingPrice.touchEnabled = true;
+    //     //     }
+    //     //     return;
+    //     // }
+    //     // askPriceChange = true;
+    //     displayPrice.value = _getCalculatedPrice(askingPrice.value.trim(), txtOriginalPrice.value.trim());
         
-    });
+    // });
 
     // txtOriginalPrice.addEventListener('change', function() {
     // 	// Ti.API.info(constant.APP + " ############## txtOriginalPrice changed #############");
     //     // displayPrice.value = _getCalculatedPrice(askingPrice.value.trim(), txtOriginalPrice.value.trim());
     // });
     
-    // displayPrice.addEventListener('change',function(){
-    //     // Ti.API.info(constant.APP + " ############## txtOriginalPrice changed #############");
-    //     if(askPriceChange){
-    //         askPriceChange = false;
-    //         if(askingPrice.value !== ''){
-    //             displayPrice.editable = false;
-    //             displayPrice.touchEnabled = false;
-    //         }
-    //         else{
-    //             displayPrice.editable = true;
-    //             displayPrice.touchEnabled = true;
-    //         }
-    //         return;
-    //     }
-    //     dispPriceChange = true;
-    //     askingPrice.value = _getSellingPrice(displayPrice.value.trim());
+    displayPrice.addEventListener('change',function(){
+        // Ti.API.info(constant.APP + " ############## txtOriginalPrice changed #############");
+        // if(askPriceChange){
+        //     askPriceChange = false;
+        //     if(askingPrice.value !== ''){
+        //         displayPrice.editable = false;
+        //         displayPrice.touchEnabled = false;
+        //     }
+        //     else{
+        //         displayPrice.editable = true;
+        //         displayPrice.touchEnabled = true;
+        //     }
+        //     return;
+        // }
+        // dispPriceChange = true;
+        askingPrice.value = _getSellingPrice(displayPrice.value.trim());
 
-    // });
+    });
 
     /*
      * Condition view
