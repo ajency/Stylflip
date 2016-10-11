@@ -76,7 +76,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
         listPrice = isNaN(listPrice) ? 0 : listPrice;
 
         if(!listPrice){
-            return '';
+            return '\u20B9 0';
         }
 
         // var subShippingPrice = listPrice <= 2519;
@@ -96,10 +96,10 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
         }
 
         if(askPrice <= 0){
-            return '';
+            return '\u20B9 0';
         }
         else{
-            return askPrice;
+            return "\u20B9 " + askPrice;
         }
         
     };
@@ -113,13 +113,13 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
         return comm;
     };
 
-	var _getShippingAndHandlingFees = function() {
+	var _getShippingAndHandlingFees = function(displayPrice) {
 		//Ti.API.info(constant.APP + " ############## _getShippingAndHandlingFees CALLED #############");
-		var intaskPrice = isNaN(parseFloat(_80pListingPrice)) ? 0 : parseFloat(_80pListingPrice);
-		if(intaskPrice == 0) {
+		var displayPrice = Math.round( displayPrice * ( 1 - ( Utils.getCommisionPercentage() / 100 ) ) );
+		if(displayPrice == 0) {
 			return '0';
 		}
-		if(intaskPrice < 2000) {
+		if(displayPrice < 2000) {
 			return '120';
 		}
 		return '0';
@@ -1305,7 +1305,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     var askingPrice = UI.createTextField(Utils._.extend({}, _commonStyle.priceTxt,{
         width: Ti.UI.FILL,
         textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
-        hintText:'Asking Price',
+        hintText:'Amount you get',
         editable: false,
         touchEnabled: false,
         maxLength: 6
@@ -1366,7 +1366,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     // });
 
     var displayPrice = Ti.UI.createTextField(Utils._.extend({}, _commonStyle.priceTxt,{
-        hintText: 'Listing Price',
+        hintText: 'Display Price',
         width: Ti.UI.FILL,
         textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
         maxLength: 6,
@@ -1581,7 +1581,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
     		title: 'Price Break-up',
             titleColor: '#ef4e6d',
     		// message: 'Listing is always free on Stylflip. If the amount you get (asking price) is less than \u20B9 2000, we mark-up this price by 20% and charge an additional \u20B9 120 for shipping.\n\nDisplay Price: '+(displayPrice.value === '' || displayPrice.value === '0' ? 0 : displayPrice.value) + '\nSF Comm.: \u20B9 '+ Math.ceil((askingPrice.value * Utils.getCommisionPercentage()) / 100) +'\nS & H: '+_getShippingAndHandlingFees(askingPrice.value)+'\nAmount you get: \u20B9 '+(askingPrice.value == '' || askingPrice.value == '0' ? 0 : askingPrice.value),
-            message: 'Listing is always free on Stylflip. We markup the amount you get (asking price) by 20%, and charge an additional \u20B9 120 for shipping if asking price is less than \u20B9 2000.\n\nDisplay Price: '+(displayPrice.value === '' || displayPrice.value === '0' ? 0 : displayPrice.value) + '\nSF Comm.: \u20B9 '+_getCommission(displayPrice.value)+'\nS & H: \u20B9 '+_getShippingAndHandlingFees()+'\nAmount you get: \u20B9 '+(askingPrice.value == '' || askingPrice.value == '0' ? 0 : askingPrice.value),
+            message: 'Listing is always free on Stylflip. We markup the amount you get (asking price) by 20%, and charge an additional \u20B9 120 for shipping if asking price is less than \u20B9 2000.\n\nDisplay Price: '+(displayPrice.value === '' || displayPrice.value === '0' ? 0 : displayPrice.value) + '\nSF Comm.: \u20B9 '+_getCommission(displayPrice.value)+'\nS & H: \u20B9 '+_getShippingAndHandlingFees(displayPrice.value)+'\nAmount you get: '+(askingPrice.value == '' || askingPrice.value == '0' ? 0 : askingPrice.value),
             buttonNames: ['GOT IT']
     	});
 
@@ -2059,10 +2059,10 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	
     if(productDetails) {
     	txtOriginalPrice.value = _productOriginalPrice;
-    	askingPrice.value = _productSellingPrice;
+    	askingPrice.value = '\u20B9 ' + _productSellingPrice;
     	// txtdisplayPrice.text = '\u20B9 ' + _productDiscount;
         if(_productDiscount){
-            displayPrice.value = '\u20B9 ' + _productDiscount;
+            displayPrice.value = _productDiscount;
         }
     }
     

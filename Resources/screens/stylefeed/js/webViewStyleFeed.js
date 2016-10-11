@@ -6,7 +6,6 @@ _feedConditionImgs = null, _categoryImgs = null, _productImgs = null, _brandImgs
 
 Ti.API.info(logContext + " ###################### webview style feed init ##########################");
 
-// var liEle = document.createElement('div');
 var randomizeIndex = function(length){
 	return Math.floor( Math.random() * length );
 };
@@ -61,14 +60,6 @@ var _attachBrandImages = function(e){
 	for(var x = 0; x < MAXITEMS; x++){
 		
 		var index = randomizeIndex(arrLength); //randomised brand index
-		
-		// var parentDiv = document.createElement('div');
-		// parentDiv.classList.add('images');
-		// parentDiv.setAttribute('id', e.brandData[index].id);
-
-		// parentDiv.innerText = e.brandData[index].title;
-		// _feedBrands.appendChild(parentDiv);
-
 		_brandImgs[x].setAttribute('id',e.brandData[index].id);
 		_brandImgs[x].innerText = e.brandData[index].title;
 	}
@@ -97,59 +88,47 @@ var _httpCallCb = function(e){
 	Ti.App.removeEventListener('webViewStyleFeed:stylefeedDataLoad',_httpCallCb);
 };
 
-// load the product page
 var _feedProductClickHandler = function(e){
-	Ti.API.info(logContext +  " _feedProductClickHandler clicked: target" + e.target.parentElement.id);
-	if(!enableFlags.productClick) return;
+	Ti.API.info(logContext +  " _feedProductClickHandler clicked: target: " + e.target);
+	// if(!enableFlags.productClick) return;
 
-	var prId = e.target.parentElement.id;
+	// var prId = e.target.parentElement.id;
 
-	if(prId){
-		Ti.App.fireEvent('app:loadProduct',{productId: prId});
-	}
-	enableFlags.productClick = false;
-	enableFlagTimeout('product');
+	// if(prId){
+	// 	Ti.App.fireEvent('app:loadProduct',{productId: prId});
+	// }
+	// enableFlags.productClick = false;
+	// enableFlagTimeout('product');
 };
 
 var _feedBrandClickHandler = function(e){
-	Ti.API.info(logContext + " ########### target id [" + e.target.id + "]");
-	var brandId = e.target.id;
-	if(brandId){
+	Ti.API.info(logContext + " _feedBrandClickHandler target id [" + e.target + "]");
+	// var brandId = e.target.id;
+	// if(brandId){
 
-		var _objFilter = {
-	    		// sortBy: '',
-	    		brands: [brandId]
-	    		// categories: '',
-	    		// subCategories: '',
-	    		// sizes: '',
-	    		// conditions: '',
-	    		// priceRange: ''
-	    	};
+	// 	var _objFilter = {
+	//     		brands: [brandId]
+	//     	};
 
-		Ti.App.fireEvent('onFooterTabSelect',{key: 'shop',objFilter: _objFilter});
-	}
+	// 	Ti.App.fireEvent('onFooterTabSelect',{key: 'shop',objFilter: _objFilter});
+	// }
 };
 
 var _feedCategoryClickHandler = function(e){
-	Ti.API.info(logContext + " ########### target id [" + e.target.id + "]");
+	Ti.API.info(logContext + " _feedCategoryClickHandler target id [" + e + "]");
 
-	var categoryId = e.target.id;
-	if(categoryId){
-		var _objFilter = {
-	    		// sortBy: '',
-	    		// brands: [brandId]
-	    		categories: [categoryId]
-	    		// subCategories: '',
-	    		// sizes: '',
-	    		// conditions: '',
-	    		// priceRange: ''
-	    	};
+	// var categoryId = e.target.id;
+	// if(categoryId){
+	// 	var _objFilter = {
+	//     		categories: [categoryId]
+	//     	};
 
-		Ti.App.fireEvent('onFooterTabSelect',{key: 'shop',objFilter: _objFilter});
-	}
-}
+	// 	Ti.App.fireEvent('onFooterTabSelect',{key: 'shop',objFilter: _objFilter});
+	// }
+};
 
 var _feedUserClickHandler = function(e){
+	Ti.API.info(logContext + " _feedUserClickHandler target id [" + e.target + "]");
 	if(!enableFlags.userClick) return;
 	var usrId = e.target.parentElement.id;
 	if(usrId){
@@ -182,13 +161,7 @@ var _feedConditionClickHandler = function(e){
 
 	if(cndID){
 		var _objFilter = {
-	    		// sortBy: '',
-	    		// brands: [brandId]
-	    		// categories: [categoryId]
-	    		// subCategories: '',
-	    		// sizes: '',
 	    		conditions: [cndID]
-	    		// priceRange: [prID]
 	    	};
 
 		Ti.App.fireEvent('onFooterTabSelect',{key: 'shop',objFilter: _objFilter});
@@ -218,45 +191,57 @@ onload = function(){
 
 	// var _html = document.querySelector('html');
 	_markupBody = document.querySelector('body');
-	_feedCategories = document.querySelector('#feed-category .feed-carousel-container');
-	_feedProducts = document.querySelector('#feed-loved-products .feed-carousel-container');
-	_feedBrands = document.querySelector('#feed-top-brands .feed-carousel-container');
-	_feedUsers = document.querySelector('#feed-featured-users .feed-carousel-container');
-	_feedPrice = document.querySelector('#feed-price .feed-carousel-container');
-	_feedCondition = document.querySelector('#feed-condition .feed-carousel-container');
+	_markupBody.style.display = 'block';
+	// _feedCategories = document.querySelector('#feed-category .feed-carousel-container');
+	// _feedProducts = document.querySelector('#feed-loved-products .feed-carousel-container');
+	// _feedBrands = document.querySelector('#feed-top-brands .feed-carousel-container');
+	// _feedUsers = document.querySelector('#feed-featured-users .feed-carousel-container');
+	// _feedPrice = document.querySelector('#feed-price .feed-carousel-container');
+	// _feedCondition = document.querySelector('#feed-condition .feed-carousel-container');
 
-	// _categoryImgs = document.querySelectorAll('#feed-category .feed-carousel-container .images img');
-	_categoryImgs = document.querySelectorAll('#feed-category .feed-carousel-container .images');
-	_productImgs = document.querySelectorAll('#feed-loved-products .feed-carousel-container .images img');
-	_userImgs = document.querySelectorAll('#feed-featured-users .feed-carousel-container .images img');
-	_brandImgs = document.querySelectorAll('#feed-top-brands .feed-carousel-container .images');
-	// _feedPriceImgs = document.querySelectorAll('#feed-price .feed-carousel-container .images img');
-	_feedPriceImgs = document.querySelectorAll('#feed-price .feed-carousel-container .images');
-	// _feedConditionImgs = document.querySelectorAll('#feed-condition .feed-carousel-container .images img');
-	_feedConditionImgs = document.querySelectorAll('#feed-condition .feed-carousel-container .images');
+	_feedCategories = document.querySelector('.sec-collection');
+	_feedProducts = document.querySelector('.sec-popular');
+	_feedBrands = document.querySelector('.sec-brand');
+	_feedUsers = document.querySelector('.sec-topusers');
+	Ti.API.info(logContext + " _feedCategories: " + _feedCategories + " _feedProducts: " + _feedProducts + " _feedBrands: " + _feedBrands + " _feedUsers: " + _feedUsers);	
 
-	_markupBody.style.height = ( window.innerHeight * 1.45 ) + 'px';
-	_markupBody.style.width = ( window.innerWidth * 0.95 ) + 'px';
-	// _markupBody.style.overflow = 'hidden';
+	// _feedPrice = document.querySelector('#feed-price .feed-carousel-container');
+	// _feedCondition = document.querySelector('#feed-condition .feed-carousel-container');
+
+	// // _categoryImgs = document.querySelectorAll('#feed-category .feed-carousel-container .images img');
+	_categoryImgs = document.querySelectorAll('.sec-collection .category-scroll .single-pick');
+	Ti.API.info(logContext + " _categoryImgs length: " + _categoryImgs);
+	// _productImgs = document.querySelectorAll('.sec-popular');
+	// _userImgs = document.querySelectorAll('#feed-featured-users .feed-carousel-container .images img');
+	// _brandImgs = document.querySelectorAll('#feed-top-brands .feed-carousel-container .images');
+	// // _feedPriceImgs = document.querySelectorAll('#feed-price .feed-carousel-container .images img');
+	// _feedPriceImgs = document.querySelectorAll('#feed-price .feed-carousel-container .images');
+	// // _feedConditionImgs = document.querySelectorAll('#feed-condition .feed-carousel-container .images img');
+	// _feedConditionImgs = document.querySelectorAll('#feed-condition .feed-carousel-container .images');
+
+	// // _markupBody.style.overflow = 'hidden';
 
 	_feedCategories.addEventListener('click',_feedCategoryClickHandler);
 	_feedProducts.addEventListener('click',_feedProductClickHandler);
 	_feedBrands.addEventListener('click',_feedBrandClickHandler);
 	_feedUsers.addEventListener('click',_feedUserClickHandler);
-	_feedPrice.addEventListener('click',_feedPriceClickHandler);
-	_feedCondition.addEventListener('click',_feedConditionClickHandler);
-	Ti.App.addEventListener('webViewStyleFeed:stylefeedDataLoad',_httpCallCb);
-	Ti.App.addEventListener('webViewStyleFeed:brandApiDataFetched',_attachBrandImages);
-	Ti.App.addEventListener('webViewStyleFeed:categoryApiDataFetched',_attachCategoryImages);
-	Ti.App.addEventListener('webViewStyleFeed:priceApiDataFetched',_attachPriceImages);
-	Ti.App.addEventListener('webViewStyleFeed:conditionApiDataFetched',_attachConditionImages);
+	// _feedPrice.addEventListener('click',_feedPriceClickHandler);
+	// _feedCondition.addEventListener('click',_feedConditionClickHandler);
+	// Ti.App.addEventListener('webViewStyleFeed:stylefeedDataLoad',_httpCallCb);
+	// Ti.App.addEventListener('webViewStyleFeed:brandApiDataFetched',_attachBrandImages);
+	// Ti.App.addEventListener('webViewStyleFeed:categoryApiDataFetched',_attachCategoryImages);
+	// Ti.App.addEventListener('webViewStyleFeed:priceApiDataFetched',_attachPriceImages);
+	// Ti.App.addEventListener('webViewStyleFeed:conditionApiDataFetched',_attachConditionImages);
 	
-	Ti.App.fireEvent('app:loadCategoryApiData');
+	// Ti.App.fireEvent('app:loadCategoryApiData');
 
 	for(var ix = 0; ix < MAXITEMS; ix++){
-		// _categoryImgs[ix].src = DEFAULTIMAGE;
-		_productImgs[ix].src = DEFAULTIMAGE;
-		_userImgs[ix].src = DEFAULTIMAGE;
+		if(_categoryImgs[ix]){
+			_categoryImgs[ix].style.backgroundImage = "url('" + DEFAULTIMAGE + "')";
+		}
+		
+		// _productImgs[ix].src = DEFAULTIMAGE;
+		// _userImgs[ix].src = DEFAULTIMAGE;
 		// _feedPriceImgs[ix].src = DEFAULTIMAGE;
 		// _feedConditionImgs[ix].src = DEFAULTIMAGE;
 	}
