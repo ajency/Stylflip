@@ -822,9 +822,14 @@ exports.get = function(filterParams) {
 	if(_filterParams){
 		Ti.API.info(constant.APP + " ################### filterParams [" + filterParams + "]");
 
+		_postedByFilters = [], _sortByFilters = [], _brandsFilters = [], _categoriesFilters = [], _subCategoriesFilters = [], _sizesFilters = [], _conditionsFilters = [], _priceRangeFilters = [];
+
 		for(var iz in _filterParams){
 			switch(iz){
+				case 'categories': _categoriesFilters = filterParams[iz];break;
 				case 'brands': _brandsFilters = filterParams[iz];break;
+				case 'priceRange': _priceRangeFilters = filterParams[iz];break;
+				case 'conditions': _conditionsFilters = filterParams[iz];break;
 			}
 			filterParams[iz] = filterParams[iz].toString();
 		}

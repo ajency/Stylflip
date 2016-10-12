@@ -20,11 +20,36 @@ exports.get = function(header) {
 	// listView.setRowSpacing(1);
 
     // var feedWebView = UI.createWebView('https://www.google.co.in/?gws_rd=ssl');
-     var feedWebView = UI.createWebView('/screens/stylefeed/stylefeed.html');
-    mainView.add(feedWebView);
+    var feedWebView = UI.createWebView('/screens/stylefeed/stylefeed.html');
+   
+    var scrollView = Ti.UI.createScrollView({
+    	top: 0,
+    	width: Ti.UI.FILL,
+		height: Ti.UI.FILL,
+		contentWidth: Ti.UI.FILL,
+		contentHeight: 'auto',
+		showVerticalScrollIndicator: true,
+		layout: 'vertical'
+    })
 
-	// mainView.add(feedView);
+    scrollView.add(feedWebView);
+
+    // var refreshControl = require('com.rkam.swiperefreshlayout').createSwipeRefresh({
+	   //  	view: scrollView
+	   //  });
+    // refreshControl.addEventListener('refreshing', function() {
+    // 	Ti.API.info(constant.APP + " refreshing sylefeed");
+    // 	refreshControl.setRefreshing(true);
+    //     refreshControl.setRefreshing(false);
+    //     if(Utils._.isFunction(_pullToRefreshCallback)) {
+    //     	_pullToRefreshCallback();
+    //     }
+    // });
 	
+	mainView.add(scrollView);
+	// mainView.add(refreshControl);
+
+	// mainView.add(feedView);	
 	// feedView.add(listView.getView());
 	
 	
@@ -914,7 +939,7 @@ exports.get = function(header) {
 			}
 		}
 		
-		Ti.App.fireEvent('app:stylefeedDataLoad',{respArgs: data});
+		Ti.App.fireEvent('webViewStyleFeed:stylefeedDataLoad',{respArgs: data});
 	};
 
 	var _loadData = function(isRefresh) {
@@ -1060,26 +1085,59 @@ exports.get = function(header) {
 					});
 				}
 				Ti.API.info(constant.APP + " ############ retrieved brand data array of length [" + _childViews.length + "]");
-				Ti.App.fireEvent('app:brandApiDataFetched',{brandData: _childViews});
+				Ti.App.fireEvent('webViewStyleFeed:brandApiDataFetched',{brandData: _childViews});
+				Loader.hide();
 			});
-		Loader.hide();
+		_loadPriceFilters();
+		_loadCondtionFilters();
+	};
+
+	var _loadPriceFilters = function(){
+		Ti.App.fireEvent('webViewStyleFeed:priceApiDataFetched',{priceFilters: constant.PRICE_FILTERS});
+	};
+
+	var _loadCondtionFilters = function(){
+		Ti.App.fireEvent('webViewStyleFeed:conditionApiDataFetched',{conditionFilters: constant.CONDITION_FILTERS});
+	};
+
+	var _loadCategoryApiData = function(){
+		Utils.getCategories(function(responseData) {
+				var _childViews = [];
+				for(var i=0; i<responseData.length; i++) {
+					_childViews.push({
+						id: responseData[i].categoryId,
+						title: responseData[i].name
+					});
+				}
+				Ti.App.fireEvent('webViewStyleFeed:categoryApiDataFetched',{categoryData: _childViews});
+			});
 	};
 
 	var _loadFeedData = function(){
 		_loadData(true);
 	}
 
-	Ti.App.addEventListener('webViewStyleFeed:loadProduct',_webViewSFClick);
-	Ti.App.addEventListener('webViewStyleFeed:loadBrandApiData',_loadBrandApiData);
-	Ti.App.addEventListener('webViewStyleFeed:loadFeedData',_loadFeedData);
-	Ti.App.addEventListener('webViewStyleFeed:loadUser',_profileViewClickHandler);
+	// var _hideLoader = function(){
+	// 	Loader.hide();
+	// };
+
+	Ti.App.addEventListener('app:loadBrandApiData',_loadBrandApiData);
+	Ti.App.addEventListener('app:loadCategoryApiData',_loadCategoryApiData);
+	Ti.App.addEventListener('app:loadProduct',_webViewSFClick);
+	
+	Ti.App.addEventListener('app:loadFeedData',_loadFeedData);
+	Ti.App.addEventListener('app:loadUser',_profileViewClickHandler);
+	// Ti.App.addEventListener('app:loadComplete',_hideLoader);
 
     var _removeFromMemory = function() {
     	_style = null;
-    	Ti.App.removeEventListener('webViewStyleFeed:loadProduct',_webViewSFClick);
-		Ti.App.removeEventListener('webViewStyleFeed:loadBrandApiData',_loadBrandApiData);
-		Ti.App.removeEventListener('webViewStyleFeed:loadFeedData',_loadFeedData);
-		Ti.App.removeEventListener('webViewStyleFeed:loadUser',_profileViewClickHandler);
+    	Ti.App.removeEventListener('app:loadProduct',_webViewSFClick);
+		Ti.App.removeEventListener('app:loadBrandApiData',_loadBrandApiData);
+		Ti.App.removeEventListener('app:loadFeedData',_loadFeedData);
+		Ti.App.removeEventListener('app:loadUser',_profileViewClickHandler);
+		Ti.App.removeEventListener('app:loadCategoryApiData',_loadCategoryApiData);
+		// UI.resetWebView(); 
+		// Ti.App.removeEventListener('app:loadComplete',_hideLoader);
 		_profileViewClickHandler = null;
 		_loadFeedData = null;
     	_webViewSFClick = null;
