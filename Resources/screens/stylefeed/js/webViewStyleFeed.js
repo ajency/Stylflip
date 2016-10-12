@@ -2,7 +2,7 @@ var logContext = 'STYLFLEED-WEBVIEW';
 // var Tifound = Ti != undefined ? true : false
 var MAXITEMS = 5, DEFAULTIMAGE = 'images/default-shop-big.jpg';
 var _markupBody = null, _feedProducts = null, _feedBrands = null, _feedUsers = null, _feedPrice = null, _feedCondition = null, _feedCategories = null, _feedPriceImgs = null, 
-_feedConditionImgs = null, _categoryImgs = null, _productImgs = null, _brandImgs = null, _userImgs = null;
+_feedConditionImgs = null, _categoryImgs = null, _productImgs = null, _brandImgs = null, _userImgs = null, _socialRedirect = null, _shopRedirect = null;
 
 Ti.API.info(logContext + " ###################### webview style feed init ##########################");
 
@@ -186,6 +186,14 @@ var _attachConditionImages = function(e){
 	// Ti.App.fireEvent('app:loadComplete');
 };
 
+var _socialRedirectClick = function(){
+	Ti.App.fireEvent('onFooterTabSelect',{key: 'social'});
+};
+
+var _shopRedirectClick = function(){
+	Ti.App.fireEvent('onFooterTabSelect',{key: 'shop'});
+};
+
 onload = function(){
 	Ti.API.info(logContext + " ############# webViewStyleFeed load complete ################");
 
@@ -203,7 +211,9 @@ onload = function(){
 	_feedProducts = document.querySelector('.sec-popular');
 	_feedBrands = document.querySelector('.sec-brand');
 	_feedUsers = document.querySelector('.sec-topusers');
-	Ti.API.info(logContext + " _feedCategories: " + _feedCategories + " _feedProducts: " + _feedProducts + " _feedBrands: " + _feedBrands + " _feedUsers: " + _feedUsers);	
+	// Ti.API.info(logContext + " _feedCategories: " + _feedCategories + " _feedProducts: " + _feedProducts + " _feedBrands: " + _feedBrands + " _feedUsers: " + _feedUsers);	
+	_socialRedirect = document.querySelector('#goto-social');
+	_shopRedirect = document.querySelector('#goto-shop');
 
 	// _feedPrice = document.querySelector('#feed-price .feed-carousel-container');
 	// _feedCondition = document.querySelector('#feed-condition .feed-carousel-container');
@@ -225,6 +235,9 @@ onload = function(){
 	_feedProducts.addEventListener('click',_feedProductClickHandler);
 	_feedBrands.addEventListener('click',_feedBrandClickHandler);
 	_feedUsers.addEventListener('click',_feedUserClickHandler);
+	_socialRedirect.addEventListener('click',_socialRedirectClick);
+	_shopRedirect.addEventListener('click',_shopRedirectClick);
+
 	// _feedPrice.addEventListener('click',_feedPriceClickHandler);
 	// _feedCondition.addEventListener('click',_feedConditionClickHandler);
 	// Ti.App.addEventListener('webViewStyleFeed:stylefeedDataLoad',_httpCallCb);

@@ -20,11 +20,36 @@ exports.get = function(header) {
 	// listView.setRowSpacing(1);
 
     // var feedWebView = UI.createWebView('https://www.google.co.in/?gws_rd=ssl');
-     var feedWebView = UI.createWebView('/screens/stylefeed/stylefeed.html');
-    mainView.add(feedWebView);
+    var feedWebView = UI.createWebView('/screens/stylefeed/stylefeed.html');
+   
+    var scrollView = Ti.UI.createScrollView({
+    	top: 0,
+    	width: Ti.UI.FILL,
+		height: Ti.UI.FILL,
+		contentWidth: Ti.UI.FILL,
+		contentHeight: 'auto',
+		showVerticalScrollIndicator: true,
+		layout: 'vertical'
+    })
 
-	// mainView.add(feedView);
+    scrollView.add(feedWebView);
+
+    // var refreshControl = require('com.rkam.swiperefreshlayout').createSwipeRefresh({
+	   //  	view: scrollView
+	   //  });
+    // refreshControl.addEventListener('refreshing', function() {
+    // 	Ti.API.info(constant.APP + " refreshing sylefeed");
+    // 	refreshControl.setRefreshing(true);
+    //     refreshControl.setRefreshing(false);
+    //     if(Utils._.isFunction(_pullToRefreshCallback)) {
+    //     	_pullToRefreshCallback();
+    //     }
+    // });
 	
+	mainView.add(scrollView);
+	// mainView.add(refreshControl);
+
+	// mainView.add(feedView);	
 	// feedView.add(listView.getView());
 	
 	
@@ -1111,7 +1136,7 @@ exports.get = function(header) {
 		Ti.App.removeEventListener('app:loadFeedData',_loadFeedData);
 		Ti.App.removeEventListener('app:loadUser',_profileViewClickHandler);
 		Ti.App.removeEventListener('app:loadCategoryApiData',_loadCategoryApiData);
-		UI.resetWebView(); 
+		// UI.resetWebView(); 
 		// Ti.App.removeEventListener('app:loadComplete',_hideLoader);
 		_profileViewClickHandler = null;
 		_loadFeedData = null;
