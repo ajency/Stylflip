@@ -42,9 +42,16 @@ a {
 .section + .section {
 	padding-top: 20px;
 }
+.sec-collection {
+	padding: 0;
+	.single-pick {
+		margin-bottom: -4px;
+		margin-right: -4px;
+	}
+}
 .sec_ttle {
 	color: @title-text;
-	line-height: 44px;
+	line-height: 24px;
 	margin-bottom: 10px;
 	font-weight: 500;
 	&:after {
@@ -55,7 +62,7 @@ a {
 }
 .sec-link {
 	float: right;
-	line-height: 44px;
+	line-height: 24px;
 	padding-left: 5px;
 	font-size: 0.85em;
 	font-weight: normal;
@@ -66,6 +73,7 @@ a {
 .sec-scroll {
 	white-space: nowrap;
 	overflow-x: scroll;
+	overflow-y: hidden;
 	margin: 0 -15px;
 	padding-left: 15px;
 	padding-right: 15px;
@@ -129,7 +137,8 @@ a {
 	.single-pick {
 		display: inline-block;
 		height: 170px;
-		width: 90%;
+		// width: 90%;
+		width: 260px;
 	}
 	.single-pick-brand-name {
 		position: absolute;
@@ -151,7 +160,7 @@ a {
 .category-scroll {
 	.single-pick {
 		display: inline-block;
-		height: 170px;
+		height: 195px;
 		width: 90%;
 		position: relative;
 	}
@@ -166,7 +175,8 @@ a {
 	}
 	.category-text {
 		position: absolute;
-		top: 20px;
+		// top: 20px;
+		top: 35px;
 		left: 20px;
 		right: 20px;
 		bottom: 20px;
