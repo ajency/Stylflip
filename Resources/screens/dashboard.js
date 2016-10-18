@@ -235,6 +235,8 @@ exports.get = function(tabToLoad) {
 				Ti.App.Properties.removeProperty('notificationCount');
 				
 				Ti.App.Properties.removeProperty('isAppOpenedForTheFirstTime');
+
+				UI.resetWebView(true); 
 				
 				_postedByFilters = [], _sortByFilters = [], _brandsFilters = [], _categoriesFilters = [], _subCategoriesFilters = [], _sizesFilters = [], _conditionsFilters = [], _priceRangeFilters = [];
 				_feedFilters = undefined, _shopFilters = undefined;

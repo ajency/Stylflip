@@ -19,6 +19,7 @@ UI.createWebView = function(url,refresh){
         Ti.API.info(constant.APP + " ############################## manufacturer: [" + manufacturer + "] model: [" + model+ "] ############################");
         feedWebView = Ti.UI.createWebView({
             enableZoomControls: false,
+            url: '',
             width: Ti.UI.FILL,
             height: Ti.UI.FILL
         });
@@ -36,15 +37,19 @@ UI.createWebView = function(url,refresh){
         // feedWebView.setScalesPageToFit(true);
     }
 
-    if(refresh || feedWebView.getUrl() == undefined){
-         feedWebView.setUrl(url);
+    if(refresh || feedWebView.getUrl().indexOf(url) === -1){
+        Ti.API.info(constant.APP + " feedWebView url: " + feedWebView.getUrl() + " url: " + url);
+        feedWebView.setUrl(url);
     }
     return feedWebView;
 };
 
-UI.resetWebView = function(){
-    if(feedWebView){
+UI.resetWebView = function(clearFromMemory){
+    if(feedWebView){   
         feedWebView.setUrl('/screens/stylefeed/blank.html');
+        if(clearFromMemory){
+            feedWebView = null;
+        } 
     }
 };
 
