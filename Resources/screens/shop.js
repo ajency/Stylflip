@@ -827,6 +827,7 @@ exports.get = function(filterParams) {
 		for(var iz in _filterParams){
 			switch(iz){
 				case 'categories': _categoriesFilters = filterParams[iz];break;
+				case 'subCategories': _subCategoriesFilters = filterParams[iz];break;
 				case 'brands': _brandsFilters = filterParams[iz];break;
 				case 'priceRange': _priceRangeFilters = filterParams[iz];break;
 				case 'conditions': _conditionsFilters = filterParams[iz];break;
@@ -835,6 +836,7 @@ exports.get = function(filterParams) {
 		}
 
 		_filterData(_filterParams);
+		Ti.App.fireEvent('app:changeFilterIcon',{type: 'shop'});
 	}
 	else{
 		_showGridView(true);

@@ -365,6 +365,18 @@ Utils.getNotificationImageURL = function(URL) {
 	return '/images/common/notification-icon.png';
 };
 
+Utils.getStyleFeedUrl = function(URL){
+	try {
+		if(URL && URL.trim() != '') {
+			return URL.indexOf('http')==-1?(constant.DOMAIN+URL):URL;
+		}
+	}
+	catch(e) {
+		// return '/images/common/notification-icon.png';
+		return null;
+	}
+};
+
 Utils.getBrands = function(callback) {
 	// var data = [];
 	// for(var i=(pageIndex*20)+1; i<((pageIndex*20)+1)+20; i++) {
