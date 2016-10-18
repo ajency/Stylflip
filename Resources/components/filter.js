@@ -320,8 +320,6 @@ exports.get = function(filterType,filterOptions) {
 		}
 	};
 	
-	
-	
 	/*
 	 * Left side filter click handler
 	 */

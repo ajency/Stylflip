@@ -25,7 +25,7 @@ Utils.rateApp = function(){
 			alertDialog.addEventListener('click', function(e){
 				if(e.status === 'accept'){
 					if(osname === 'android'){
-						Ti.Platform.openURL('https://play.google.com/store/apps/details?id=com.under1r.StylFlip&hl=en#details-reviews');
+						Ti.Platform.openURL('https://play.google.com/store/apps/details?id=com.under1r.StylFlip');
 					}
 					else{
 						Ti.Platform.openURL('https://itunes.apple.com/in/app/stylflip/id1072334629?mt=8');
@@ -217,6 +217,11 @@ Utils.getShortOrderStatus = function(status) {
 			_shortStatus = 'Rtrn\'d by Byr';
 			_shortStatus = status;
 		break;
+		case 'Delievered':
+			_shortStatus = 'Delivered';
+		break;
+		case 'Cancelled':
+			_shortStatus = status;		 
 	}
 	return _shortStatus;
 };
@@ -363,6 +368,18 @@ Utils.getNotificationImageURL = function(URL) {
 		return '/images/common/notification-icon.png';
 	}
 	return '/images/common/notification-icon.png';
+};
+
+Utils.getStyleFeedUrl = function(URL){
+	try {
+		if(URL && URL.trim() != '') {
+			return URL.indexOf('http')==-1?(constant.DOMAIN+URL):URL;
+		}
+	}
+	catch(e) {
+		// return '/images/common/notification-icon.png';
+		return null;
+	}
 };
 
 Utils.getBrands = function(callback) {

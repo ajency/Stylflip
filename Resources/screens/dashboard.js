@@ -385,6 +385,17 @@ exports.get = function(tabToLoad) {
 	Ti.App.addEventListener('app:apicallSuccess',_apiSuccessCb);
 
 
+	var _changeFilterIcon = function(e){
+		if(e.type === 'stylefeed'){
+			header.setFilterActive(_feedFilters && Object.keys(_feedFilters).length > 0);
+		}
+		else if(e.type === 'shop'){
+			header.setFilterActive(_shopFilters && Object.keys(_shopFilters).length > 0);
+		}
+	};
+
+
+	Ti.App.addEventListener('app:changeFilterIcon',_changeFilterIcon);
 	/*
 	 * Tab select listener
 	 */
@@ -480,7 +491,8 @@ exports.get = function(tabToLoad) {
 			break;
 		}
 		
-		header.setCurrentSelectedFilterOptions(e.objFilter !== undefined ? e.objFilter : undefined);
+		// header.setCurrentSelectedFilterOptions(e.objFilter !== undefined ? e.objFilter : undefined);
+		
 		//	Close all windows if more than one are opened
 		Window.closeAll(function() {
 			if(_currentKey != e.key || allowDuplicate) {
