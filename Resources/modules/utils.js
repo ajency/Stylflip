@@ -25,7 +25,7 @@ Utils.rateApp = function(){
 			alertDialog.addEventListener('click', function(e){
 				if(e.status === 'accept'){
 					if(osname === 'android'){
-						Ti.Platform.openURL('https://play.google.com/store/apps/details?id=com.under1r.StylFlip&hl=en#details-reviews');
+						Ti.Platform.openURL('https://play.google.com/store/apps/details?id=com.under1r.StylFlip');
 					}
 					else{
 						Ti.Platform.openURL('https://itunes.apple.com/in/app/stylflip/id1072334629?mt=8');

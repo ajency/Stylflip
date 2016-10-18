@@ -57,21 +57,30 @@ var _attachApiData = function(e){
 			for(var x = 0; x < arrLength; x++){
 
 				currentItem = e.collectionData[x];
-				var catString = currentItem.parentCategoryId + '-' + currentItem.categoryId;
-				$(_categoryImgs[x]).attr('id',catString);		
-				
-				
 
+				currentItem.parentCategoryId = currentItem.parentCategoryId ? currentItem.parentCategoryId : '';
+				currentItem.categoryId = currentItem.categoryId ? currentItem.categoryId : '';
+
+				if(currentItem.parentCategoryId || currentItem.categoryId){
+					var catString = currentItem.parentCategoryId + '-' + currentItem.categoryId;
+					$(_categoryImgs[x]).attr('id',catString);	
+				}
+	
+				
 				if(currentItem.categoryPhoto){
 					_categoryImgs[x].style.backgroundImage = "url('" + currentItem.categoryPhoto + "')";
 					// Ti.API.info(logContext +  " currentItem.categoryPhoto: " + currentItem.categoryPhoto);
 				}
 				
-				var catTitle = $(_categoryImgs[x]).find('.category-title');
-				var catAdj = $(_categoryImgs[x]).find('.category-adj');
-
-				$(catTitle).html(currentItem.parentCategory);
-				$(catAdj).html(currentItem.name);
+				if(currentItem.parentCategory){
+					var catTitle = $(_categoryImgs[x]).find('.category-title');
+					$(catTitle).html(currentItem.parentCategory);
+				}
+				
+				if(currentItem.name){
+					var catAdj = $(_categoryImgs[x]).find('.category-adj');
+					$(catAdj).html(currentItem.name);
+				}
 			}
 
 			Ti.App.fireEvent('app:loadBrandApiData');
@@ -81,17 +90,22 @@ var _attachApiData = function(e){
 			arrLength = e.brandData.length;
 			
 			for(var x = 0; x < arrLength; x++){
-				currentItem = e.brandData[x];		
-				$(_brandImgs[x]).attr('id',currentItem.brandId);
+				currentItem = e.brandData[x];
 
+				if(currentItem.brandId){
+					$(_brandImgs[x]).attr('id',currentItem.brandId);
+				}		
+				
 				if(currentItem.brandPhoto){
 					_brandImgs[x].style.backgroundImage = "url('" + currentItem.brandPhoto + "')";
 				}
 				
 
-				var brandTitle = $(_brandImgs[x]).find('.single-pick-brand-name span');
-
-				$(brandTitle).html(currentItem.name);
+				if(currentItem.name){
+					var brandTitle = $(_brandImgs[x]).find('.single-pick-brand-name span');
+					$(brandTitle).html(currentItem.name);
+				}
+				
 			}
 
 			Ti.App.fireEvent('app:loadProductApiData');
@@ -104,19 +118,24 @@ var _attachApiData = function(e){
 			for(var x = 0; x < arrLength; x++){
 				currentItem = e.productData[x];
 
-				$(_productImgs[x]).attr('id',currentItem.productId);
-
+				if(currentItem.productId){
+					$(_productImgs[x]).attr('id',currentItem.productId);
+				}
+				
 				if(currentItem.primaryPhoto){
 					var prImg = $(_productImgs[x]).find('.img-full-100');
 					prImg[0].src = currentItem.primaryPhoto;
 					Ti.API.info(logContext + " product image: " + prImg[0].src);
 				}
 
-				var prTitle = $(_productImgs[x]).find('.shop-item-title');
-				prTitle.html(currentItem.productTitle);
+				if(currentItem.productTitle){
+					var prTitle = $(_productImgs[x]).find('.shop-item-title');
+					prTitle.html(currentItem.productTitle);
+				}
 				
 				var prMeta = $(_productImgs[x]).find('.shop-item-meta');
-				var metaStr = "Other | ";
+				// var metaStr = "Other | ";
+				var metaStr = "";
 				if(currentItem.sizeChart){
 					metaStr = metaStr + currentItem.sizeChart + " (UK)"
 				}
@@ -125,9 +144,10 @@ var _attachApiData = function(e){
 				}
 				prMeta.html(metaStr);
 
-				var prPrice = $(_productImgs[x]).find('.shop-item-price');
-				prPrice.html("<i class='fa fa-inr'></i> " + currentItem.discountPrice);
-				
+				if(currentItem.discountPrice){
+					var prPrice = $(_productImgs[x]).find('.shop-item-price');
+					prPrice.html("<i class='fa fa-inr'></i> " + currentItem.discountPrice);
+				}
 			}
 
 			Ti.App.fireEvent('app:loadUserApiData');
@@ -332,7 +352,6 @@ onload = function(){
 	_markupBody = document.querySelector('body');
 	_markupBody.style.display = 'block';
 
-
 	_feedCategories = document.querySelector('.sec-collection');
 	_feedProducts = document.querySelector('.sec-popular');
 	_feedBrands = document.querySelector('.sec-brand');
@@ -344,7 +363,6 @@ onload = function(){
 	_brandImgs = document.querySelectorAll('.sec-brand .brand-scroll .single-pick');
 	_productImgs = document.querySelectorAll('.sec-popular .sec-scroll .shop-item');
 	_userImgs = document.querySelectorAll('.sec-topusers .sec-scroll .user-item');
-	Ti.API.info(logContext + " _userImgs length: " + _userImgs.length);
 
 	_feedCategories.addEventListener('click',_feedCategoryClickHandler);
 	_feedProducts.addEventListener('click',_feedProductClickHandler);
@@ -358,7 +376,6 @@ onload = function(){
 	Ti.App.addEventListener('webViewStyleFeed:removeAllevents',_removeEventHandlers);
 	
 	Ti.App.fireEvent('app:loadCategoryApiData');
-
 };
 
 onunload = function(){

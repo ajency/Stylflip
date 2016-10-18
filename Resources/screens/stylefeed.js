@@ -1079,6 +1079,7 @@ exports.get = function(header) {
 
 		var _requestArgs = {
 	        showLoader: true,
+	        byPassLoaderHide: true,
 	        url: 'stylfeed.php',
 	        method: 'post',
 	        serverArgs: {
@@ -1119,7 +1120,7 @@ exports.get = function(header) {
 	var _loadBrandApiData = function(){
 
 		var _requestArgs = {
-	        showLoader: true,
+	        // showLoader: true,
 	        url: 'stylfeed.php',
 	        method: 'post',
 	        serverArgs: {
@@ -1158,7 +1159,7 @@ exports.get = function(header) {
 
 	var _loadProductApiData = function(){
 		var _requestArgs = {
-	        showLoader: true,
+	        // showLoader: true,
 	        url: 'stylfeed.php',
 	        method: 'post',
 	        serverArgs: {
@@ -1252,9 +1253,7 @@ exports.get = function(header) {
 	Ti.App.addEventListener('app:loadProduct',_loadProduct);
 	Ti.App.addEventListener('app:loadUser',_profileViewClickHandler);
 	// Ti.App.addEventListener('app:loadComplete',_hideLoader);
-
-	Ti.App.fireEvent('app:loadCategoryApiData');
-
+	
     var _removeFromMemory = function() {
     	_style = null;
     	

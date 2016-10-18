@@ -162,7 +162,7 @@ var _registerForTiNotifications = function(){
 
 HttpClient.apiCall = function(params, method, api, successCallback, errorCallback) {
 	// if(Ti.Network.online) {
-	if(!Ti.Network.online) {	
+	if(!Ti.Network.online) {
 		_responseObject = {
 			sucess: false,
 			isNetworkError: 1,
@@ -185,6 +185,8 @@ HttpClient.apiCall = function(params, method, api, successCallback, errorCallbac
 		_httpClient.httpClient = _httpClient;
 		
 		_httpClient.showLoader = params.showLoader;
+		
+		_httpClient.byPassLoaderHide = params.byPassLoaderHide ? true : false;
 		// setting timeout for http client
 		_httpClient.setTimeout = (60 * 3) * 1000; 		
 		//	Set custom properties
@@ -207,11 +209,12 @@ HttpClient.apiCall = function(params, method, api, successCallback, errorCallbac
 	  	// http onload method
 		_httpClient.onload = function() {
 			Titanium.API.info(constant.APP + " http api call message recived");
-			// Titanium.API.info(this.responseText);
+			Titanium.API.info(this.responseText);
 
 			// Ti.App.fireEvent('app:apicallSuccess',{params: params});
 			
-			if(this.showLoader) {
+			// if(this.showLoader) {
+			if(this.showLoader && this.byPassLoaderHide === false) {	
 				Loader.hide();				
 			}
 			

@@ -22,11 +22,13 @@ else {
 exports.get = function() {
 	return {
 
-		// DOMAIN: 'http://54.69.190.92/stylflip/',
-		// BASE_URL: 'http://54.69.190.92/stylflip/api/',
-
+		/* staging server */
 		DOMAIN: 'http://139.162.29.106/styleflip.ajency.in/',
 		BASE_URL: 'http://139.162.29.106/styleflip.ajency.in/api/',
+
+		/* test server */
+		// DOMAIN: 'http://54.69.190.92/stylflip/',
+		// BASE_URL: 'http://54.69.190.92/stylflip/api/',
 
 		// DOMAIN: 'http://54.149.49.29/stylflip/',
 		// BASE_URL: 'http://54.149.49.29/stylflip/api/',
@@ -34,6 +36,7 @@ exports.get = function() {
 		// DOMAIN: 'http://localhost/sf/server/',
 		// BASE_URL: 'http://localhost/sf/server/api/',
 		
+		/* live server */
 		// DOMAIN: 'http://stylflip.com/stylflip/',
 		// BASE_URL: 'http://stylflip.com/stylflip/api/',
 		
