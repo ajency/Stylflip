@@ -71,7 +71,8 @@ a {
 	padding-right: 15px;
 }
 .shop-item {
-	width: 42%;
+	// width: 42%;
+	width: 150px;
 	display: inline-block;
 	margin-right: 5px;
 	color: @body-text;
@@ -88,6 +89,10 @@ a {
 		padding: 4px 8px;
 		display: block;
 	}
+	.shop-item-img {
+		height: 144px; 
+		overflow: hidden; 
+	}
 	.shop-item-img, .shop-item-title,
 	.shop-item-meta, .shop-item-price {
 		display: block;
@@ -95,6 +100,9 @@ a {
 	}
 	.shop-item-title {
 		font-weight: bold;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden;
 	}
 	.shop-item-meta {
 		opacity: 0.7;

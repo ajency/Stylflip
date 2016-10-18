@@ -112,7 +112,7 @@ a:active {
   padding-right: 15px;
 }
 .shop-item {
-  width: 42%;
+  width: 150px;
   display: inline-block;
   margin-right: 5px;
   color: #494949;
@@ -131,6 +131,10 @@ a:active {
   padding: 4px 8px;
   display: block;
 }
+.shop-item .shop-item-img {
+  height: 144px;
+  overflow: hidden;
+}
 .shop-item .shop-item-img,
 .shop-item .shop-item-title,
 .shop-item .shop-item-meta,
@@ -140,6 +144,9 @@ a:active {
 }
 .shop-item .shop-item-title {
   font-weight: bold;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .shop-item .shop-item-meta {
   opacity: 0.7;
