@@ -217,6 +217,11 @@ Utils.getShortOrderStatus = function(status) {
 			_shortStatus = 'Rtrn\'d by Byr';
 			_shortStatus = status;
 		break;
+		case 'Delievered':
+			_shortStatus = 'Delivered';
+		break;
+		case 'Cancelled':
+			_shortStatus = status;		 
 	}
 	return _shortStatus;
 };
