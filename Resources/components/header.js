@@ -367,7 +367,8 @@ exports.get = function(config) {
 	var _setCurrentSelectedFilterOptions = function(selectedFilterOptions){
 		// Ti.API.info(constant.APP + " ############## _setCurrentSelectedFilterOptions ##############");
 		_currentSelectedFilterOptions = selectedFilterOptions;
-		if(_currentSelectedFilterOptions){
+		// if(_currentSelectedFilterOptions){
+		if(_currentSelectedFilterOptions && Object.keys(_currentSelectedFilterOptions).length){
 			// Ti.API.info(constant.APP + " ############## show filter ##############");
 			_setFilterActive(true);
 		}

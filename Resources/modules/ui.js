@@ -14,7 +14,7 @@ UI.firstLogin = false;
 UI.platformWidth = pwidth;
 UI.platformHeight = pheight;
 
-UI.createWebView = function(url){
+UI.createWebView = function(url,refresh){
     if(feedWebView === null){
         Ti.API.info(constant.APP + " ############################## manufacturer: [" + manufacturer + "] model: [" + model+ "] ############################");
         feedWebView = Ti.UI.createWebView({
@@ -27,15 +27,18 @@ UI.createWebView = function(url){
             feedWebView.willHandleTouches = false; 
         }
 
-        var disableHwAcc = model.match(/nexus/i) ? true : false;
-        if(disableHwAcc){
-            Ti.API.info(constant.APP + " ################# hardware acc disabled ###############");
-            feedWebView.setBorderRadius(1);
-        }
+        // var disableHwAcc = model.match(/nexus/i) ? true : false;
+        // if(disableHwAcc){
+        //     Ti.API.info(constant.APP + " ################# hardware acc disabled ###############");
+        //     feedWebView.setBorderRadius(1);
+        // }
         
         // feedWebView.setScalesPageToFit(true);
     }
-    feedWebView.setUrl(url);
+
+    if(refresh || feedWebView.getUrl() == undefined){
+         feedWebView.setUrl(url);
+    }
     return feedWebView;
 };
 
