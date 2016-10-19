@@ -18,15 +18,15 @@ UI.createWebView = function(url,refresh){
     if(feedWebView === null){
         Ti.API.info(constant.APP + " ############################## manufacturer: [" + manufacturer + "] model: [" + model+ "] ############################");
 
-        feedWebScrollView = Ti.UI.createScrollView({
-            top: 0,
-            width: Ti.UI.FILL,
-            height: Ti.UI.FILL,
-            contentWidth: Ti.UI.FILL,
-            contentHeight: 'auto',
-            showVerticalScrollIndicator: true,
-            layout: 'vertical'
-        });
+        // feedWebScrollView = Ti.UI.createScrollView({
+        //     top: 0,
+        //     width: Ti.UI.FILL,
+        //     height: Ti.UI.FILL,
+        //     contentWidth: Ti.UI.FILL,
+        //     contentHeight: 'auto',
+        //     showVerticalScrollIndicator: true,
+        //     layout: 'vertical'
+        // });
 
         feedWebView = Ti.UI.createWebView({
             enableZoomControls: false,
@@ -48,7 +48,7 @@ UI.createWebView = function(url,refresh){
         //     Ti.API.info(constant.APP + " ################# hardware acc disabled ###############");
         //     feedWebView.setBorderRadius(1);
         // }
-        feedWebScrollView.add(feedWebView);
+        // feedWebScrollView.add(feedWebView);
     }
 
     if(refresh || feedWebView.getUrl().indexOf(url) === -1){
@@ -62,7 +62,7 @@ UI.resetWebView = function(clearFromMemory){
         feedWebView.setUrl('/screens/stylefeed/blank.html');
         if(clearFromMemory){
             feedWebView = null;
-            feedWebScrollView = null;
+            // feedWebScrollView = null;
         } 
     }
 };

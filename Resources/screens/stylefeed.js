@@ -40,11 +40,16 @@ exports.get = function(header) {
 	    });
 
 		mainView.add(refreshControl);
-		mainView.add(feedWebView);
+		
 		
 		// mainView.add(feedView);	
 		// feedView.add(listView.getView());
   	}
+  	else{
+
+  	}
+
+  	mainView.add(feedWebView);
 
   	// mainView.add(feedWebView);
 
