@@ -5,7 +5,7 @@ var Animation = require('/modules/animation');
 
 var positiveButtons = ['yes', 'ok', 'true', 'correct', 'agree'];
 var negativeButtons = ['no', 'cancel', 'false', 'wrong', 'disagree'];
-var feedWebView = null;
+var feedWebView = null, feedWebScrollView = null;
 
 var UI = {};
 
@@ -17,14 +17,30 @@ UI.platformHeight = pheight;
 UI.createWebView = function(url,refresh){
     if(feedWebView === null){
         Ti.API.info(constant.APP + " ############################## manufacturer: [" + manufacturer + "] model: [" + model+ "] ############################");
+
+        feedWebScrollView = Ti.UI.createScrollView({
+            top: 0,
+            width: Ti.UI.FILL,
+            height: Ti.UI.FILL,
+            contentWidth: Ti.UI.FILL,
+            contentHeight: 'auto',
+            showVerticalScrollIndicator: true,
+            layout: 'vertical'
+        });
+
         feedWebView = Ti.UI.createWebView({
             enableZoomControls: false,
+            url: '',
+            scrollsToTop: true,
+            // touchEnabled: false,
+            // showScrollbars: false,
             width: Ti.UI.FILL,
-            height: Ti.UI.FILL
+            height: Ti.UI.SIZE
         });
 
         if(osname !== 'android'){
-            feedWebView.willHandleTouches = false; 
+            // feedWebView.willHandleTouches = false;
+            feedWebView.setWillHandleTouches(false); 
         }
 
         // var disableHwAcc = model.match(/nexus/i) ? true : false;
@@ -32,19 +48,22 @@ UI.createWebView = function(url,refresh){
         //     Ti.API.info(constant.APP + " ################# hardware acc disabled ###############");
         //     feedWebView.setBorderRadius(1);
         // }
-        
-        // feedWebView.setScalesPageToFit(true);
+        feedWebScrollView.add(feedWebView);
     }
 
-    if(refresh || feedWebView.getUrl() == undefined){
-         feedWebView.setUrl(url);
+    if(refresh || feedWebView.getUrl().indexOf(url) === -1){
+        feedWebView.setUrl(url);
     }
     return feedWebView;
 };
 
-UI.resetWebView = function(){
-    if(feedWebView){
+UI.resetWebView = function(clearFromMemory){
+    if(feedWebView){   
         feedWebView.setUrl('/screens/stylefeed/blank.html');
+        if(clearFromMemory){
+            feedWebView = null;
+            feedWebScrollView = null;
+        } 
     }
 };
 

@@ -85,9 +85,16 @@ a:active {
 .section + .section {
   padding-top: 20px;
 }
+.sec-collection {
+  padding: 0;
+}
+.sec-collection .single-pick {
+  margin-bottom: -4px;
+  margin-right: -4px;
+}
 .sec_ttle {
   color: #222222;
-  line-height: 44px;
+  line-height: 24px;
   margin-bottom: 10px;
   font-weight: 500;
 }
@@ -98,7 +105,7 @@ a:active {
 }
 .sec-link {
   float: right;
-  line-height: 44px;
+  line-height: 24px;
   padding-left: 5px;
   font-size: 0.85em;
   font-weight: normal;
@@ -107,12 +114,13 @@ a:active {
 .sec-scroll {
   white-space: nowrap;
   overflow-x: scroll;
+  overflow-y: hidden;
   margin: 0 -15px;
   padding-left: 15px;
   padding-right: 15px;
 }
 .shop-item {
-  width: 42%;
+  width: 150px;
   display: inline-block;
   margin-right: 5px;
   color: #494949;
@@ -131,6 +139,10 @@ a:active {
   padding: 4px 8px;
   display: block;
 }
+.shop-item .shop-item-img {
+  height: 144px;
+  overflow: hidden;
+}
 .shop-item .shop-item-img,
 .shop-item .shop-item-title,
 .shop-item .shop-item-meta,
@@ -140,6 +152,9 @@ a:active {
 }
 .shop-item .shop-item-title {
   font-weight: bold;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .shop-item .shop-item-meta {
   opacity: 0.7;
@@ -162,7 +177,7 @@ a:active {
 .brand-scroll .single-pick {
   display: inline-block;
   height: 170px;
-  width: 90%;
+  width: 260px;
 }
 .brand-scroll .single-pick-brand-name {
   position: absolute;
@@ -182,7 +197,7 @@ a:active {
 }
 .category-scroll .single-pick {
   display: inline-block;
-  height: 170px;
+  height: 195px;
   width: 90%;
   position: relative;
 }
@@ -197,7 +212,7 @@ a:active {
 }
 .category-scroll .category-text {
   position: absolute;
-  top: 20px;
+  top: 35px;
   left: 20px;
   right: 20px;
   bottom: 20px;
