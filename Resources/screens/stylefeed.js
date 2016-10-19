@@ -1,5 +1,4 @@
 exports.get = function(header) {
-	Ti.API.info(constant.APP + " ################### stylefeed view init #################");
 	var _style = require('/styles/stylefeed').get();
 	
 	var _pageIndex = 0;
@@ -44,6 +43,9 @@ exports.get = function(header) {
 		
 		// mainView.add(feedView);	
 		// feedView.add(listView.getView());
+  	}
+  	else{
+  		mainView.add(feedWebView);
   	}
 
   	// mainView.add(feedWebView);
