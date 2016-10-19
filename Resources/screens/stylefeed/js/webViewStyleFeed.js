@@ -330,6 +330,29 @@ var _removeEventHandlers = function(){
 	Ti.App.removeEventListener('webViewStyleFeed:removeAllevents',_removeEventHandlers);
 };
 
+// onunload = function(){
+var _cleanUpMemory = function(){
+	Ti.API.info(logContext + " webViewStyleFeed sanitation start...");	
+	_feedCategories.removeEventListener('click',_feedCategoryClickHandler);
+	_feedProducts.removeEventListener('click',_feedProductClickHandler);
+	_feedUsers.removeEventListener('click',_feedUserClickHandler);
+
+	// _feedBrands.removeEventListener('click',_feedBrandClickHandler);
+	for(var ux = 0; ux < _brandImgs.length; ux++){
+		_brandImgs[ux].removeEventListener('click',_feedBrandClickHandler);
+	}
+
+	// _feedPrice.removeEventListener('click',_feedPriceClickHandler);
+	// _feedCondition.removeEventListener('click',_feedConditionClickHandler);
+	
+	_removeEventHandlers();
+
+	_markupBody = _feedCategories = _feedProducts = _feedBrands = _feedUsers = _feedPrice = _feedCondition
+	 = _categoryImgs = _productImgs = _userImgs = _brandImgs = _feedPriceImgs = _feedConditionImgs = null;
+
+	Ti.API.info(logContext + " webViewStyleFeed sanitation complete");
+};
+
 onload = function(){
 	Ti.API.info(logContext + " ############# webViewStyleFeed load complete ################");
 
@@ -367,31 +390,3 @@ onload = function(){
 	Ti.App.fireEvent('app:loadCategoryApiData');
 };
 
-// onunload = function(){
-var _cleanUpMemory = function(){	
-	_feedCategories.removeEventListener('click',_feedCategoryClickHandler);
-	_feedProducts.removeEventListener('click',_feedProductClickHandler);
-	_feedUsers.removeEventListener('click',_feedUserClickHandler);
-
-	// _feedBrands.removeEventListener('click',_feedBrandClickHandler);
-	for(var ux = 0; ux < _brandImgs.length; ux++){
-		_brandImgs[ux].removeEventListener('click',_feedBrandClickHandler);
-	}
-
-	// _feedPrice.removeEventListener('click',_feedPriceClickHandler);
-	// _feedCondition.removeEventListener('click',_feedConditionClickHandler);
-	
-	_removeEventHandlers();
-
-	_markupBody = _feedCategories = _feedProducts = _feedBrands = _feedUsers = _feedPrice = _feedCondition
-	 = _categoryImgs = _productImgs = _userImgs = _brandImgs = _feedPriceImgs = _feedConditionImgs = null;
-
-	Ti.API.info(logContext + " webViewStyleFeed sanitation complete");
-};
-
-
-
-// window.onresize = function(){
-// 	Ti.API.info(logContext + " #################### webViewStyleFeed window resize complete #####################");
-
-// };

@@ -381,7 +381,7 @@ exports.get = function(tabToLoad) {
 			btnSearch.backgroundImage = '/images/header/search.png';
 		}
 		Utils.rateApp();
-	}
+	};
 
 	// Ti.App.fireEvent('app:apicallSuccess',{params});
 	Ti.App.addEventListener('app:apicallSuccess',_apiSuccessCb);
