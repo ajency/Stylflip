@@ -33,7 +33,7 @@ var enableFlags = {
 	// conditionClick: true
 };
 
-var enableFlagTimeout = function(flagType){
+var debounceTimeout = function(flagType){
 
 	var timeoutFunc = function(type){
 		switch(type){
@@ -125,7 +125,7 @@ var _attachApiData = function(e){
 				if(currentItem.primaryPhoto){
 					var prImg = $(_productImgs[x]).find('.img-full-100');
 					prImg[0].src = currentItem.primaryPhoto;
-					Ti.API.info(logContext + " product image: " + prImg[0].src);
+					// Ti.API.info(logContext + " product image: " + prImg[0].src);
 				}
 
 				if(currentItem.productTitle){
@@ -194,37 +194,6 @@ var _httpCallCb = function(e){
 	Ti.App.removeEventListener('webViewStyleFeed:stylefeedDataLoad',_httpCallCb);
 };
 
-var _feedProductClickHandler = function(e){
-	if(!enableFlags.productClick) return;
-	Ti.API.info(logContext +  " _feedProductClickHandler clicked: target: " + e.target);
-	
-	var prId = findId(e.target);
-	if(prId){
-		Ti.App.fireEvent('app:loadProduct',{productId: prId});
-	}
-
-	enableFlags.productClick = false;
-	enableFlagTimeout('product');
-};
-
-var _feedBrandClickHandler = function(e){
-	if(!enableFlags.brandClick) return;
-	Ti.API.info(logContext + " _feedBrandClickHandler event [" + this.id + "]");
-
-	brandId = this.id;	
-	if(brandId){
-
-		var _objFilter = {
-	    		brands: [brandId]
-	    	};
-
-		Ti.App.fireEvent('onFooterTabSelect',{key: 'shop',objFilter: _objFilter});
-	}
-
-	enableFlags.brandClick = false;
-	enableFlagTimeout('brand');
-};
-
 var _feedCategoryClickHandler = function(e){
 	// Ti.API.info(logContext + " _feedCategoryClickHandler target id [" + e + "]");
 	if(!enableFlags.categoryClick) return;
@@ -254,10 +223,39 @@ var _feedCategoryClickHandler = function(e){
 	}
 
 	enableFlags.categoryClick = false;
-	enableFlagTimeout('category');
+	debounceTimeout('category');
 };
 
+var _feedBrandClickHandler = function(e){
+	if(!enableFlags.brandClick) return;
+	Ti.API.info(logContext + " _feedBrandClickHandler event [" + this.id + "]");
 
+	brandId = this.id;	
+	if(brandId){
+
+		var _objFilter = {
+	    		brands: [brandId]
+	    	};
+
+		Ti.App.fireEvent('onFooterTabSelect',{key: 'shop',objFilter: _objFilter});
+	}
+
+	enableFlags.brandClick = false;
+	debounceTimeout('brand');
+};
+
+var _feedProductClickHandler = function(e){
+	if(!enableFlags.productClick) return;
+	Ti.API.info(logContext +  " _feedProductClickHandler clicked: target: " + e.target);
+	
+	var prId = findId(e.target);
+	if(prId){
+		Ti.App.fireEvent('app:loadProduct',{productId: prId});
+	}
+
+	enableFlags.productClick = false;
+	debounceTimeout('product');
+};
 
 var _feedUserClickHandler = function(e){
 	if(!enableFlags.userClick) return;
@@ -269,7 +267,7 @@ var _feedUserClickHandler = function(e){
 	}
 
 	enableFlags.userClick = false;
-	enableFlagTimeout('user');
+	debounceTimeout('user');
 };
 
 // var _feedPriceClickHandler = function(e){
@@ -337,6 +335,7 @@ onload = function(){
 
 	_markupBody = document.querySelector('body');
 	_markupBody.style.display = 'block';
+	_markupBody.onbeforeunload = _cleanUpMemory;
 
 	_feedCategories = document.querySelector('.sec-collection');
 	_feedProducts = document.querySelector('.sec-popular');
@@ -356,10 +355,7 @@ onload = function(){
 	_userImgs = document.querySelectorAll('.sec-topusers .sec-scroll .user-item');
 
 	_feedCategories.addEventListener('click',_feedCategoryClickHandler);
-	_feedProducts.addEventListener('click',_feedProductClickHandler);
-	
-	// _feedBrands.addEventListener('click',_feedBrandClickHandler);
-	
+	_feedProducts.addEventListener('click',_feedProductClickHandler);	
 	_feedUsers.addEventListener('click',_feedUserClickHandler);
 	
 	_socialRedirect.addEventListener('click',_socialRedirectClick);
@@ -371,26 +367,29 @@ onload = function(){
 	Ti.App.fireEvent('app:loadCategoryApiData');
 };
 
-onunload = function(){
+// onunload = function(){
+var _cleanUpMemory = function(){	
 	_feedCategories.removeEventListener('click',_feedCategoryClickHandler);
-	
+	_feedProducts.removeEventListener('click',_feedProductClickHandler);
+	_feedUsers.removeEventListener('click',_feedUserClickHandler);
+
 	// _feedBrands.removeEventListener('click',_feedBrandClickHandler);
 	for(var ux = 0; ux < _brandImgs.length; ux++){
 		_brandImgs[ux].removeEventListener('click',_feedBrandClickHandler);
 	}
 
-	_feedProducts.removeEventListener('click',_feedProductClickHandler);
-	_feedUsers.removeEventListener('click',_feedUserClickHandler);
-	
 	// _feedPrice.removeEventListener('click',_feedPriceClickHandler);
 	// _feedCondition.removeEventListener('click',_feedConditionClickHandler);
+	
+	_removeEventHandlers();
 
 	_markupBody = _feedCategories = _feedProducts = _feedBrands = _feedUsers = _feedPrice = _feedCondition
 	 = _categoryImgs = _productImgs = _userImgs = _brandImgs = _feedPriceImgs = _feedConditionImgs = null;
 
-	_removeEventHandlers();
 	Ti.API.info(logContext + " webViewStyleFeed sanitation complete");
 };
+
+
 
 // window.onresize = function(){
 // 	Ti.API.info(logContext + " #################### webViewStyleFeed window resize complete #####################");

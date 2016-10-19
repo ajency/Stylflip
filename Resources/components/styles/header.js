@@ -27,7 +27,7 @@ exports.get = function() {
 	    btnMenu: {
 	        backgroundImage: '/images/header/menu.png',
 	        left: UI.left(0),
-			width: UI.width(17),
+			width: UI.width(22),
 			height: UI.height(22)
 	    },
 	    
