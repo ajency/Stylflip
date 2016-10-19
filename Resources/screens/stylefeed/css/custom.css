@@ -86,7 +86,8 @@ a:active {
   padding-top: 20px;
 }
 .sec-collection {
-  padding: 0;
+  padding: 0 15px;
+  padding-left: 0;
 }
 .sec-collection .single-pick {
   margin-bottom: -4px;
