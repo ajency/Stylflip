@@ -97,6 +97,10 @@ exports.get = function(filterType,filterOptions) {
 			}
 			rightView.add(view);
 			Loader.hide();
+
+			// if(_arrSelectedFilters.length === 1){
+			// 	Utils._.isFunction(filterSelectionCallback) && filterSelectionCallback({selectedFilters: _arrSelectedFilters});
+			// }
 		// });
 	};
 	
@@ -136,7 +140,7 @@ exports.get = function(filterType,filterOptions) {
 				{ key: 'filterBy', title: 'FILTER BY', checked: (_brandsFilters.length > 0 || _categoriesFilters.length > 0 || _subCategoriesFilters.length > 0 || _sizesFilters.length > 0 || _conditionsFilters.length > 0 || _priceRangeFilters.length > 0), options: [
 				{ key: 'brand', title: 'BRAND', enabled: true, checked: _brandsFilters.length > 0, multiSelection: true, childViews: [] },
 				{ key: 'category', title: 'CATEGORY', enabled: true, checked: _categoriesFilters.length > 0, multiSelection: true, childViews: [] },
-				{ key: 'subCategory', title: 'SUB-CATEGORY', enabled: false, checked: _subCategoriesFilters.length > 0, multiSelection: true, childViews: [] },
+				{ key: 'subCategory', title: 'SUB-CATEGORY', enabled: _subCategoriesFilters.length > 0, checked: _subCategoriesFilters.length > 0, multiSelection: true, childViews: [] },
 				{ key: 'size', title: 'SIZES', enabled: true, checked: _sizesFilters.length > 0, multiSelection: true, childViews: [] },
 				{ key: 'condition', title: 'CONDITION', enabled: true, checked: _conditionsFilters.length > 0, multiSelection: true, childViews: constant.CONDITION_FILTERS },
 				{ key: 'priceRange', title: 'PRICE RANGE', enabled: true, checked: _priceRangeFilters.length > 0, multiSelection: false, childViews: constant.PRICE_FILTERS }
@@ -426,8 +430,10 @@ exports.get = function(filterType,filterOptions) {
 								if(_selectedCategories.length == 0 || _selectedCategories.length > 1) {
 									_arrFilterButtons[currentParentFilter.index + 1].children[0].backgroundImage = '/images/common/filter-field-untick.png';
 									UI.disableView(_arrFilterButtons[currentParentFilter.index + 1]);
+									
 									_arrFilterButtons[currentParentFilter.index + 2].children[0].backgroundImage = '/images/common/filter-field-untick.png';
 									UI.disableView(_arrFilterButtons[currentParentFilter.index + 2]);
+									
 									_selectedSubCategories = [];
 									_selectedSizes = [];
 								}
