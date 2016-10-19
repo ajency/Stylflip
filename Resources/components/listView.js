@@ -107,6 +107,7 @@ exports.get = function() {
 		    	view: view
 		    });
 		    refreshControl.addEventListener('refreshing', function() {
+		    	Ti.API.info(constant.APP + " refreshing list view...");
 		    	refreshControl.setRefreshing(true);
 		        refreshControl.setRefreshing(false);
 		        if(Utils._.isFunction(_pullToRefreshCallback)) {

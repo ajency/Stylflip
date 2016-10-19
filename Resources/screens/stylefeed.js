@@ -1,4 +1,5 @@
 exports.get = function(header) {
+	Ti.API.info(constant.APP + " ################### stylefeed view init #################");
 	var _style = require('/styles/stylefeed').get();
 	
 	var _pageIndex = 0;
@@ -19,42 +20,39 @@ exports.get = function(header) {
 	
 	// listView.setRowSpacing(1);
 
-    // var feedWebView = UI.createWebView('https://www.google.co.in/?gws_rd=ssl');
     var feedWebView = UI.createWebView('/screens/stylefeed/stylefeed.html');
    
-  //   var scrollView = Ti.UI.createScrollView({
-  //   	top: 0,
-  //   	width: Ti.UI.FILL,
-		// height: Ti.UI.FILL,
-		// contentWidth: Ti.UI.FILL,
-		// contentHeight: 'auto',
-		// showVerticalScrollIndicator: true,
-		// layout: 'vertical'
-  //   })
+  	if(osname === 'android'){
+  	
+  		var refreshControl = require('com.rkam.swiperefreshlayout').createSwipeRefresh({
+		    	view: feedWebView
+		});
+	    
+	    refreshControl.addEventListener('refreshing', function() {
+	    	Ti.API.info(constant.APP + " refreshing sylefeed");
+	    	// refreshControl.setRefreshing(true);
+	        refreshControl.setRefreshing(false);
+	        UI.resetWebView();
+	        feedWebView = UI.createWebView('/screens/stylefeed/stylefeed.html');
+	     //    if(Utils._.isFunction(_pullToRefreshCallback)) {
+	     //    	_pullToRefreshCallback();
+	     //    }
+	    });
 
-    mainView.add(feedWebView);
+		mainView.add(refreshControl);
+		mainView.add(feedWebView);
+		
+		// mainView.add(feedView);	
+		// feedView.add(listView.getView());
+  	}
 
-    // var refreshControl = require('com.rkam.swiperefreshlayout').createSwipeRefresh({
-	   //  	view: scrollView
-	   //  });
-    // refreshControl.addEventListener('refreshing', function() {
-    // 	Ti.API.info(constant.APP + " refreshing sylefeed");
-    // 	refreshControl.setRefreshing(true);
-    //     refreshControl.setRefreshing(false);
-    //     if(Utils._.isFunction(_pullToRefreshCallback)) {
-    //     	_pullToRefreshCallback();
-    //     }
-    // });
-	
-	// mainView.add(scrollView);
-	// mainView.add(refreshControl);
+  	// mainView.add(feedWebView);
 
-	// mainView.add(feedView);	
-	// feedView.add(listView.getView());
-	
+  	Ti.API.info(constant.APP + " ################### stylefeed scroll-view added #################");
+    
+    
 	
 	var feedText, imageToUpload;
-	
 	
 	/*
 	 * Create new feed view
