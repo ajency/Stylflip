@@ -388,10 +388,11 @@ exports.get = function(tabToLoad) {
 
 
 	var _changeFilterIcon = function(e){
-		if(e.type === 'stylefeed'){
+        Ti.API.info(constant.APP + " ############ _changeFilterIcon cb called type: [" + e.type + "] ###########")
+		if(e.pageRoute === 'stylefeed'){
 			header.setFilterActive(_feedFilters && Object.keys(_feedFilters).length > 0);
 		}
-		else if(e.type === 'shop'){
+		else if(e.pageRoute === 'shop'){
 			header.setFilterActive(_shopFilters && Object.keys(_shopFilters).length > 0);
 		}
 	};

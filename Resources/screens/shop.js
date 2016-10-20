@@ -836,7 +836,7 @@ exports.get = function(filterParams) {
 		}
 
 		_filterData(_filterParams);
-		Ti.App.fireEvent('app:changeFilterIcon',{type: 'shop'});
+		Ti.App.fireEvent('app:changeFilterIcon',{pageRoute: 'shop'});
 	}
 	else{
 		_showGridView(true);
