@@ -340,6 +340,7 @@ exports.get = function(config) {
 	
 	
 	var _setFilterActive = function(bool) {
+		Ti.API.info(constant.APP + " ############### _setFilterActive called bool: [" + bool + "] ##############");
 		if(bool) {
 			btnFilter.backgroundImage = '/images/header/filter-active.png';
 		}

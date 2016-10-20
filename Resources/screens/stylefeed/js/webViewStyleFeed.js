@@ -347,6 +347,8 @@ var _cleanUpMemory = function(){
 		_brandImgs[ux].removeEventListener('click',_feedBrandClickHandler);
 	}
 
+	_socialRedirect.removeEventListener('click',_socialRedirectClick);
+	_shopRedirect.removeEventListener('click',_shopRedirectClick);
 	// _feedPrice.removeEventListener('click',_feedPriceClickHandler);
 	// _feedCondition.removeEventListener('click',_feedConditionClickHandler);
 	
