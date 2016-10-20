@@ -19,45 +19,8 @@ exports.get = function(header) {
 	// });
 	
 	// listView.setRowSpacing(1);
-
-    var feedWebView = UI.createWebView('/screens/stylefeed/stylefeed.html');
-   
-  	if(osname === 'android'){
-  	
-  		var refreshControl = require('com.rkam.swiperefreshlayout').createSwipeRefresh({
-		    	view: feedWebView
-		});
-	    
-	    refreshControl.addEventListener('refreshing', function() {
-	    	Ti.API.info(constant.APP + " refreshing sylefeed");
-	    	// refreshControl.setRefreshing(true);
-	        refreshControl.setRefreshing(false);
-	        UI.resetWebView();
-	        feedWebView = UI.createWebView('/screens/stylefeed/stylefeed.html');
-	     //    if(Utils._.isFunction(_pullToRefreshCallback)) {
-	     //    	_pullToRefreshCallback();
-	     //    }
-	    });
-
-		mainView.add(refreshControl);
-		
-		
-		// mainView.add(feedView);	
-		// feedView.add(listView.getView());
-  	}
-  	else{
-
-  	}
-
-  	mainView.add(feedWebView);
-
-  	// mainView.add(feedWebView);
-
-  	Ti.API.info(constant.APP + " ################### stylefeed scroll-view added #################");
-    
-    
 	
-	var feedText, imageToUpload;
+	// var feedText, imageToUpload;
 	
 	/*
 	 * Create new feed view
@@ -373,6 +336,15 @@ exports.get = function(header) {
 	 * Load other user's profile
 	 */
 	var _loadUserProfile = function(userId) {
+		Ti.API.info(constant.APP + " ############### stylefeed _loadUserProfile init #################");
+
+		Analytics.trackEvent({
+	  		category: "Username (StylFeed)",
+	  		action: "click",
+	  		label: "-",
+	  		value: 1
+		});
+
         var window = Window.create(exitOnClose=false);
     	var userProfile = require('/screens/stylefile').get('stylefeed', userId);
 	 	window.add(userProfile.getView());
@@ -384,7 +356,7 @@ exports.get = function(header) {
 	 * Load product details
 	 */
 	var _loadProductDetails = function(productId) {
-		console.log(constant.APP + " ############### stylefeed _loadProductDetails init #################");
+		Ti.API.info(constant.APP + " ############### stylefeed _loadProductDetails init #################");
         var window = Window.create(exitOnClose=false);
         var productDetails = require('/screens/productDetails').get(tabSelected='stylefeed', productId, function(e) {
         	if(e.type == 'purchase') {
@@ -426,15 +398,11 @@ exports.get = function(header) {
     	else{
     		userId = this.userId;
     	}
+
     	if(userId == Utils.loggedInUserId()) {
     		return;
     	}
-    	Analytics.trackEvent({
-	  		category: "Username (StylFeed)",
-	  		action: "click",
-	  		label: "-",
-	  		value: 1
-		});
+
     	_loadUserProfile(userId);
     };
 	
@@ -1115,6 +1083,7 @@ exports.get = function(header) {
 	    	},
 	    	error: function(error){
 	    		// UI.showAlert(error.errorMessage);
+				Ti.API.info(constant.APP + " error loading category api data: [" + error.errorMessage + "]");
 	    		Ti.App.fireEvent('app:loadBrandApiData');
 	    	}
 	    });
@@ -1155,6 +1124,7 @@ exports.get = function(header) {
 	    	},
 	    	error: function(error){
 	    		// UI.showAlert(error.errorMessage);
+				Ti.API.info(constant.APP + " error loading brand api data: [" + error.errorMessage + "]");
 	    		Ti.App.fireEvent('app:loadProductApiData');
 	    	}
 	    });
@@ -1195,6 +1165,7 @@ exports.get = function(header) {
 	    	},
 	    	error: function(error){
 	    		// UI.showAlert(error.errorMessage);
+				Ti.API.info(constant.APP + " error loading product api data: [" + error.errorMessage + "]");
 	    		Ti.App.fireEvent('app:loadUserApiData');
 	    	}
 	    });
@@ -1233,7 +1204,8 @@ exports.get = function(header) {
 
 	    	},
 	    	error: function(error){
-	    		UI.showAlert(error.errorMessage);
+	    		// UI.showAlert(error.errorMessage);
+				Ti.API.info(constant.APP + " error loading user api data: [" + error.errorMessage + "]");
 	    		Ti.App.fireEvent('webViewStyleFeed:removeAllevents');
 	    	}
 	    });
@@ -1256,6 +1228,41 @@ exports.get = function(header) {
 	Ti.App.addEventListener('app:loadProduct',_loadProduct);
 	Ti.App.addEventListener('app:loadUser',_profileViewClickHandler);
 	// Ti.App.addEventListener('app:loadComplete',_hideLoader);
+
+	var feedWebView = UI.createWebView('/screens/stylefeed/stylefeed.html');
+   
+  	if(osname === 'android'){
+  	
+  		var refreshControl = require('com.rkam.swiperefreshlayout').createSwipeRefresh({
+		    	view: feedWebView
+		});
+	    
+	    refreshControl.addEventListener('refreshing', function() {
+	    	Ti.API.info(constant.APP + " refreshing sylefeed");
+	    	// refreshControl.setRefreshing(true);
+	        refreshControl.setRefreshing(false);
+	        UI.resetWebView();
+	        feedWebView = UI.createWebView('/screens/stylefeed/stylefeed.html');
+	     //    if(Utils._.isFunction(_pullToRefreshCallback)) {
+	     //    	_pullToRefreshCallback();
+	     //    }
+	    });
+
+		mainView.add(refreshControl);
+		
+		
+		// mainView.add(feedView);	
+		// feedView.add(listView.getView());
+  	}
+  	else{
+  	}
+
+  	mainView.add(feedWebView);
+
+
+  	// mainView.add(feedWebView);
+
+  	Ti.API.info(constant.APP + " ################### stylefeed scroll-view added #################");
 	
     var _removeFromMemory = function() {
     	_style = null;

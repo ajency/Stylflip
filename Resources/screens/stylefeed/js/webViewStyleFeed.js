@@ -1,10 +1,10 @@
 var logContext = 'STYLFLEED-WEBVIEW';
+Ti.API.info(logContext + " ###################### webview style feed init ##########################");
+
 // var Tifound = Ti != undefined ? true : false
 var MAXITEMS = 5, DEFAULTIMAGE = 'images/default-shop-big.jpg';
 var _markupBody = null, _feedProducts = null, _feedBrands = null, _feedUsers = null, _feedPrice = null, _feedCondition = null, _feedCategories = null, _feedPriceImgs = null, 
 _feedConditionImgs = null, _categoryImgs = null, _productImgs = null, _brandImgs = null, _userImgs = null, _socialRedirect = null, _shopRedirect = null;
-
-Ti.API.info(logContext + " ###################### webview style feed init ##########################");
 
 var randomizeIndex = function(length){
 	return Math.floor( Math.random() * length );
@@ -330,9 +330,14 @@ var _removeEventHandlers = function(){
 	Ti.App.removeEventListener('webViewStyleFeed:removeAllevents',_removeEventHandlers);
 };
 
+
+var cleanUpCalled = false;
 // onunload = function(){
 var _cleanUpMemory = function(){
+	if(cleanUpCalled)return;
 	Ti.API.info(logContext + " webViewStyleFeed sanitation start...");	
+	
+	cleanUpCalled = true;
 	_feedCategories.removeEventListener('click',_feedCategoryClickHandler);
 	_feedProducts.removeEventListener('click',_feedProductClickHandler);
 	_feedUsers.removeEventListener('click',_feedUserClickHandler);
@@ -353,12 +358,17 @@ var _cleanUpMemory = function(){
 	Ti.API.info(logContext + " webViewStyleFeed sanitation complete");
 };
 
+var onLoadCalled = false;
+
 onload = function(){
+	if(onLoadCalled)return;
 	Ti.API.info(logContext + " ############# webViewStyleFeed load complete ################");
 
+	onLoadCalled = true;
 	_markupBody = document.querySelector('body');
 	_markupBody.style.display = 'block';
-	_markupBody.onbeforeunload = _cleanUpMemory;
+	// _markupBody.onbeforeunload = _cleanUpMemory;
+	_markupBody.onunload = _cleanUpMemory;
 
 	_feedCategories = document.querySelector('.sec-collection');
 	_feedProducts = document.querySelector('.sec-popular');
