@@ -78,6 +78,19 @@ a:hover,
 a:active {
   opacity: 0.6;
 }
+body * {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Chrome/Safari/Opera */
+  -khtml-user-select: none;
+  /* Konqueror */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+}
 .section {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   padding: 10px 15px 5px;
