@@ -10,7 +10,7 @@ include("class/Pagination.php");
 //mysql_query("update tbl_subcategory set subcategory_name='Hospitality' where subcategory_name='Rental'");
 //mysql_query("update tbl_subcategory set subcategory_name='Institutional' where subcategory_name='Leisure'");
 
-	$sql = "select * from tbl_brands";
+	$sql = "select * from tbl_brands ORDER BY brandId DESC";
 ?>
 
 

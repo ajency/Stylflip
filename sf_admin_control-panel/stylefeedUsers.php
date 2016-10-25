@@ -116,9 +116,16 @@ tr:nth-child(odd) {background: #FFF}
 
 function add_user_to_list(username,userId)
 {
+    var usersIds = get_selected_users();
+
+    if(jQuery.inArray(userId, usersIds) != -1) {
+        document.getElementById("error").innerHTML = "User already added!";
+        return false;
+    }
+
     if(document.getElementsByClassName('selected_users_list').length < 5)
     {
-        document.getElementById("selected_users").innerHTML += "<div id = 'div"+userId+"'><table class='selected_users_list table'><tr><input type='hidden' name='users_list[]' value='"+userId+"'><td style='text-align:center;width:80%'>"+username+"'</td><td style='text-align:center;width:20%'><a style='color:red' href=# onclick=\"remove_added_user('div"+userId+"')\">Remove</a></td></tr></table></div>";
+        document.getElementById("selected_users").innerHTML += "<div id = 'div"+userId+"'><table class='selected_users_list table' style='width:50%'><tr><input type='hidden' name='users_list[]' value='"+userId+"'><td style='text-align:center;width:80%'>"+username+"</td><td style='text-align:center;width:20%'><a style='color:red' href=# onclick=\"remove_added_user('div"+userId+"')\">Remove</a></td></tr></table></div>";
         if(document.getElementsByClassName('selected_users_list').length == 5)
         {
             document.getElementById('put_button').innerHTML = "<input type='submit' value='Save' name='addusers' id='add_users' />";
@@ -144,6 +151,18 @@ function remove_added_user(userId)
     document.getElementById('put_button').innerHTML = "<input type='submit' value='Save' disabled title='Add 5 users to enable this button!' name='addusers' id='add_users' />";
     document.getElementById(userId).remove();
 }
+
+
+
+function get_selected_users(){
+    var users = [];
+    $( ".selected_users_list input[type='hidden']" ).each(function() {
+      users.push($(this).val());
+    });
+    return users;
+}
+
+
 
 </script>
 <center>
