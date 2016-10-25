@@ -121,6 +121,8 @@ function add_user_to_list(username,userId)
     if(jQuery.inArray(userId, usersIds) != -1) {
         document.getElementById("error").innerHTML = "User already added!";
         return false;
+    }else{
+       document.getElementById("error").innerHTML = ""; 
     }
 
     if(document.getElementsByClassName('selected_users_list').length < 5)
