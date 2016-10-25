@@ -42,7 +42,7 @@ switch($action) {
 	break;
 	
 	case 'listing':
-		$stylefeed -> listing($_REQUEST['userId'], $_REQUEST['location'], $_REQUEST['pageIndex'], $_REQUEST['limit'], $_REQUEST['searchText'], $_REQUEST['postedBy']);
+		$stylefeed -> listing($_REQUEST['userId'], $_REQUEST['location'], $_REQUEST['pageIndex'], $_REQUEST['limit'], $_REQUEST['searchText'], $_REQUEST['postedBy'],$_REQUEST['stylefeedSection']);
 		break;
 		
 	case 'feedDetails':

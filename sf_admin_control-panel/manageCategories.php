@@ -86,7 +86,7 @@ else {
 	<td><?php echo $sr; ?></td>
 	<td>
 		<?php if($photo){ ?>
-			<a class="single_image" style="float:left;" href="<?php echo $photo; ?>"><img width="50px" src="<?php echo $photo; ?>"></a>
+			<a class="single_image" style="float:left;" href="<?php echo $baseURL.$photo; ?>"><img width="50px" src="<?php echo $baseURL.$photo; ?>"></a>
 		<?php } 
 		else {
 			echo "No image";
@@ -99,6 +99,7 @@ else {
 		$result1 = mysql_query($sql);
 		
 		while($row1 = mysql_fetch_assoc($result1)) { ?>
+		<a href="editCategory.php?Id=<?php echo $row1['categoryId']; ?>">Edit</a>&nbsp;&nbsp;|&nbsp;&nbsp;
 		<a href="#" onclick="deleteUser('<?php echo $baseURL ?>api/categories.php?action=delete&Id=<?php echo $row1['categoryId']; ?>');">Delete</a>  &nbsp;&nbsp;
         <select onchange="updateSizeChart('<?php echo $row1['categoryId']; ?>', this.value)">
             <option value="">Select size</option>

@@ -75,7 +75,7 @@ else {
 	<td><?php echo $sr; ?></td>
 	<td>
 		<?php if($photo){ ?>
-			<a class="single_image" style="float:left;" href="<?php echo $photo; ?>"><img width="50px" src="<?php echo $photo; ?>"></a>
+			<a class="single_image" style="float:left;" href="<?php echo $baseURL.$photo; ?>"><img width="50px" src="<?php echo $baseURL.$photo; ?>"></a>
 		<?php } 
 		else {
 			echo "No image";

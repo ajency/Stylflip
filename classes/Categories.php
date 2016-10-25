@@ -24,7 +24,7 @@ class Categories {
         	$successfileToUpload = TRUE;
         	$uploadOk = 1;
         	if(isset($_FILES['filetoUpload'])) {
-				$fileToUpload = '../uploads/categoryPics/'.$_FILES['filetoUpload']['name'];
+				$fileToUpload = 'uploads/categoryPics/'.$_FILES['filetoUpload']['name'];
 				//echo $fileToUpload;
 				if (file_exists($fileToUpload)) {
     				$uploadOk = 0;
@@ -80,8 +80,8 @@ class Categories {
         //var_dump($_FILES);
         $successfileToUpload = TRUE;
         $uploadOk = 1;
-        if(isset($_FILES['filetoUpload'])) {
-			$fileToUpload = '../uploads/categoryPics/'.$_FILES['filetoUpload']['name'];
+        if(!empty($_FILES['filetoUpload']['name'])) {
+			$fileToUpload = 'uploads/categoryPics/'.$_FILES['filetoUpload']['name'];
 			//echo $fileToUpload;
 			if (file_exists($fileToUpload)) {
     			$uploadOk = 0;
@@ -125,7 +125,15 @@ class Categories {
 		}
 		else
 		{
-			$this -> setMessage("Failed to update Category");
+			$query = "update tbl_categories set name = '" . $arrInfo['name'] . "' where categoryId=".$arrInfo['Id'];
+			$result = mysql_query($query);
+			if($result) {
+				$this -> setMessage("Category has been updated successfully");
+			}
+			else
+			{
+				$this -> setMessage("Failed to update Category");
+			}
 		}
 		
 		header("Location:../sf_admin_control-panel/manageCategories.php");
@@ -141,7 +149,7 @@ class Categories {
 		$result = mysql_query($query);
 		if( result ) {
 			$this -> setMessage("Category has been deleted successfully");
-			unlink($row['categoryPhoto']);
+			unlink($baseURL.$row['categoryPhoto']);
 		} else {
 			$this -> setMessage("Failed to delete Category");
 		}

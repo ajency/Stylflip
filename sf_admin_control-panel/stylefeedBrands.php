@@ -25,7 +25,7 @@ if(isset($_POST['addbrands']))
 		<td colspan="5"></td>  
 	</tr>
 	<tr>
-		<td colspan="5"><a href="stylefeedUsers.php">Users</a> | <a href="stylefeedProducts.php">Products</a> | <a href="stylefeedCategories.php">Categories</	a> | <a href="stylefeedBrands.php">Brands</a></td>
+		<td colspan="5"><a href="stylefeedUsers.php">Users</a> | <a href="stylefeedProducts.php">Products</a> | <a href="stylefeedCategories.php">Categories</a> | <a href="stylefeedBrands.php"><font color="green"><u>Brands</u></font></a></td>
 	</tr>
 </table>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
@@ -51,7 +51,7 @@ if(isset($_POST['addbrands']))
         line-height: 30px;
         outline: medium none;
         padding: 8px 12px;
-        width: 400px;
+        width: 40%;
     } 
     .tt-dropdown-menu {
         width: 400px;
@@ -65,6 +65,31 @@ if(isset($_POST['addbrands']))
         color: #111;
         background-color: #F1F1F1;
     }
+      #table-wrapper {
+  position:relative;
+}
+#table-scroll {
+  height:200px;
+  overflow:auto;  
+  margin-top:20px;
+}
+/*#table-wrapper table {
+  width:100%;
+
+}*/
+#table-wrapper table * {
+  color:black;
+}
+#table-wrapper table thead th .text {
+  position:absolute;   
+  top:-20px;
+  z-index:2;
+  height:20px;
+  width:35%;
+  border:1px;
+}
+tr:nth-child(even) {background: #CCC}
+tr:nth-child(odd) {background: #FFF}
 </style>
 <script>
     function showResult(str) {
@@ -91,7 +116,7 @@ if(isset($_POST['addbrands']))
 
 function add_brand_to_list(name,brandId)
 {
-	if(document.getElementsByClassName('selected_brands_list').length < 5)
+	if(document.getElementsByClassName('brand_list').length < 5)
 	{
 		$.ajax({
  			url : 'get_brands_info_ajax.php',
@@ -103,11 +128,10 @@ function add_brand_to_list(name,brandId)
  			success : function(data){
  				if(data.brandPhoto)
  				{
- 					//document.getElementById("selected_brands").innerHTML += "<div id = 'div"+brandId+"'><input type='hidden' name='brands_list[]' value='"+brandId+"'><input size = '35' name= 'brand_list[]' class= 'selected_brands_list' type='text' id="+brandId+" readonly value='"+name+"'><a href=# onclick=\"remove_added_brand('div"+brandId+"')\">Remove</a><br></div>";
- 					document.getElementById("selected_brands").innerHTML += "<div id = 'div"+brandId+"'><table class='table' style='text-align:center;width:70%''><tr><td width=60%><input type='hidden' class = 'brand_list' name='brands_list[]' value="+data.brandId+">"+data.name+"</td><td width = 20%><img width = 50px src='"+data.brandPhoto+"'></td><td width=20%><a href='#' onclick = \"remove_added_brand('div"+brandId+"')\">Remove</a></td></tr></table></div>";
-        			if(document.getElementsByClassName('selected_brands_list').length == 5)
+ 					document.getElementById("selected_brands").innerHTML += "<div id = 'div"+brandId+"'><table class='table' style='text-align:center;width:70%''><tr><td width=60% style='text-align:center'><input type='hidden' class = 'brand_list' name='brands_list[]' value="+data.brandId+">"+data.name+"</td><td width = 20% style='text-align:center'><img width = 50px src='"+"<?php echo $baseURL; ?>"+data.brandPhoto+"'></td><td width=20% style='text-align:center'><a style='color:red' href='#' onclick = \"remove_added_brand('div"+brandId+"')\">Remove</a></td></tr></table></div>";
+        			if(document.getElementsByClassName('brand_list').length == 5)
         			{
-            			document.getElementById('put_button').innerHTML = "<input type='submit' value='Add brands' name='addbrands' id='add_brands' />";
+            			document.getElementById('put_button').innerHTML = "<input type='submit' value='Save' name='addbrands' id='add_brands' />";
         			} 
  				}
  				else
@@ -125,9 +149,9 @@ function add_brand_to_list(name,brandId)
 }
 
 $( document ).ready(function() {
-    if(document.getElementsByClassName('selected_brands_list').length == 5)
+    if(document.getElementsByClassName('brand_list').length == 5)
     {
-        document.getElementById('put_button').innerHTML = "<input type='submit' value='Add brands' name='addbrands' id='add_brands' />";
+        document.getElementById('put_button').innerHTML = "<input type='submit' value='Save' name='addbrands' id='add_brands' />";
     }
 });
 
@@ -139,17 +163,30 @@ function remove_added_brand(brandId)
 }
 
 </script>
-<hr><center>
-<strong>Configure the stylefeed section</strong>
+<center>
+<strong>Configure the stylefeed brands</strong>
 <div id = "error" style="color:red"></div>
-<form name="brands_stylefeed_form" method="post" enctype="multipart/form-data" action="<?php echo $baseURL; ?>sf_admin_control-panel/stylefeedBrands.php">
 
+<form name="brands_stylefeed_form" method="post" enctype="multipart/form-data" action="<?php echo $baseURL; ?>sf_admin_control-panel/stylefeedBrands.php">
 	<div class="content">
+    Search brands : <br><input type="text" id="brandName" name="brandName" placeholder="Search by brand name" class= "add_brands" onkeyup="showResult(this.value)"><div id="livesearch" style="width:40%"></div><br>
     
-    	<div id="selected_brands"></div>
+
+    	<div id="selected_brands">
+    		<?php 
+                $sql1 = "SELECT * FROM tbl_newstylefeed WHERE object_type = 'brand'";
+                $result1 = mysql_query($sql1);
+                while($row = mysql_fetch_assoc($result1))
+                {
+                    $sql = "SELECT * FROM tbl_brands WHERE brandId = ".$row['object_id'];
+                    $result = mysql_query($sql);
+                    $single_brand = mysql_fetch_assoc($result);
+                    echo "<div id = 'div".$single_brand['brandId']."'><table class='table' style='text-align:center;width:70%''><tr><td width=60% style='text-align:center'><input type='hidden' class = 'brand_list' name='brands_list[]' value=".$single_brand['brandId'].">".$single_brand['name']."</td><td width = 20% style='text-align:center'><img width = 50px src='".$baseURL.$single_brand['brandPhoto']."'></td><td width=20% style='text-align:center'><a style='color:red' href='#' onclick = \"remove_added_brand('div".$single_brand['brandId']."')\">Remove</a></td></tr></table></div>";
+                }
+            ?>
+            <p id = "put_button"></p>
+    	</div>
     	
-    	Search brands : <input type="text" id="brandName" name="brandName" placeholder="Enter brand name" class= "add_brands" onkeyup="showResult(this.value)"><div id="livesearch" style="width:45%"></div>
-    	<p id = "put_button"></p>
-   
+    	
     </div>
-</form> </center>
+</form></center>

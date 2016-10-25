@@ -17,8 +17,8 @@ session_start();
 
 $host = "localhost";
 $db = "stylflip";
-$user = "username";
-$password = "password";
+$user = "root";
+$password = "root";
 
 $con = mysql_connect($host, $user, $password) or die(mysql_error()); 
 mysql_select_db($db) or die(mysql_error()); 
@@ -27,7 +27,7 @@ $_SESSION['connection'] = $con;
 
  //$baseURL = "http://styleflip.ah.local/";
 // $baseURL = "http://54.149.49.29/stylflip/";
-$baseURL = "http://localhost/stylflip/";
+$baseURL = "http://localhost/styleflip/";
 
 function filterRequestObject($requestObj) {
 	/*

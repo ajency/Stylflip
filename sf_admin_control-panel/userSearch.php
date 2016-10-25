@@ -9,15 +9,14 @@ if (strlen($q)>0) {
     $sql = "select * from tbl_users where username LIKE '%".$q."%' OR firstName LIKE '%".$q."%' OR lastName LIKE '%".$q."%'";
     $result = mysql_query($sql);
     
-    $hint = "<table>";
+    $hint = "";
     while($row = mysql_fetch_assoc($result))
     {
         $username = $row['username'];
         $userId = $row['userId'];
         $function_call = 'onclick = "add_user_to_list(\''.$username.'\',\''.$userId.'\')"';
-        $hint = $hint."<tr><td>".$row['username']."</td><td> <a href='#' ".$function_call.">add user</a></td></tr>";
+        $hint = $hint."<tr><td style='width:30%'>".$row['username']."&nbsp;&nbsp;</td><td style='width:55%'>".$row['firstName']." ".$row['lastName']."&nbsp;&nbsp;</td><td style='width:15%' dir='rtl'> <a style='color:green' href='#' ".$function_call.">Add user</a></td></tr>";
     }
-    $hint .= "</table>";
 }
 
 // Set output to "no suggestion" if no hint was found
@@ -25,9 +24,10 @@ if (strlen($q)>0) {
 if ($hint=="") {
   $response="no suggestion";
 } else {
-  $response=$hint;
+  $response= "<div id='table-wrapper'><div id='table-scroll'><table style='width:100%'><thead><tr><th style='width:30%'><span class='text'>Username</span></th><th style='width:55%'><span class='text'>Full name</span></th><th style='width:15%'><span class='text'></span></th></tr></thead>".$hint."</table></div></div>";
 }
 
 //output the response
 echo $response;
+//<thead><tr><th style='width:30%'><span class='text'>Username</span></th><th style='width:55%'><span class='text'>Full name</span></th><th style='width:15%'><span class='text'>Add User</span></th></tr></thead>
 ?>

@@ -65,7 +65,7 @@ class Brand {
         	$successfileToUpload = TRUE;
         	$uploadOk = 1;
         	if(isset($_FILES['filetoUpload'])) {
-				$fileToUpload = '../uploads/brandPics/'.$_FILES['filetoUpload']['name'];
+				$fileToUpload = 'uploads/brandPics/'.$_FILES['filetoUpload']['name'];
 				//echo $fileToUpload;
 				if (file_exists($fileToUpload)) {
     				$uploadOk = 0;
@@ -121,8 +121,8 @@ class Brand {
         //var_dump($_FILES);
         $successfileToUpload = TRUE;
         $uploadOk = 1;
-        if(isset($_FILES['filetoUpload'])) {
-			$fileToUpload = '../uploads/brandPics/'.$_FILES['filetoUpload']['name'];
+        if(!empty($_FILES['filetoUpload']['name'])) {
+			$fileToUpload = 'uploads/brandPics/'.$_FILES['filetoUpload']['name'];
 			//echo $fileToUpload;
 			if (file_exists($fileToUpload)) {
     			$uploadOk = 0;
@@ -166,7 +166,15 @@ class Brand {
 		}
 		else
 		{
-			$this -> setMessage("Failed to update Brand");
+			$query = "update tbl_brands set name = '" . $arrInfo['name'] . "' where brandId=".$arrInfo['Id'];
+			$result = mysql_query($query);
+			if($result) {
+				$this -> setMessage("Brand has been updated successfully");
+			}
+			else
+			{
+				$this -> setMessage("Failed to update Brand");
+			}
 		}
 		header("Location:../sf_admin_control-panel/manageBrands.php");
 		exit;
@@ -182,17 +190,14 @@ class Brand {
 	
 		if( $result ) {
 			$this -> setMessage("Brand has been deleted successfully");
-			unlink($row['brandPhoto']);
+			unlink($baseURL.$row['brandPhoto']);
 		} else {
 			$this -> setMessage("Failed to delete brand");
 		}
 	
 		header("Location:../sf_admin_control-panel/manageBrands.php");
-		
 		exit;
-	
 	}
 	
 };
-
 ?>

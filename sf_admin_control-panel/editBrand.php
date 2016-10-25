@@ -27,7 +27,7 @@ if(isset($_REQUEST['Id'])) {
 
     <tr>
       <td align="right"><div align="right">Name :</div></td>
-      <td><input type="text" name="name" value="<?php echo $row['name']; ?>"></td>
+      <td><input type="text" name="name" value="<?php echo $row['name']; ?>" required></td>
     </tr>
     
     <tr>
@@ -37,7 +37,7 @@ if(isset($_REQUEST['Id'])) {
 
     <tr>
       <td align="right"><div align="right">Photo :</div></td>
-      <td><input type="file" id = 'filetoUpload' name="filetoUpload" required></td>
+      <td><input type="file" id = 'filetoUpload' name="filetoUpload"></td>
     </tr>
     
     <tr>

@@ -98,105 +98,209 @@ class StyleFeed {
 		echo json_encode($response);
 	}
 	
-	function listing( $userId, $location, $index, $limit, $searchText, $type ) {
+	function listing( $userId, $location, $index, $limit, $searchText, $type,$stylefeedSection ) {
 		$response = array();
 		$response['success'] = true;
 		$strWhere = '';
 		
-		if(true == empty($index)) { $index = 0; }
-		if(true == empty($limit)) { $limit = 20; }
-		
-		if(false == empty($searchText)) {
+		if(true == empty($stylefeedSection))
+		{
+			if(true == empty($index)) { $index = 0; }
+			if(true == empty($limit)) { $limit = 20; }
+			
+			if(false == empty($searchText)) {
+				
+				if($userId) {
+					$strWhere = " AND ";
+				} else {
+					$strWhere = " WHERE ";
+				}		
+				
+				$strWhere .= " ( s.title LIKE '%" . $searchText . "%' OR u.username LIKE '%" . $searchText . "%' OR firstName LIKE '%" . $searchText . "%' OR lastName LIKE '%" . $searchText . "%' ) ";
+			}
+			
+			if( false == empty($type) ) {
+				if(true == empty($searchText) && true == empty($userId) ) {
+					$strWhere = " WHERE ";
+				} else {
+					$strWhere .= " AND ";
+				}
+				
+				if( 'only me' == strtolower($type) ) {
+					$strWhere .= " s.userId = $userId ";
+				} elseif( 'my network' == strtolower($type) ) {
+					$strWhere .= " ( s.userId IN ( SELECT userId FROM tbl_user_follow WHERE followedUserId = $userId )  OR s.userId IN ( SELECT followedUserId FROM tbl_user_follow WHERE userId = $userId ) ) ";
+				}
+        	    else {
+        	        $strWhere = ''; //  Default case (Global)
+        	    }
+				
+			}
+				
+			$index = $index * $limit;
 			
 			if($userId) {
-				$strWhere = " AND ";
-			} else {
-				$strWhere = " WHERE ";
-			}		
-			
-			$strWhere .= " ( s.title LIKE '%" . $searchText . "%' OR u.username LIKE '%" . $searchText . "%' OR firstName LIKE '%" . $searchText . "%' OR lastName LIKE '%" . $searchText . "%' ) ";
-		}
-		
-		if( false == empty($type) ) {
-			if(true == empty($searchText) && true == empty($userId) ) {
-				$strWhere = " WHERE ";
-			} else {
-				$strWhere .= " AND ";
+				$query = "select s.*, u.username, u.profilePicURL, u.city, (select count(feedCommentId) from tbl_feed_comments fc where fc.feedId = s.feedId) as comments, CASE WHEN fc.feedCommentId IS NULL THEN 0 else 1 END as 'isCommented', CASE WHEN ft.feedTagId IS NULL THEN 0 else 1 END as 'isTagged', CASE WHEN fl.feedLikeId IS NULL THEN 0 else 1 END  as 'isLiked', CASE WHEN fu.userFollowId IS NULL THEN 0 else 1 END as 'isFollowing' from tbl_stylefeed s INNER JOIN tbl_users u on u.userId = s.userId and u.isActive = 1 LEFT JOIN tbl_feed_likes fl on fl.feedId = s.feedId and fl.userId = $userId LEFT JOIN tbl_feed_comments fc on fc.feedId = s.feedId and fc.userId = $userId LEFT JOIN tbl_feed_tags ft on ft.feedId = s.feedId and ft.taggedUserId = $userId LEFT JOIN tbl_user_follow fu on fu.followedUserId = s.userId and fu.userId = $userId WHERE s.feedId NOT IN ( SELECT feedId from tbl_hidden_feeds where userId = $userId ) $strWhere Group BY s.feedId order by s.feedId desc LIMIT $index, $limit";
 			}
-			
-			if( 'only me' == strtolower($type) ) {
-				$strWhere .= " s.userId = $userId ";
-			} elseif( 'my network' == strtolower($type) ) {
-				$strWhere .= " ( s.userId IN ( SELECT userId FROM tbl_user_follow WHERE followedUserId = $userId )  OR s.userId IN ( SELECT followedUserId FROM tbl_user_follow WHERE userId = $userId ) ) ";
+			else {
+				$query = "select s.*, u.username, u.profilePicURL, u.city, (select count(feedCommentId) from tbl_feed_comments fc where fc.feedId = s.feedId) as comments, 0 as 'isFollowing', 0 as 'isCommented', 0 as 'isTagged' from tbl_stylefeed s INNER JOIN tbl_users u on u.userId = s.userId LEFT JOIN tbl_feed_likes fl on fl.feedId = s.feedId and fl.userId = s.userId and u.isActive = 1 $strWhere Group BY s.feedId order by s.feedId desc LIMIT $index, $limit";
 			}
-            else {
-                $strWhere = ''; //  Default case (Global)
-            }
-			
-		}
-			
-		$index = $index * $limit;
-		
-		if($userId) {
-			$query = "select s.*, u.username, u.profilePicURL, u.city, (select count(feedCommentId) from tbl_feed_comments fc where fc.feedId = s.feedId) as comments, CASE WHEN fc.feedCommentId IS NULL THEN 0 else 1 END as 'isCommented', CASE WHEN ft.feedTagId IS NULL THEN 0 else 1 END as 'isTagged', CASE WHEN fl.feedLikeId IS NULL THEN 0 else 1 END  as 'isLiked', CASE WHEN fu.userFollowId IS NULL THEN 0 else 1 END as 'isFollowing' from tbl_stylefeed s INNER JOIN tbl_users u on u.userId = s.userId and u.isActive = 1 LEFT JOIN tbl_feed_likes fl on fl.feedId = s.feedId and fl.userId = $userId LEFT JOIN tbl_feed_comments fc on fc.feedId = s.feedId and fc.userId = $userId LEFT JOIN tbl_feed_tags ft on ft.feedId = s.feedId and ft.taggedUserId = $userId LEFT JOIN tbl_user_follow fu on fu.followedUserId = s.userId and fu.userId = $userId WHERE s.feedId NOT IN ( SELECT feedId from tbl_hidden_feeds where userId = $userId ) $strWhere Group BY s.feedId order by s.feedId desc LIMIT $index, $limit";
-		}
-		else {
-			$query = "select s.*, u.username, u.profilePicURL, u.city, (select count(feedCommentId) from tbl_feed_comments fc where fc.feedId = s.feedId) as comments, 0 as 'isFollowing', 0 as 'isCommented', 0 as 'isTagged' from tbl_stylefeed s INNER JOIN tbl_users u on u.userId = s.userId LEFT JOIN tbl_feed_likes fl on fl.feedId = s.feedId and fl.userId = s.userId and u.isActive = 1 $strWhere Group BY s.feedId order by s.feedId desc LIMIT $index, $limit";
-		}
 
-		$result = mysql_query($query);
-		
-		if($result) {
-            $response['data'] = array();
-            
-            if(mysql_num_rows($result) > 0) {
-                while($row = mysql_fetch_assoc($result)) {
-                	$rowTemp['productId'] = $row['productId'];
-                	$rowTemp['wardrobeId'] = $row['wardrobeId'];
-                    $rowTemp['feedId'] = $row['feedId'];
-                    $rowTemp['feedTitle'] = $row['title'];
-                    $rowTemp['userId'] = $row['userId'];
-                    $rowTemp['username'] = $row['username'];
-                    $rowTemp['likes'] = $row['likes'];
-                    $rowTemp['comments'] = $row['comments'];
-                    $rowTemp['photo'] = $row['photo'];
-                    $rowTemp['userLocation'] = $row['city'];
-                    $rowTemp['timestamp'] = $this->relativeDate($row['createdOn']);
-                    
-                    if( false == is_null( $row['profilePicURL'] ) ) {
-                        $rowTemp['profilePicURL'] = $row['profilePicURL'];
-                    } else {
-                        $rowTemp['profilePicURL'] = '';
-                    }
-                    
-                    $rowTemp['recentComments'] = array();
-                    
-                    $query = "select f.*, u.username, u.firstName, u.lastName, u.profilePicURL from tbl_feed_comments f INNER JOIN tbl_users u on u.userId = f.userId WHERE f.feedId = " . $row['feedId'] . " ORDER BY f.feedCommentId DESC LIMIT 0, 2";
-                    $result2 = mysql_query($query);
-
-                    if(mysql_num_rows($result2) > 0) {
-                    	while($row1 = mysql_fetch_assoc($result2)) {
-                    		$rowTemp['recentComments'][] = $row1;
-                    	}
-                    }
-                    
-                    $rowTemp['isLiked'] = $userId?$row['isLiked']:0;
-                    $rowTemp['isFollowing'] = $userId?$row['isFollowing']:0;
-                    $rowTemp['isCommented'] = $userId?$row['isCommented']:0;
-                    $rowTemp['isTagged'] = $userId?$row['isTagged']:0;
-					
-					if($rowTemp['isLiked'] == 1) {
-						$rowTemp['likes'] = $rowTemp['likes'] - 1;
-					}
-                    
-                    $response['data'][] = $rowTemp;
-                }
-            }
+			$result = mysql_query($query);
+			
+			if($result) {
+        	    $response['data'] = array();
+        	    
+        	    if(mysql_num_rows($result) > 0) {
+        	        while($row = mysql_fetch_assoc($result)) {
+        	        	$rowTemp['productId'] = $row['productId'];
+        	        	$rowTemp['wardrobeId'] = $row['wardrobeId'];
+        	            $rowTemp['feedId'] = $row['feedId'];
+        	            $rowTemp['feedTitle'] = $row['title'];
+        	            $rowTemp['userId'] = $row['userId'];
+        	            $rowTemp['username'] = $row['username'];
+        	            $rowTemp['likes'] = $row['likes'];
+        	            $rowTemp['comments'] = $row['comments'];
+        	            $rowTemp['photo'] = $row['photo'];
+        	            $rowTemp['userLocation'] = $row['city'];
+        	            $rowTemp['timestamp'] = $this->relativeDate($row['createdOn']);
+        	            
+        	            if( false == is_null( $row['profilePicURL'] ) ) {
+        	                $rowTemp['profilePicURL'] = $row['profilePicURL'];
+        	            } else {
+        	                $rowTemp['profilePicURL'] = '';
+        	            }
+        	            
+        	            $rowTemp['recentComments'] = array();
+        	            
+        	            $query = "select f.*, u.username, u.firstName, u.lastName, u.profilePicURL from tbl_feed_comments f INNER JOIN tbl_users u on u.userId = f.userId WHERE f.feedId = " . $row['feedId'] . " ORDER BY f.feedCommentId DESC LIMIT 0, 2";
+        	            $result2 = mysql_query($query);
+	
+        	            if(mysql_num_rows($result2) > 0) {
+        	            	while($row1 = mysql_fetch_assoc($result2)) {
+        	            		$rowTemp['recentComments'][] = $row1;
+        	            	}
+        	            }
+        	            
+        	            $rowTemp['isLiked'] = $userId?$row['isLiked']:0;
+        	            $rowTemp['isFollowing'] = $userId?$row['isFollowing']:0;
+        	            $rowTemp['isCommented'] = $userId?$row['isCommented']:0;
+        	            $rowTemp['isTagged'] = $userId?$row['isTagged']:0;
+						
+						if($rowTemp['isLiked'] == 1) {
+							$rowTemp['likes'] = $rowTemp['likes'] - 1;
+						}
+        	            
+        	            $response['data'][] = $rowTemp;
+        	        }
+        	    }
+			}
+			else {
+				$response['success'] = false;
+			}
 		}
-		else {
-			$response['success'] = false;
+		else
+		{
+			$sql = "SELECT * FROM tbl_newstylefeed WHERE object_type = '".$stylefeedSection."'";
+			$result = mysql_query($sql);
+			$response['data'] = array();
+			if($result)
+			{
+				switch($stylefeedSection)
+				{
+					case 'product':	
+						while($row = mysql_fetch_assoc($result))
+						{
+							$sql2 = "SELECT * FROM tbl_products WHERE productId = '".$row['object_id']."'";
+							$result2 = mysql_query($sql2);
+							if($result2)
+							{
+								while($row2 = mysql_fetch_assoc($result2))
+								{
+									$row2['primaryPhoto'] = $baseURL.$row2['primaryPhoto'];
+									$response['data'][] = $row2;
+								}
+							}
+							else
+							{
+								$response['success'] = false;
+							}
+						}
+						break;
+					case 'user':	
+						while($row = mysql_fetch_assoc($result))
+						{
+							$sql2 = "SELECT * FROM tbl_users WHERE userId = '".$row['object_id']."'";
+							$result2 = mysql_query($sql2);
+							if($result2)
+							{
+								while($row2 = mysql_fetch_assoc($result2))
+								{
+									$row2['profilePicURL'] = $baseURL.$row2['profilePicURL'];
+									$response['data'][] = $row2;
+								}
+							}
+							else
+							{
+								$response['success'] = false;
+							}
+						}
+						break;
+					case 'brand':	
+						while($row = mysql_fetch_assoc($result))
+						{
+							$sql2 = "SELECT * FROM tbl_brands WHERE brandId = '".$row['object_id']."'";
+							$result2 = mysql_query($sql2);
+							if($result2)
+							{
+								while($row2 = mysql_fetch_assoc($result2))
+								{
+									$row2['brandPhoto'] = $baseURL.$row2['brandPhoto'];
+									$response['data'][] = $row2;
+								}
+							}
+							else
+							{
+								$response['success'] = false;
+							}
+						}
+						break;
+					case 'category':	
+						while($row = mysql_fetch_assoc($result))
+						{
+							$sql2 = "SELECT * FROM tbl_categories WHERE categoryId = '".$row['object_id']."'";
+							$result2 = mysql_query($sql2);
+							if($result2)
+							{
+								while($row2 = mysql_fetch_assoc($result2))
+								{
+									if($stylefeedSection == 'category')
+									{
+										$sql1 = "SELECT * FROM tbl_categories WHERE categoryId = '".$row2['parentCategoryId']."'";
+										$result1 = mysql_query($sql1);
+										$row1 = mysql_fetch_assoc($result1);
+										$row2['parentCategory'] = $row1['name'];
+									}
+									$row2['categoryPhoto'] = $baseURL.$row2['categoryPhoto'];
+									$response['data'][] = $row2;
+								}
+							}
+							else
+							{
+								$response['success'] = false;
+							}
+						}
+						break;
+					default:
+						echo "Invalid request";
+						break;
+				}
+			}
+			else
+			{
+				$response['success'] = false;
+			}
 		}
-		
 		echo json_encode($response);
 	}
 	
