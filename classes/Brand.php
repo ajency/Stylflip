@@ -3,6 +3,7 @@
 class Brand {
 	
 	function createResponse ($sql) {			//	for select query only
+		mysql_query('SET CHARACTER SET utf8');
 		$response = array();
 		$response['data'] = array();
 	
@@ -44,10 +45,21 @@ class Brand {
 		}
 		
 		$index = $index * $limit;
+		mysql_query('SET CHARACTER SET utf8');		
 		
-		$query = "select brandId, name from tbl_brands order by name asc"; // LIMIT $index, $limit";
+		$query = "select brandId, name from tbl_brands order by name asc";
 		echo json_encode($this -> createResponse($query));
 	}
+
+
+	function utf8_encode_all($dat)
+	{ 
+		if (is_string($dat)) return utf8_encode($dat); 
+		if (!is_array($dat)) return $dat; 
+		$ret = array(); 
+		foreach($dat as $i=>$d) $ret[$i] = utf8_encode_all($d); 
+		return $ret; 
+	} 
 	
 	function addNewBrand($arrInfo) {
 		$response = array();
