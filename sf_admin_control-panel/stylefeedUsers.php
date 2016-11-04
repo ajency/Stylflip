@@ -8,12 +8,28 @@ if(isset($_POST['addusers']))
     $i = 0;
     $users = array();
     $users = $_POST['users_list'];
-    while ($row = mysql_fetch_assoc($result1)) {
+
+    /*while ($row = mysql_fetch_assoc($result1)) {
+        //print_r($users);
         //var_dump($row);
         $sql = "UPDATE `stylflip`.`tbl_newstylefeed` SET `object_id` = '".$users[$i]."' WHERE `tbl_newstylefeed`.`id` = ".$row['id'];
         $result = mysql_query($sql);
         $i++;
+    }*/
+
+
+    foreach($users as $key=>$val){
+        $record = mysql_query(
+        "SELECT * FROM tbl_newstylefeed WHERE object_type='user' AND object_id=$val LIMIT 1");
+
+        if(mysql_fetch_array($record) == false){
+            $query = "INSERT INTO `tbl_newstylefeed` (`object_type`, `object_id`) VALUES ('user',
+        '$val');";
+        $result = mysql_query($query);
+        }        
     }
+
+
     if($result)
     {
         ?><center><span style="color:green">Successfully Updated!</span></center><?php
@@ -150,7 +166,7 @@ $( document ).ready(function() {
 function remove_added_user(userId)
 {
     document.getElementById("error").innerHTML = "";
-    document.getElementById('put_button').innerHTML = "<input type='submit' value='Save' disabled title='Add 5 users to enable this button!' name='addusers' id='add_users' />";
+    document.getElementById('put_button').innerHTML = "<input type='submit' value='Save' disabled title='Add 10 users to enable this button!' name='addusers' id='add_users' />";
     document.getElementById(userId).remove();
 }
 

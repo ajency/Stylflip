@@ -8,12 +8,24 @@ if(isset($_POST['addproducts']))
     $i = 0;
     $products = array();
     $products = $_POST['products_list'];
-    while ($row = mysql_fetch_assoc($result1)) {
+    /*while ($row = mysql_fetch_assoc($result1)) {
         //var_dump($row);
         $sql = "UPDATE `stylflip`.`tbl_newstylefeed` SET `object_id` = '".$products[$i]."' WHERE `tbl_newstylefeed`.`id` = ".$row['id'];
         $result = mysql_query($sql);
         $i++;
-    }
+    }*/
+
+    foreach($products as $key=>$val){
+        $record = mysql_query(
+          "SELECT * FROM tbl_newstylefeed WHERE object_type='product' AND object_id=$val LIMIT 1");
+
+        if(mysql_fetch_array($record) == false){
+          $query = "INSERT INTO `tbl_newstylefeed` (`object_type`, `object_id`) VALUES ('product',
+          '$val');";
+          $result = mysql_query($query);
+        }        
+      }
+
     if($result)
     {
         ?><center><span style="color:green">Successfully Updated!</span></center><?php
@@ -171,7 +183,7 @@ function remove_added_product(productId)
             ?>
         </div>
       
-      <p id = "put_button"><input type='submit' disabled title='Add 5 items to enable this button!' value='Save' name='addproducts' id='add_products' /></p>
+      <p id = "put_button"><input type='submit' disabled title='Add 10 items to enable this button!' value='Save' name='addproducts' id='add_products' /></p>
       
    
     </div>

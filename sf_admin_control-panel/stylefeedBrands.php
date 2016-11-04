@@ -8,12 +8,24 @@ if(isset($_POST['addbrands']))
     $i = 0;
     $brands = array();
     $brands = $_POST['brands_list'];
-    while ($row = mysql_fetch_assoc($result1)) {
+    /*while ($row = mysql_fetch_assoc($result1)) {
         //var_dump($row);
         $sql = "UPDATE `stylflip`.`tbl_newstylefeed` SET `object_id` = '".$brands[$i]."' WHERE `tbl_newstylefeed`.`id` = ".$row['id'];
         $result = mysql_query($sql);
         $i++;
+    }*/
+
+    foreach($brands as $key=>$val){
+        $record = mysql_query(
+        "SELECT * FROM tbl_newstylefeed WHERE object_type='brand' AND object_id=$val LIMIT 1");
+
+        if(mysql_fetch_array($record) == false){
+            $query = "INSERT INTO `tbl_newstylefeed` (`object_type`, `object_id`) VALUES ('brand',
+        '$val');";
+        $result = mysql_query($query);
+        }        
     }
+
     if($result)
     {
         ?><center><span style="color:green">Successfully Updated!</span></center><?php

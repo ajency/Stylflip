@@ -8,12 +8,24 @@
     	$i = 0;
     	$categories = array();
     	$categories = $_POST['selected_categories'];
-    	while ($row = mysql_fetch_assoc($result1)) {
+    	/*while ($row = mysql_fetch_assoc($result1)) {
     	    //var_dump($row);
     	    $sql = "UPDATE `stylflip`.`tbl_newstylefeed` SET `object_id` = '".$categories[$i]."' WHERE `tbl_newstylefeed`.`id` = ".$row['id'];
     	    $result = mysql_query($sql);
     	    $i++;
+    	}*/
+
+    	foreach($categories as $key=>$val){
+    		$record = mysql_query(
+    			"SELECT * FROM tbl_newstylefeed WHERE object_type='category' AND object_id=$val LIMIT 1");
+
+    		if(mysql_fetch_array($record) == false){
+    			$query = "INSERT INTO `tbl_newstylefeed` (`object_type`, `object_id`) VALUES ('category',
+    			'$val');";
+    			$result = mysql_query($query);
+    		}        
     	}
+
     	if($result)
     	{
     	    ?><center><span style="color:green">Successfully Updated!</span></center><?php
@@ -210,6 +222,6 @@
 	    ?>
 	    
 	</div>
-	<p id='put_button'><input type='submit' value='Save' disabled title="Select 5 items to enable this button!" name='addcategories' id='add_categories' /></p>
+	<p id='put_button'><input type='submit' value='Save' disabled title="Select 10 items to enable this button!" name='addcategories' id='add_categories' /></p>
 </form>
 </center>
