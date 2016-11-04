@@ -58,7 +58,7 @@ class Product {
 		}
         
         
-        $productImage2 = '';
+        $productImage2 = '';        
         
         if( true == isset($_FILES['productImage2'])) {
             $productImage2 = 'uploads/productPics/thumbnails/'.$arrProduct['userId'].'_'.'thumbnail_2'.$_FILES['productImage2']['name'];

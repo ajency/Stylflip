@@ -125,10 +125,10 @@ function add_user_to_list(username,userId)
        document.getElementById("error").innerHTML = ""; 
     }
 
-    if(document.getElementsByClassName('selected_users_list').length < 5)
+    if(document.getElementsByClassName('selected_users_list').length < 10)
     {
         document.getElementById("selected_users").innerHTML += "<div id = 'div"+userId+"'><table class='selected_users_list table' style='width:50%'><tr><input type='hidden' name='users_list[]' value='"+userId+"'><td style='text-align:center;width:80%'>"+username+"</td><td style='text-align:center;width:20%'><a style='color:red' href=# onclick=\"remove_added_user('div"+userId+"')\">Remove</a></td></tr></table></div>";
-        if(document.getElementsByClassName('selected_users_list').length == 5)
+        if(document.getElementsByClassName('selected_users_list').length == 10)
         {
             document.getElementById('put_button').innerHTML = "<input type='submit' value='Save' name='addusers' id='add_users' />";
         } 
@@ -141,7 +141,7 @@ function add_user_to_list(username,userId)
 }
 
 $( document ).ready(function() {
-    if(document.getElementsByClassName('selected_users_list').length == 5)
+    if(document.getElementsByClassName('selected_users_list').length == 10)
     {
         document.getElementById('put_button').innerHTML = "<input type='submit' value='Save' name='addusers' id='add_users' />";
     }

@@ -73,7 +73,7 @@
  	}
  	function add_sub_category(element,caller)
 	{
-		if(document.getElementsByClassName('category_list').length < 5)
+		if(document.getElementsByClassName('category_list').length < 10)
 		{
 			document.getElementById('error').innerHTML = "";
 			var sel = document.getElementById('subcats');
@@ -115,7 +115,7 @@
  						{
  							document.getElementById('error').innerHTML = "No photo for this category. Please select a category which has photo";
  						}
- 						if(document.getElementsByClassName('category_list').length == 5)
+ 						if(document.getElementsByClassName('category_list').length == 10)
  						{
  							document.getElementById('put_button').innerHTML = "<input type='submit' value='Save' name='addcategories' id='add_categories' />"
  						}
@@ -141,7 +141,7 @@
  	}
 
  	$( document ).ready(function() {
-    	if(document.getElementsByClassName('category_list').length == 5)
+    	if(document.getElementsByClassName('category_list').length == 10)
     	{
     	    document.getElementById('put_button').innerHTML = "<input type='submit' value='Save' name='addcategories' id='add_categories' />";
     	}

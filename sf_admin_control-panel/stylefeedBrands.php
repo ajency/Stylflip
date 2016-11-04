@@ -116,7 +116,7 @@ tr:nth-child(odd) {background: #FFF}
 
 function add_brand_to_list(name,brandId)
 {
-	if(document.getElementsByClassName('brand_list').length < 5)
+	if(document.getElementsByClassName('brand_list').length < 10)
 	{
 		$.ajax({
  			url : 'get_brands_info_ajax.php',
@@ -129,7 +129,7 @@ function add_brand_to_list(name,brandId)
  				if(data.brandPhoto)
  				{
  					document.getElementById("selected_brands").innerHTML += "<div id = 'div"+brandId+"'><table class='table' style='text-align:center;width:70%''><tr><td width=60% style='text-align:center'><input type='hidden' class = 'brand_list' name='brands_list[]' value="+data.brandId+">"+data.name+"</td><td width = 20% style='text-align:center'><img width = 50px src='"+"<?php echo $baseURL; ?>"+data.brandPhoto+"'></td><td width=20% style='text-align:center'><a style='color:red' href='#' onclick = \"remove_added_brand('div"+brandId+"')\">Remove</a></td></tr></table></div>";
-        			if(document.getElementsByClassName('brand_list').length == 5)
+        			if(document.getElementsByClassName('brand_list').length == 10)
         			{
             			document.getElementById('put_button').innerHTML = "<input type='submit' value='Save' name='addbrands' id='add_brands' />";
         			} 
@@ -149,7 +149,7 @@ function add_brand_to_list(name,brandId)
 }
 
 $( document ).ready(function() {
-    if(document.getElementsByClassName('brand_list').length == 5)
+    if(document.getElementsByClassName('brand_list').length == 10)
     {
         document.getElementById('put_button').innerHTML = "<input type='submit' value='Save' name='addbrands' id='add_brands' />";
     }

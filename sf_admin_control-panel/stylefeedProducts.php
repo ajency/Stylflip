@@ -116,10 +116,10 @@ tr:nth-child(odd) {background: #FFF}
 
 function add_product_to_list(productName,productId)
 {
-  if(document.getElementsByClassName('selected_products_list').length < 5)
+  if(document.getElementsByClassName('selected_products_list').length < 10)
   {
     document.getElementById("selected_products").innerHTML += "<div id = 'div"+productId+"'><table class= 'selected_products_list table'><tr><input type='hidden' name='products_list[]' value='"+productId+"'><td style='text-align:center;width:30%'>SF00000"+productId+"</td><td style='text-align:center;width:50%'>"+productName+"</td><td style='text-align:center;width:20%'><a style='color:red' href=# onclick=\"remove_added_product('div"+productId+"')\">Remove</a></td></tr></table></div>";
-        if(document.getElementsByClassName('selected_products_list').length == 5)
+        if(document.getElementsByClassName('selected_products_list').length == 10)
         {
             document.getElementById('put_button').innerHTML = "<input type='submit' value='Save' title='Save products list!' name='addproducts' id='add_products' />";
         } 
@@ -132,7 +132,7 @@ function add_product_to_list(productName,productId)
 }
 
 $( document ).ready(function() {
-    if(document.getElementsByClassName('selected_products_list').length == 5)
+    if(document.getElementsByClassName('selected_products_list').length == 10)
     {
         document.getElementById('put_button').innerHTML = "<input type='submit' value='Save' title='Save products list!' name='addproducts' id='add_products' />";
     }
