@@ -197,7 +197,7 @@ function remove_added_brand(brandId)
                     echo "<div id = 'div".$single_brand['brandId']."'><table class='table' style='text-align:center;width:70%''><tr><td width=60% style='text-align:center'><input type='hidden' class = 'brand_list' name='brands_list[]' value=".$single_brand['brandId'].">".$single_brand['name']."</td><td width = 20% style='text-align:center'><img width = 50px src='".$baseURL.$single_brand['brandPhoto']."'></td><td width=20% style='text-align:center'><a style='color:red' href='#' onclick = \"remove_added_brand('div".$single_brand['brandId']."')\">Remove</a></td></tr></table></div>";
                 }
             ?>
-            <p id = "put_button"></p>
+            <p id = "put_button"><input type='submit' value='Save' name='addbrands' id='add_brands' /></p>
     	</div>
     	
     	
