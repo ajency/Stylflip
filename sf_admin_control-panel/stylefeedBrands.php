@@ -15,6 +15,7 @@ if(isset($_POST['addbrands']))
         $i++;
     }*/
 
+    $delquery = mysql_query("DELETE FROM tbl_newstylefeed WHERE object_type='brand'");
     foreach($brands as $key=>$val){
         $record = mysql_query(
         "SELECT * FROM tbl_newstylefeed WHERE object_type='brand' AND object_id=$val LIMIT 1");

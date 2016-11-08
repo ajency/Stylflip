@@ -14,7 +14,7 @@ if(isset($_POST['addproducts']))
         $result = mysql_query($sql);
         $i++;
     }*/
-
+    $delquery = mysql_query("DELETE FROM tbl_newstylefeed WHERE object_type='product'");
     foreach($products as $key=>$val){
         $record = mysql_query(
           "SELECT * FROM tbl_newstylefeed WHERE object_type='product' AND object_id=$val LIMIT 1");
@@ -183,7 +183,7 @@ function remove_added_product(productId)
             ?>
         </div>
       
-      <p id = "put_button"><input type='submit' disabled title='Add 10 items to enable this button!' value='Save' name='addproducts' id='add_products' /></p>
+      <p id = "put_button"><input type='submit' title='Add 10 items to enable this button!' value='Save' name='addproducts' id='add_products' /></p>
       
    
     </div>

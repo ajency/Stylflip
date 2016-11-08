@@ -17,7 +17,7 @@ if(isset($_POST['addusers']))
         $i++;
     }*/
 
-
+    $delquery = mysql_query("DELETE FROM tbl_newstylefeed WHERE object_type='user'");
     foreach($users as $key=>$val){
         $record = mysql_query(
         "SELECT * FROM tbl_newstylefeed WHERE object_type='user' AND object_id=$val LIMIT 1");
@@ -166,7 +166,7 @@ $( document ).ready(function() {
 function remove_added_user(userId)
 {
     document.getElementById("error").innerHTML = "";
-    document.getElementById('put_button').innerHTML = "<input type='submit' value='Save' disabled title='Add 10 users to enable this button!' name='addusers' id='add_users' />";
+    document.getElementById('put_button').innerHTML = "<input type='submit' value='Save'  title='Add 10 users to enable this button!' name='addusers' id='add_users' />";
     document.getElementById(userId).remove();
 }
 

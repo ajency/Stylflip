@@ -15,6 +15,7 @@
     	    $i++;
     	}*/
 
+    	$delquery = mysql_query("DELETE FROM tbl_newstylefeed WHERE object_type='category'");
     	foreach($categories as $key=>$val){
     		$record = mysql_query(
     			"SELECT * FROM tbl_newstylefeed WHERE object_type='category' AND object_id=$val LIMIT 1");
@@ -222,6 +223,6 @@
 	    ?>
 	    
 	</div>
-	<p id='put_button'><input type='submit' value='Save' disabled title="Select 10 items to enable this button!" name='addcategories' id='add_categories' /></p>
+	<p id='put_button'><input type='submit' value='Save' title="Select 10 items to enable this button!" name='addcategories' id='add_categories' /></p>
 </form>
 </center>
