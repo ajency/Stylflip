@@ -171,7 +171,7 @@ $( document ).ready(function() {
 function remove_added_brand(brandId)
 {
 	document.getElementById("error").innerHTML = "";
-    document.getElementById('put_button').innerHTML = "";
+    //document.getElementById('put_button').innerHTML = "";
 	document.getElementById(brandId).remove();
 }
 
