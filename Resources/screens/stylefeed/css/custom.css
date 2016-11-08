@@ -136,6 +136,7 @@ body * {
 .shop-item {
   width: 150px;
   display: inline-block;
+  vertical-align: top;
   margin-right: 5px;
   color: #494949;
   background: #f6f9fa;
