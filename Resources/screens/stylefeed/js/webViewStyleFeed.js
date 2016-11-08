@@ -261,7 +261,7 @@ var _feedUserClickHandler = function(e){
 	if(!enableFlags.userClick) return;
 	Ti.API.info(logContext + " _feedUserClickHandler target id [" + e.target + "]");
 	
-	var usrId = findId(e.target);;
+	var usrId = findId(e.target);
 	if(usrId){
 		Ti.App.fireEvent('app:loadUser',{userId: usrId});
 	}

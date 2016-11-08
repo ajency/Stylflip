@@ -360,11 +360,7 @@ exports.get = function(tabSelected, wardrobeData, productData) {
         		alertDialog.hide();
         		alertDialog = null;
         		
-        		var _requestArgs = {
-			        showLoader: true,
-			        url: 'product.php',
-			        method: 'post',
-		        	serverArgs: {
+				var _serverArgs = {
 			        	action: productData == undefined ? 'create' : 'updateProductDetails',
 			        	userId: Utils.loggedInUserId(),
 			        	productTitle: _productDetails.productTitle,
@@ -381,7 +377,17 @@ exports.get = function(tabSelected, wardrobeData, productData) {
 			        	sizeChart: _productDetails.sizeChart,
 			        	toBeDonated: _productDetails.toBeDonated,
 			        	pickupFrom: _productDetails.pickupFrom
-			        }
+			        };
+
+				for(var iz in _serverArgs){
+					Ti.API.info(constant.APP + " _serverArgs: key: [" + iz + "] value: [" + _serverArgs[iz] + "]");
+				}	
+
+        		var _requestArgs = {
+			        showLoader: true,
+			        url: 'product.php',
+			        method: 'post',
+		        	serverArgs: _serverArgs
 			    };
 			    
 			    if(_productDetails.sizeChart == 'E') {	//	E is custom size chart
@@ -478,6 +484,7 @@ exports.get = function(tabSelected, wardrobeData, productData) {
 			        	}
 		        	},
 		        	error: function(error) {
+						Ti.API.info(constant.APP + " error: " + error.errorTitle + " error message: " + error.errorMessage);
 		                var alertDialog = UI.createAlertDialog({
 		                    title: error.errorTitle, 
 		                    message: error.errorMessage

@@ -268,6 +268,8 @@ HttpClient.apiCall = function(params, method, api, successCallback, errorCallbac
                     serverArgs: this.params
                 };
                 
+				Ti.API.info("reponse error message");
+				Ti.API.info(responseText);
                 Utils._.isFunction(errorCallback) && errorCallback(_responseObject);
 			}
 			

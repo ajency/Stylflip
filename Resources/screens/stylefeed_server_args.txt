@@ -1,0 +1,17 @@
+
+//old argument set
+serverArgs: {
+	action: 'listing',
+    location: {
+    	lat: 10.10,
+    	lon: 10.10
+    },
+    pageIndex: 1
+}
+
+
+//updated arguments for the revised stylfeed section
+serverArgs: {
+	action: 'listing',
+	stylefeedSection: '' //category, brand, product, user
+}

@@ -373,7 +373,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	    	// Ti.API.info(constant.APP + "### checking text title");
 
 		   	if(txtTitle.value.trim() == '' || txtTitle.value.trim() == txtTitle.hintText) {
-	    		// alert('Please enter title');
+	    		alert('Please enter title');
 	    		// return;
 	    		_areFieldsInComplete = true;
 	    		_inCompleteFields.push('Title');
@@ -387,7 +387,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 
 	    	// Ti.API.info(constant.APP + "### checking category");
 	    	if(_categorySelected == undefined) {
-	    		// alert('Please select at least one category');
+	    		alert('Please select at least one category');
 	    		// return;
 	    		_areFieldsInComplete = true;
 	    		// _inCompleteFields.push('Category');
@@ -423,7 +423,8 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	    		// _areFieldsInComplete = true;
 	    	// }
 	    	// Ti.API.info(constant.APP + "### checking text selling price info");
-	    	if( askingPrice.value.trim() == '' || ( askingPrice.value.trim() != '' && isNaN(askingPrice.value.trim()) ) ) {
+	    	// if( askingPrice.value.trim() == '' || ( askingPrice.value.trim() != '' && isNaN(askingPrice.value.trim()) ) ) {
+			if( askingPrice.value.trim() == '' ) {	
 	    		// alert('Please enter selling price');
 	    		// return;
 	    		_areFieldsInComplete = true;
@@ -471,10 +472,10 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	    	
 	    	// Ti.API.info(constant.APP + "### finalizing product info");
 	    	// Window.closeAll(function() {
-	    	var discountPrice = (displayPrice.value).split(' ');
-            // var discountPrice = displayPrice.value;
 
-	    	discountPrice = discountPrice[1];
+	    	// var discountPrice = (displayPrice.value).split(' ');
+			// discountPrice = discountPrice[1];
+            var discountPrice = displayPrice.value;
 	    	var discountPercentage = (100 - ((parseFloat(discountPrice)/parseFloat(txtOriginalPrice.value.trim()))*100)) < 0 ? 0 : (100 - ((parseFloat(discountPrice)/parseFloat(txtOriginalPrice.value.trim()))*100));
 
 	    	// console.log(txtTitle.value.trim());
@@ -495,15 +496,19 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	    	// console.log(_userAddresses);
 	    	// console.log(_toBeDonated);	
 
+			var sellingPrice = (askingPrice.value).split(' ');
+			sellingPrice = sellingPrice[1];
+
+			Ti.API.info(constant.APP + " discount price: [" + discountPrice + "] selling price: [" + sellingPrice + "]");
 	    	// Ti.API.info(constant.APP + "### discount product info");
 	        	Utils._.isFunction(successCallback) && successCallback({
 	        		productTitle: txtTitle.value.trim(),
 		        	productDescription: txtDescription.value.trim() == txtDescription.hintText ? '' : txtDescription.value.trim(),
 		        	categoryId: _categorySelected,
 		        	subcategoryId: _subcategorySelected,
-		        	sellingPrice: askingPrice.value.trim(),
+		        	sellingPrice: sellingPrice.trim(),
 		        	originalPrice: txtOriginalPrice.value.trim(),
-		        	discountPrice: discountPrice,
+		        	discountPrice: discountPrice.trim(),
 		        	discountPercentage: discountPercentage,
 		        	condition: _conditionSelected,
 		        	brandId: _brandSelected,
@@ -522,7 +527,7 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	        // });
     	}
     	catch(e){
-    		// Ti.API.info(constant.APP + " SOMETHING HAS CRASHED HERE");
+    		Ti.API.info(constant.APP + " SOMETHING HAS CRASHED HERE");
     		_showIncompleteAlert();
     	}
     }); //end btnNext click event
@@ -2058,8 +2063,14 @@ exports.get = function(tabSelected, productDetails, successCallback,backButtonCa
 	});
 	
     if(productDetails) {
-    	txtOriginalPrice.value = _productOriginalPrice;
-    	askingPrice.value = '\u20B9 ' + _productSellingPrice;
+		if(_productOriginalPrice){
+			txtOriginalPrice.value = _productOriginalPrice;
+		}
+    	
+		if(_productSellingPrice){
+			askingPrice.value = '\u20B9 ' + _productSellingPrice;
+		}
+    	
     	// txtdisplayPrice.text = '\u20B9 ' + _productDiscount;
         if(_productDiscount){
             displayPrice.value = _productDiscount;
