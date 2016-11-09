@@ -51,10 +51,10 @@ UI.createWebView = function(url,refresh){
         // feedWebScrollView.add(feedWebView);
     }
 
-    if(refresh || feedWebView.getUrl().indexOf(url) === -1){
-        Ti.API.info(constant.APP + " feedWebView url: [" + feedWebView.getUrl() + "] passed in url: [" + url + "]");
+    // if(refresh || feedWebView.getUrl().indexOf(url) === -1){
+        // Ti.API.info(constant.APP + " feedWebView url: [" + feedWebView.getUrl() + "] passed in url: [" + url + "]");
         feedWebView.setUrl(url);
-    }
+    // }
     return feedWebView;
 };
 
