@@ -97,7 +97,10 @@ var _attachApiData = function(e){
 				}		
 				
 				if(currentItem.brandPhoto){
-					_brandImgs[x].style.backgroundImage = "url('" + currentItem.brandPhoto + "')";
+					var catOverlay = $(_brandImgs[x]).find('.category-overlay');
+					// $(catOverlay[0]).css('background-image',currentItem.brandPhoto);
+					catOverlay[0].style.backgroundImage = "url('" + currentItem.brandPhoto + "')";
+					Ti.API.info(logContext + " atached cat overlay");
 				}
 				
 

@@ -1231,31 +1231,31 @@ exports.get = function(header) {
 
 	var feedWebView = UI.createWebView('/screens/stylefeed/stylefeed.html');
    
-  	if(osname === 'android'){
+  	// if(osname === 'android'){
   	
-  		var refreshControl = require('com.rkam.swiperefreshlayout').createSwipeRefresh({
-		    	view: feedWebView
-		});
+  	// 	var refreshControl = require('com.rkam.swiperefreshlayout').createSwipeRefresh({
+	// 	    	view: feedWebView
+	// 	});
 	    
-	    refreshControl.addEventListener('refreshing', function() {
-	    	Ti.API.info(constant.APP + " refreshing sylefeed");
-	    	// refreshControl.setRefreshing(true);
-	        refreshControl.setRefreshing(false);
-	        UI.resetWebView();
-	        feedWebView = UI.createWebView('/screens/stylefeed/stylefeed.html');
-	     //    if(Utils._.isFunction(_pullToRefreshCallback)) {
-	     //    	_pullToRefreshCallback();
-	     //    }
-	    });
+	//     refreshControl.addEventListener('refreshing', function() {
+	//     	Ti.API.info(constant.APP + " refreshing sylefeed");
+	//     	// refreshControl.setRefreshing(true);
+	//         refreshControl.setRefreshing(false);
+	//         UI.resetWebView();
+	//         feedWebView = UI.createWebView('/screens/stylefeed/stylefeed.html');
+	//      //    if(Utils._.isFunction(_pullToRefreshCallback)) {
+	//      //    	_pullToRefreshCallback();
+	//      //    }
+	//     });
 
-		mainView.add(refreshControl);
+	// 	mainView.add(refreshControl);
 		
 		
-		// mainView.add(feedView);	
-		// feedView.add(listView.getView());
-  	}
-  	else{
-  	}
+	// 	// mainView.add(feedView);	
+	// 	// feedView.add(listView.getView());
+  	// }
+  	// else{
+  	// }
 
   	mainView.add(feedWebView);
 
