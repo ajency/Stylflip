@@ -1,3 +1,4 @@
 .DS_Store
 *.DS_Store
 */.DS_Store
+Resources/screens/stylefeed/node_modules
