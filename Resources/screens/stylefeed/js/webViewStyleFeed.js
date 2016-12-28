@@ -68,8 +68,10 @@ var _attachApiData = function(e){
 	
 				
 				if(currentItem.categoryPhoto){
-					_categoryImgs[x].style.backgroundImage = "url('" + currentItem.categoryPhoto + "')";
-					// Ti.API.info(logContext +  " currentItem.categoryPhoto: " + currentItem.categoryPhoto);
+					// _categoryImgs[x].style.backgroundImage = "url('" + currentItem.categoryPhoto + "')";
+					var _imgfull = _categoryImgs[x].querySelector('.img-full-100');
+					_imgfull.src = currentItem.categoryPhoto;
+					Ti.API.info(logContext +  " currentItem.categoryPhoto: " + _imgfull.src);
 				}
 				
 				if(currentItem.parentCategory){
@@ -80,7 +82,7 @@ var _attachApiData = function(e){
 				if(currentItem.name){
 					var catAdj = $(_categoryImgs[x]).find('.category-adj');
 					$(catAdj).html(currentItem.name);
-				}
+				}			
 			}
 
 			Ti.App.fireEvent('app:loadBrandApiData');
@@ -108,7 +110,6 @@ var _attachApiData = function(e){
 					var brandTitle = $(_brandImgs[x]).find('.single-pick-brand-name span');
 					$(brandTitle).html(currentItem.name);
 				}
-				
 			}
 
 			Ti.App.fireEvent('app:loadProductApiData');
@@ -151,6 +152,7 @@ var _attachApiData = function(e){
 					var prPrice = $(_productImgs[x]).find('.shop-item-price');
 					prPrice.html("<i class='fa fa-inr'></i> " + currentItem.discountPrice);
 				}
+
 			}
 
 			Ti.App.fireEvent('app:loadUserApiData');
@@ -183,6 +185,7 @@ var _attachApiData = function(e){
 					$(usrPic[0]).css('background-image',"url('" + currentItem.profilePicURL + "')");
 					// Ti.API.info(logContext + " usrPic.style.backgroundImage: " + usrPic[0].style.backgroundImage);
 				}
+
 			}
 
 			_removeEventHandlers();
