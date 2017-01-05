@@ -448,3 +448,12 @@ var _objFilter = {
 	    		conditions: _selectedConditions,
 	    		priceRange: _selectedPriceRanges
 	    	};
+
+titanium build -p android -b -K "certificates/playstore-keystore/playstore-keystore" --key-password styl@123 -L stylflip -O "build/stylflip.apk" -P styl@123 dist-playstore
+
+
+Add following entitlements to your info.plist file:
+NSPhotoLibraryUsageDescription: something
+NSMicrophoneUsageDescription: something
+NSAppleMusicUsageDescription: something
+NSAppTransportSecurity -> Allow arbitrary loads -> yes
